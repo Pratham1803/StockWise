@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "602812577038",
+    "firebase_url": "https://stockwiseapp-231a8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "stockwiseapp-231a8",
+    "storage_bucket": "stockwiseapp-231a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602812577038:android:db229bc1b45d355920535f",
+        "android_client_info": {
+          "package_name": "com.example.stockwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs41_JVc_y8-4m2DQJlSfwnkjUXi30rY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

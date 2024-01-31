@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">StockWise</string>
+
+    <string name="edUserNumHint">Enter Mobile Number Here</string>
+    <string name="edUserNameHint">Enter Your Name Here</string>
+    <string name="edOtpHint">Enter OTP Here</string>
+
+    <string name="btnSubmit">Submit</string>
+    <string name="btnVerifyOtp">Verify Otp</string>
+    <string name="btnUpdate">Update Profile</string>
 </resources>
