@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -63,14 +64,12 @@ public class LoginActivity extends AppCompatActivity {
             }
             // if user entering Name
         } else if (edNum.getHint().toString().equals(getResources().getString(R.string.edUserNameHint))) {
-            OwnerModel ownerModel = new OwnerModel();
-            ownerModel.setId(Params.getAUTH().getCurrentUser().getUid()); // collecting current user UID
-            ownerModel.setName(edText); // collecting name from textbox
-            ownerModel.setContact_num(Params.getAUTH().getCurrentUser().getPhoneNumber()); // current user mobile number
 
+            Params.getOwnerModel().setId(Params.getAUTH().getCurrentUser().getUid()); // collecting current user UID
+            Params.getOwnerModel().setName(edText); // collecting name from textbox
+            Params.getOwnerModel().setContact_num(Params.getAUTH().getCurrentUser().getPhoneNumber()); // current user mobile number
 
-
-            registerNewUser(ownerModel); // registering new user in database
+            registerNewUser(); // registering new user in database
         }
     }
 
@@ -102,31 +101,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // if there is new user then register in database
-    private void registerNewUser(OwnerModel ownerModel){
+    private void registerNewUser(){
 
         // adding new user in database
-        Params.getDATABASE().getReference(ownerModel.getId()).setValue(ownerModel).addOnSuccessListener(
-                // user registered successfully then redirect to the main activity
-                new OnSuccessListener<Void>() {
+        Params.getSTORAGE().child("person-icon.png").getDownloadUrl().addOnSuccessListener(
+                new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }
-        ).addOnFailureListener(
-                // if error comes then give message
-                // set the textbox to enter new number
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, "Something Went Wrong!! Try Again", Toast.LENGTH_SHORT).show();
-                        edNum.setText("");
-                        edNum.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                        edNum.setHint(R.string.edUserNumHint);
+                    public void onSuccess(Uri uri) {
+                        Params.getOwnerModel().setPicture(uri.toString());
+                                // user registered successfully then redirect to the main activity
+                        Params.getDATABASE().getReference(Params.getOwnerModel().getId()).setValue(Params.getOwnerModel()).addOnSuccessListener(
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        // setting url of image
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        finish();
+                                    }
+                                }
+                        ).addOnFailureListener(
+                                // if error comes then give message
+                                // set the textbox to enter new number
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(LoginActivity.this, "Something Went Wrong!! Try Again", Toast.LENGTH_SHORT).show();
+                                        edNum.setText("");
+                                        edNum.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                                        edNum.setHint(R.string.edUserNumHint);
+                                    }
+                                }
+                        );
                     }
                 }
         );
+
     }
 
     // sign in the user in firebase with credentials

@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
                             Params.getOwnerModel().setName(snapshot.child(Params.getNAME()).getValue().toString());
                             Params.getOwnerModel().setId(snapshot.getKey().toString());
                             Params.getOwnerModel().setContact_num(snapshot.child(Params.getContactNumber()).getValue().toString());
-                            //Params.getOwnerModel().setPicture(snapshot.child(Params.getProfilePic()).getValue().toString());
+                            Params.getOwnerModel().setPicture(snapshot.child(Params.getProfilePic()).getValue().toString());
 
                             con.startActivity(new Intent(con, MainActivity.class));
                             ((Activity)con).finish();
