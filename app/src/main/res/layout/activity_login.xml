@@ -6,28 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".loginModule.LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="196dp"
-        android:layout_height="141dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
-
     <!--    enter number layout-->
     <LinearLayout
         android:id="@+id/layout_Num"
         android:layout_width="350sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        tools:layout_editor_absoluteY="281dp">
 
         <EditText
             android:id="@+id/edMobileNum"
@@ -54,13 +43,12 @@
         android:id="@+id/layout_OTP"
         android:layout_width="350sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        tools:layout_editor_absoluteY="281dp">
 
         <EditText
             android:id="@+id/edOtpNum"
@@ -77,7 +65,7 @@
             android:layout_height="wrap_content"
             android:onClick="btnVerifyOtp_Clicked"
             android:text="@string/btnVerifyOtp"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -86,11 +74,10 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        tools:layout_editor_absoluteY="169dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

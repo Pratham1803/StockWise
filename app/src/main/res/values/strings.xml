@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StockWise</string>
+    <string name="app_name">Stock Wise</string>
 
     <string name="edUserNumHint">Enter Mobile Number Here</string>
     <string name="edUserNameHint">Enter Your Name Here</string>
@@ -8,6 +8,8 @@
     <string name="btnSubmit">Submit</string>
     <string name="btnVerifyOtp">Verify Otp</string>
     <string name="btnUpdate">Update Profile</string>
+    <string name="btnlandingLogin">Login</string>
+    <string name="btnSignUP">Sign Up</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

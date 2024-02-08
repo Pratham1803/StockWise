@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.stockwise.loginModule.LoginActivity;
+import com.example.stockwise.model.LandingPage;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 // is the user is not logged in, open login screen
                 if(Params.getAUTH().getCurrentUser() == null){
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LandingPage.class));
                     finish();
                 }else{ // else open main activity all data of user
                     openMainActivity(SplashActivity.this);
