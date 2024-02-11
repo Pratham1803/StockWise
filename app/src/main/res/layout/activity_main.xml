@@ -29,11 +29,15 @@
                 android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="60sp">
             <FrameLayout
                 android:id="@+id/main_fragment_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
+            </ScrollView>
         </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView

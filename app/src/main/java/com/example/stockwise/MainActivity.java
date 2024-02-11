@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,8 +14,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigation.add(new MeowBottomNavigation.Model(order,R.drawable.ordervector));
         bottomNavigation.add(new MeowBottomNavigation.Model(product,R.drawable.productvector));
         bottomNavigation.add(new MeowBottomNavigation.Model(profile,R.drawable.profilevector));
+
 
 
         bottomNavigation.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
@@ -109,6 +116,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bind.navDrawerView.setNavigationItemSelectedListener(this); // drawer navigation item select listener setup
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,bind.mainDrawerLayout,bind.toolbar,R.string.open_nav,R.string.close_nav);
+        bind.mainDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                bind.meowBottom.setVisibility(View.GONE);
+                TextView txtName = findViewById(R.id.txtDrawerName);
+                txtName.setText(Params.getOwnerModel().getName());
+
+                TextView txtNum = findViewById(R.id.txtDrawerNum);
+                txtNum.setText(Params.getOwnerModel().getContact_num());
+
+                ImageView imgProfile = findViewById(R.id.imgDrawerProfile);
+                Glide.with(MainActivity.this).load(Params.getOwnerModel().getPicture()).into(imgProfile);
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                bind.meowBottom.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         bind.mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -135,41 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_settings) // user click on log out
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view,profileFragment).commit();
 
+        bind.mainDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // log out user from the app
-    public void logOutUser(Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-        // Set the message show for the Alert time
-        builder.setMessage("Are you sure to LogOut ?");
-
-        // Set Alert Title
-        builder.setTitle("Log Out !");
-
-        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
-        builder.setCancelable(false);
-
-        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
-        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Params.getAUTH().signOut(); // signing out current user
-                context.startActivity(new Intent(context, LandingPage.class)); // redirecting user to sign in activity
-                ((Activity)context).finish(); // finishing this activity
-            }
-        });
-
-        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
-        builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
-            // If user click no then dialog box is canceled.
-            dialog.cancel();
-        });
-
-        // Create the Alert dialog
-        AlertDialog alertDialog = builder.create();
-        // Show the Alert Dialog box
-        alertDialog.show();
     }
 }

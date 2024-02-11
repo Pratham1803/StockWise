@@ -3,6 +3,7 @@ package com.example.stockwise.loginModule;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class ManageOtp extends AppCompatActivity {
                 Intent intent = new Intent(ManageOtp.this,LoginModule.class);
                 intent.putExtra("MOBILE_NUM",mobileNum); // giving mobile number to the activity
                 startActivity(intent);
+                ((Activity)ManageOtp.this).finish();
             }
         });
     }
