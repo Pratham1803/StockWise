@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.stockwise.MainActivity;
 import com.example.stockwise.R;
-import com.example.stockwise.SplashActivity;
 import com.example.stockwise.databinding.ActivityLandingPageBinding;
-import com.example.stockwise.loginModule.LoginActivity;
 import com.example.stockwise.loginModule.LoginModule;
 
 public class LandingPage extends AppCompatActivity {
@@ -30,6 +29,14 @@ public class LandingPage extends AppCompatActivity {
                 finish();
             }
         });
+        bind.btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LandingPage.this, MainActivity.class));
+                finish();
+            }
+        });
+
 
     }
 }
