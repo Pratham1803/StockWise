@@ -22,22 +22,18 @@
             android:name=".loginModule.LoginModule"
             android:exported="false" />
         <activity
-            android:name=".model.LandingPage"
+            android:name=".LandingPage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".loginModule.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
             android:exported="false" />
 
         <meta-data
