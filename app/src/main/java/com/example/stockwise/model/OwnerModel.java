@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class OwnerModel {
     private String id;
-    private String name;
+    private String shop_name;
+    private String owner_name;
+    private String email_id;
     private String contact_num;
     private String fcm_token;
     private String picture;
@@ -16,8 +18,10 @@ public class OwnerModel {
     // constructor
     public OwnerModel(){}
 
-    public OwnerModel(String name, String contact_num, String fcm_token, String picture) {
-        this.name = name;
+    public OwnerModel(String shop_name,String owner_name, String contact_num, String fcm_token, String picture,String email_id) {
+        this.shop_name = shop_name;
+        this.email_id = email_id;
+        this.owner_name = owner_name;
         this.contact_num = contact_num;
         this.fcm_token = fcm_token;
         this.picture = picture;
@@ -28,8 +32,16 @@ public class OwnerModel {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail_id(String email_id) {
+        this.email_id = email_id;
+    }
+
+    public void setShop_name(String shop_name) {
+        this.shop_name = shop_name;
+    }
+
+    public void setOwner_name(String owner_name) {
+        this.owner_name = owner_name;
     }
 
     public void setContact_num(String contact_num) {
@@ -65,8 +77,16 @@ public class OwnerModel {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getShop_name() {
+        return shop_name;
+    }
+
+    public String getEmail_id() {
+        return email_id;
+    }
+
+    public String getOwner_name() {
+        return owner_name;
     }
 
     public String getContact_num() {

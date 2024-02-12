@@ -73,41 +73,6 @@ public class ManageOtp extends AppCompatActivity {
         });
     }
 
-    // if there is new user then register in database
-    private void registerNewUser(){
-
-        // adding new user in database
-        Params.getSTORAGE().child("default_user.jpg").getDownloadUrl().addOnSuccessListener(
-                new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Params.getOwnerModel().setPicture(uri.toString());
-                        // user registered successfully then redirect to the main activity
-                        Params.getDATABASE().getReference(Params.getOwnerModel().getId()).setValue(Params.getOwnerModel()).addOnSuccessListener(
-                                new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        // setting url of image
-                                        startActivity(new Intent(ManageOtp.this, MainActivity.class));
-                                        finish();
-                                    }
-                                }
-                        ).addOnFailureListener(
-                                // if error comes then give message
-                                // set the textbox to enter new number
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(ManageOtp.this, "Something Went Wrong!! Try Again", Toast.LENGTH_SHORT).show();
-                                        bind.edOTP.setText("");
-                                    }
-                                }
-                        );
-                    }
-                }
-        );
-
-    }
 
     // sign in the user in firebase with credentials
     private void signInWithCredential(PhoneAuthCredential credential) {
@@ -138,10 +103,7 @@ public class ManageOtp extends AppCompatActivity {
                                         splashActivity.openMainActivity(ManageOtp.this);
                                     }else {
                                         // if user is not registered then register from here
-                                        /*
-                                        edNum.setText("");
-                                        edNum.setInputType(InputType.TYPE_CLASS_TEXT); // chaging type to store name
-                                        edNum.setHint(R.string.edUserNameHint); // changing hint of textbox to get name*/
+                                        startActivity(new Intent(ManageOtp.this, Registration.class));
                                     }
                                 }
 

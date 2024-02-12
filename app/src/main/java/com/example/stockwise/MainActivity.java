@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 bind.meowBottom.setVisibility(View.GONE);
                 TextView txtName = findViewById(R.id.txtDrawerName);
-                txtName.setText(Params.getOwnerModel().getName());
+                txtName.setText(Params.getOwnerModel().getOwner_name());
 
                 TextView txtNum = findViewById(R.id.txtDrawerNum);
                 txtNum.setText(Params.getOwnerModel().getContact_num());

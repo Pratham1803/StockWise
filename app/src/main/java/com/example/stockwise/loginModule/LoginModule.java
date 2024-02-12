@@ -45,6 +45,7 @@ public class LoginModule extends AppCompatActivity {
             public void onClick(View v) {
                 bind.countryCode.registerCarrierNumberEditText(bind.edMobile); // collect country code
 
+                bind.btnNext.setText("Please Wait..");
                 bind.progressBarLoginNum.setVisibility(View.VISIBLE); // displaying progressbar
                 mobileNum = bind.countryCode.getFullNumberWithPlus().replace(" ",""); // getting full contact number
                 sendVerificationCode(mobileNum); // calling method to initiate Otp

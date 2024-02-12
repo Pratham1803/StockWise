@@ -134,48 +134,33 @@
             android:ems="10"
             android:hint="Enter Your Shop Name"
             android:inputType="text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/blue"/>
-
-        <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/cbTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
             android:layout_weight="1"
-            android:text="I accept the Terms Of Services &amp; Privacy Policy."
-            android:textSize="13sp" />
+            android:layout_marginTop="10sp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:text="Accept Terms and Condition"
+            android:buttonTint="@color/blue"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/btnConfirm"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_signup"
         android:fontFamily="@font/lexend_bold"
-        android:text="Confirm"
+        android:text="Create Account"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:onClick="btnCreateAccount_Clicked"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

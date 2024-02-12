@@ -12,7 +12,9 @@ import com.google.firebase.storage.StorageReference;
 public class Params {
     private static OwnerModel OWNER_MODEL;
     private static String ID;
-    private static String NAME;
+    private static String SHOP_NAME;
+    private static String OWNER_NAME;
+    private static String EMAIL_ID;
     private static String CONTACT_NUMBER;
     private static String FCM_TOKEN;
     private static String PROFILE_PIC;
@@ -34,7 +36,9 @@ public class Params {
 
     public Params() {
         ID = "id";
-        NAME = "name";
+        SHOP_NAME = "shop_name";
+        OWNER_NAME = "owner_name";
+        EMAIL_ID = "email_id";
         CONTACT_NUMBER = "contact_num";
         FCM_TOKEN = "fcm_token";
         PROFILE_PIC = "picture";
@@ -83,8 +87,16 @@ public class Params {
         return ID;
     }
 
-    public static String getNAME() {
-        return NAME;
+    public static String getEmailId() {
+        return EMAIL_ID;
+    }
+
+    public static String getShopName() {
+        return SHOP_NAME;
+    }
+
+    public static String getOwnerName() {
+        return OWNER_NAME;
     }
 
     public static String getContactNumber() {

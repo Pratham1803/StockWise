@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.stockwise.databinding.ActivityLandingPageBinding;
 import com.example.stockwise.loginModule.LoginModule;
+import com.example.stockwise.loginModule.Registration;
 
 public class LandingPage extends AppCompatActivity {
     ActivityLandingPageBinding bind; // declaring view binding

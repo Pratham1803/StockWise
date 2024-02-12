@@ -32,7 +32,7 @@ public class ProfileFragment extends Fragment {
         context = bind.getRoot().getContext();
 
         Glide.with(this).load(Params.getOwnerModel().getPicture()).into(bind.shapeableImageView);
-        bind.txtProfileName.setText(Params.getOwnerModel().getName());
+        bind.txtProfileName.setText(Params.getOwnerModel().getOwner_name());
 
         bind.layoutLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,13 +41,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        bind.AccClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, Registration.class)); // redirecting user to sign in activity
-                ((Activity)context).finish();
-            }
-        });
         return bind.getRoot();
     }
 

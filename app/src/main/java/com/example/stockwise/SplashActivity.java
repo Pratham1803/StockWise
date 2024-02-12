@@ -22,7 +22,6 @@ public class SplashActivity extends AppCompatActivity {
 
     // collect all user data and hen open the main activity
     public void openMainActivity(Context con){
-        try{
             // setting the user id of current user
             Params.getOwnerModel().setId(Params.getAUTH().getCurrentUser().getUid().toString());
             Params.setREFERENCE(); // setting reference of the firebase database of current user
@@ -32,13 +31,19 @@ public class SplashActivity extends AppCompatActivity {
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Params.getOwnerModel().setName(snapshot.child(Params.getNAME()).getValue().toString()); // set name of current user
-                            Params.getOwnerModel().setId(snapshot.getKey().toString()); // user id of current user
-                            Params.getOwnerModel().setContact_num(snapshot.child(Params.getContactNumber()).getValue().toString()); // contact number
-                            Params.getOwnerModel().setPicture(snapshot.child(Params.getProfilePic()).getValue().toString()); // profile picture
+                            try {
+                                Params.getOwnerModel().setOwner_name(snapshot.child(Params.getOwnerName()).getValue().toString()); // set name of current user
+                                Params.getOwnerModel().setShop_name(snapshot.child(Params.getShopName()).getValue().toString()); // set name of current user
+                                Params.getOwnerModel().setId(snapshot.getKey().toString()); // user id of current user
+                                Params.getOwnerModel().setContact_num(snapshot.child(Params.getContactNumber()).getValue().toString()); // contact number
+                                Params.getOwnerModel().setPicture(snapshot.child(Params.getProfilePic()).getValue().toString()); // profile picture
 
-                            con.startActivity(new Intent(con, MainActivity.class)); // start main activity
-                            ((Activity)con).finish(); // finish this activity
+                                con.startActivity(new Intent(con, MainActivity.class)); // start main activity
+                                ((Activity) con).finish(); // finish this activity
+                            }catch(Exception e){
+                                Log.d("ErrorMsg", "openMainActivity: "+e);
+                                Toast.makeText(SplashActivity.this, "Something Went Wrong!! try Again!!", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -47,10 +52,6 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
             );
-        }catch(Exception e){
-            Log.d("ErrorMsg", "openMainActivity: "+e);
-            Toast.makeText(this, "Something Went Wrong!! try Again!!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     // setting FCM token for firebase messaging
