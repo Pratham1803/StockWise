@@ -1,6 +1,7 @@
 package com.example.stockwise.fragments.profile;
 
 import android.app.Activity;
+import com.example.stockwise.loginModule.Registration;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentProfileBinding;
 
+
 public class ProfileFragment extends Fragment {
     private Context context;
     private FragmentProfileBinding bind;
@@ -27,7 +29,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         bind = FragmentProfileBinding.inflate(inflater,container,false);
-
         context = bind.getRoot().getContext();
 
         Glide.with(this).load(Params.getOwnerModel().getPicture()).into(bind.shapeableImageView);
@@ -40,6 +41,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        bind.AccClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, Registration.class)); // redirecting user to sign in activity
+                ((Activity)context).finish();
+            }
+        });
         return bind.getRoot();
     }
 
@@ -77,4 +85,5 @@ public class ProfileFragment extends Fragment {
         // Show the Alert Dialog box
         alertDialog.show();
     }
+
 }

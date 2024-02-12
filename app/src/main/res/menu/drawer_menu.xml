@@ -6,7 +6,6 @@
         android:id="@+id/nav_home"
         android:title="Home"
         android:icon="@drawable/homevector"
-        android:textSize="50sp"
         />
     <item
         android:id="@+id/nav_profile"
@@ -14,15 +13,23 @@
         android:icon="@drawable/profilevector"
         />
     <item
-        android:id="@+id/nav_manageProducts"
-        android:icon="@drawable/productvector"
-        android:title="Manage Products" />
-    <item
         android:id="@+id/nav_shop"
         android:icon="@drawable/shopvector"
-        android:title="Your Shop" />
+        android:title="Your Shop"
+        />
+    <item
+        android:id="@+id/nav_category"
+        android:icon="@drawable/categoryvector"
+        android:title="Category"
+        />
+    <item
+        android:id="@+id/nav_manageProducts"
+        android:icon="@drawable/productvector"
+        android:title="Manage Products"
+        />
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/settingvector"
-        android:title="Settings" />
+        android:title="Settings"
+        />
 </menu>

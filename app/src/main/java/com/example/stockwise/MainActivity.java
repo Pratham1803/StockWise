@@ -28,6 +28,7 @@ import com.example.stockwise.fragments.item.ItemFragment;
 import com.example.stockwise.fragments.order.orderFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
+import com.example.stockwise.loginModule.Registration;
 import com.google.android.material.navigation.NavigationView;
 
 import kotlin.Unit;
@@ -174,4 +175,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bind.mainDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
