@@ -77,7 +77,7 @@ public class ManageOtp extends AppCompatActivity {
     private void registerNewUser(){
 
         // adding new user in database
-        Params.getSTORAGE().child("person-icon.png").getDownloadUrl().addOnSuccessListener(
+        Params.getSTORAGE().child("default_user.jpg").getDownloadUrl().addOnSuccessListener(
                 new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
