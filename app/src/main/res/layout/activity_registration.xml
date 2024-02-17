@@ -57,15 +57,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtWelcome" />
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9">
+
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView10">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView8"
@@ -81,13 +85,13 @@
             android:layout_width="318dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:fontFamily="@font/lexend_"
             android:layout_marginTop="5dp"
             android:background="@drawable/textboxbg"
             android:ems="10"
-            android:paddingStart="10dp"
+            android:fontFamily="@font/lexend_"
             android:hint="Enter Your Username"
-            android:inputType="text" />
+            android:inputType="text"
+            android:paddingStart="10dp" />
 
         <TextView
             android:id="@+id/textView9"
@@ -104,13 +108,13 @@
             android:layout_width="318dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:fontFamily="@font/lexend_"
             android:layout_marginTop="5dp"
             android:background="@drawable/textboxbg"
             android:ems="10"
-            android:paddingStart="10dp"
+            android:fontFamily="@font/lexend_"
             android:hint="Enter Your Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:paddingStart="10dp" />
 
         <TextView
             android:id="@+id/textView10"
@@ -127,40 +131,41 @@
             android:layout_width="318dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            android:fontFamily="@font/lexend_"
             android:layout_marginTop="5dp"
-            android:paddingStart="10dp"
             android:background="@drawable/textboxbg"
             android:ems="10"
+            android:fontFamily="@font/lexend_"
             android:hint="Enter Your Shop Name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:paddingStart="10dp" />
 
         <CheckBox
             android:id="@+id/cbTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="10sp"
             android:layout_gravity="center"
-            android:textSize="18sp"
+            android:layout_marginTop="10sp"
+            android:layout_weight="1"
+            android:buttonTint="@color/blue"
             android:text="Accept Terms and Condition"
-            android:buttonTint="@color/blue"/>
-    </LinearLayout>
+            android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/btnConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_signup"
-        android:fontFamily="@font/lexend_bold"
-        android:text="Create Account"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:onClick="btnCreateAccount_Clicked"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_signup"
+            android:fontFamily="@font/lexend_bold"
+            android:onClick="btnCreateAccount_Clicked"
+            android:text="Create Account"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+    </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

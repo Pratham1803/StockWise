@@ -2,17 +2,15 @@ package com.example.stockwise;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,11 +22,10 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.CategoryFragment;
-import com.example.stockwise.fragments.item.ItemFragment;
-import com.example.stockwise.fragments.order.orderFragment;
+import com.example.stockwise.fragments.product.ProductFragment;
+import com.example.stockwise.fragments.transaction.transactionFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
-import com.example.stockwise.loginModule.Registration;
 import com.google.android.material.navigation.NavigationView;
 
 import kotlin.Unit;
@@ -39,16 +36,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // declaring fragments object
     CategoryFragment categoryFragment;
-    ItemFragment itemFragment;
+    ProductFragment productFragment;
     PersonFragment personFragment;
     ProfileFragment profileFragment;
     HomeFragment homeFragment;
-    orderFragment orderFragment;
+    transactionFragment transactionFragment;
 
     // Bottom Navigation Objects
     protected final int navHomeId=1;
     protected final int navCustomerId=2;
-    protected final int navOrderId=3;
+    protected final int navTransactionId=3;
     protected final int navProductId=4;
     protected final int navProfileId=5;
 
@@ -59,10 +56,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bind = ActivityMainBinding.inflate(getLayoutInflater()); // initializing view binding
         setContentView(bind.getRoot());
 
+        // setup toolbar
+        setSupportActionBar(bind.toolbar);
+        bind.toolbar.setTitle(R.string.titleHome);
+
         //Bottom Navigation
         bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector));
         bind.meowBottom.add(new MeowBottomNavigation.Model(navCustomerId,R.drawable.custvector));
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navOrderId,R.drawable.ordervector));
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navTransactionId,R.drawable.ordervector));
         bind.meowBottom.add(new MeowBottomNavigation.Model(navProductId,R.drawable.productvector));
         bind.meowBottom.add(new MeowBottomNavigation.Model(navProfileId,R.drawable.profilevector));
 
@@ -71,16 +72,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public Unit invoke(MeowBottomNavigation.Model model) {
                 int currentId = model.getId();
-                if(currentId == navHomeId ){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, homeFragment).commit();
+
+                if(currentId == navHomeId){
+                    changeFragment(homeFragment,R.string.titleHome);
                 } else if (currentId == navCustomerId) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, personFragment).commit();
-                }else if(currentId == navOrderId){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, orderFragment).commit();
+                    changeFragment(personFragment,R.string.titlePerson);
+                }else if(currentId == navTransactionId){
+                    changeFragment(transactionFragment,R.string.titleTransaction);
                 } else if (currentId == navProductId) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, itemFragment).commit();
+                    changeFragment(productFragment,R.string.titleProduct);
                 }else if (currentId == navProfileId) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, profileFragment).commit();
+                    changeFragment(profileFragment,R.string.titleProfile);
                 }
                 return null;
             }
@@ -89,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // setup of drawer navigation
         // initializing Fragments object
         categoryFragment = new CategoryFragment();
-        itemFragment = new ItemFragment();
+        productFragment = new ProductFragment();
         personFragment = new PersonFragment();
         profileFragment = new ProfileFragment();
         homeFragment = new HomeFragment();
-        orderFragment = new orderFragment();
+        transactionFragment = new transactionFragment();
 
         // setting drawer and custom toolbar
         setSupportActionBar(bind.toolbar); // toolbar setup
@@ -141,16 +143,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId(); // id of selected fragment item
 
         if(id == R.id.nav_home) { // home fragment selected
+            changeFragment(homeFragment,R.string.titleHome);
             bind.meowBottom.show(navHomeId,true);
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, homeFragment).commit();
         }
         else if (id == R.id.nav_profile) { // profile fragment selected
+            changeFragment(profileFragment,R.string.titleProfile);
             bind.meowBottom.show(navProfileId,true);
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, profileFragment).commit();
         }
-        else if (id == R.id.nav_manageProducts) { // category fragment selected
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, itemFragment).commit();
+        else if (id == R.id.nav_manageProducts) { // Products fragment selected
+            changeFragment(productFragment,R.string.titleProduct);
+            bind.meowBottom.show(navProductId,true);
+        } else if (id == R.id.nav_category) { // category fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, categoryFragment).commit();
         }
+
+        // unused right now
         else if (id == R.id.nav_shop)
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view,categoryFragment).commit();
         else if (id == R.id.nav_settings) // user click on log out
@@ -160,4 +167,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    // change the fragment
+    private void changeFragment(Fragment fragment,int title){
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit();
+        bind.toolbar.setTitle(title);
+    }
 }

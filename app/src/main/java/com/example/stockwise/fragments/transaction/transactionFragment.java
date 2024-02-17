@@ -1,4 +1,4 @@
-package com.example.stockwise.fragments.order;
+package com.example.stockwise.fragments.transaction;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.example.stockwise.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link orderFragment#newInstance} factory method to
+ * Use the {@link transactionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class orderFragment extends Fragment {
+public class transactionFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class orderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public orderFragment() {
+    public transactionFragment() {
         // Required empty public constructor
     }
 
@@ -39,8 +39,8 @@ public class orderFragment extends Fragment {
      * @return A new instance of fragment orderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static orderFragment newInstance(String param1, String param2) {
-        orderFragment fragment = new orderFragment();
+    public static transactionFragment newInstance(String param1, String param2) {
+        transactionFragment fragment = new transactionFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

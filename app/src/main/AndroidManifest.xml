@@ -16,6 +16,9 @@
         android:theme="@style/Theme.StockWise"
         tools:targetApi="31">
         <activity
+            android:name=".fragments.product.AddProduct"
+            android:exported="false" />
+        <activity
             android:name=".loginModule.Registration"
             android:exported="false" />
         <activity
