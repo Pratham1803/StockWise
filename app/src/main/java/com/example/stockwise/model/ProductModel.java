@@ -1,6 +1,6 @@
 package com.example.stockwise.model;
 
-public class ItemModel {
+public class ProductModel {
     private String id;
     private String name;
     private String current_stock;
@@ -12,9 +12,9 @@ public class ItemModel {
 
     // constructor
 
-    public ItemModel() {}
+    public ProductModel() {}
 
-    public ItemModel(String name, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture) {
+    public ProductModel(String name, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture) {
         this.name = name;
         this.current_stock = current_stock;
         this.reorder_point = reorder_point;

@@ -23,6 +23,7 @@ public class LoginModule extends AppCompatActivity {
     private ActivityLoginModuleBinding bind; // setting view binding
     private String verificationCodeId; // to store verification code id
     private String mobileNum; // to store mobile num
+    private String tempMobileNum; // to store temp mobile num collect from intent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +34,10 @@ public class LoginModule extends AppCompatActivity {
         // when user click edit number from otp screen then it has mobile number as intent value
         // get the number and show in text box
         if(getIntent().getStringExtra("MOBILE_NUM") != null){
-            mobileNum = getIntent().getStringExtra("MOBILE_NUM"); // initializing num
-            bind.countryCode.setCountryForPhoneCode(Integer.parseInt(mobileNum.substring(0,3))); // setting country code
-            bind.edMobile.setText(mobileNum.substring(3)); // setting mobile number in textBox
+            tempMobileNum = getIntent().getStringExtra("MOBILE_NUM"); // initializing num
+            verificationCodeId = getIntent().getStringExtra("VERIFICATION_ID"); // initializing verification id
+            bind.countryCode.setCountryForPhoneCode(Integer.parseInt(tempMobileNum.substring(0,3))); // setting country code
+            bind.edMobile.setText(tempMobileNum.substring(3)); // setting mobile number in textBox
         }
 
         // next button click event
@@ -44,11 +46,19 @@ public class LoginModule extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bind.countryCode.registerCarrierNumberEditText(bind.edMobile); // collect country code
-
                 bind.btnNext.setText("Please Wait..");
                 bind.progressBarLoginNum.setVisibility(View.VISIBLE); // displaying progressbar
+
                 mobileNum = bind.countryCode.getFullNumberWithPlus().replace(" ",""); // getting full contact number
-                sendVerificationCode(mobileNum); // calling method to initiate Otp
+
+                if(!mobileNum.equals(tempMobileNum))
+                    sendVerificationCode(mobileNum); // calling method to initiate Otp
+                else {
+                    Intent intent = new Intent(LoginModule.this, ManageOtp.class);
+                    intent.putExtra("MOBILE_NUM",mobileNum); // giving mobile number to next activity
+                    intent.putExtra("VERIFICATION_ID",verificationCodeId); // giving verification id
+                    startActivity(intent); // starting ManageOtp Activity
+                }
             }
         });
     }

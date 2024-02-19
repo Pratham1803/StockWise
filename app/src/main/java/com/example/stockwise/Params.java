@@ -19,7 +19,7 @@ public class Params {
     private static String FCM_TOKEN;
     private static String PROFILE_PIC;
     private static String CATEGORY;
-    private static String ITEM;
+    private static String PRODUCT;
     private static String CURRENT_STOCK;
     private static String REORDER_POINT;
     private static String PURCHASE_PRICE;
@@ -47,7 +47,7 @@ public class Params {
         PURCHASE_PRICE = "purchase_price";
         CATEGORY = "category";
         SALE_PRICE = "sale_price";
-        ITEM = "item";
+        PRODUCT = "product";
         PERSON = "person";
         VENDOR = "vendor";
         CUSTOMER = "customer";
@@ -115,8 +115,8 @@ public class Params {
         return CATEGORY;
     }
 
-    public static String getITEM() {
-        return ITEM;
+    public static String getPRODUCT() {
+        return PRODUCT;
     }
 
     public static String getCurrentStock() {

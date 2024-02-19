@@ -1,15 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     tools:context=".fragments.product.AddProduct">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="150sp"
-        android:layout_height="150sp"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarProduct"
+        android:layout_width="match_parent"
+        android:layout_height="70sp"
+        android:elevation="4sp"
+        app:menu = "@menu/toolbar_menu"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarProduct">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="200sp"
+                android:layout_height="200sp"
+                app:cardCornerRadius="90sp">
+                <ImageView
+                    android:id="@+id/imgAddProductMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/productvector"
+                    android:scaleType="fitCenter"
+                    android:padding="15sp"/>
+            </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                android:id="@+id/progrssBarAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="30sp"/>
+
+            <EditText
+                android:id="@+id/edProductName"
+                android:layout_width="300sp"
+                android:layout_marginTop="30sp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Product Name Here"
+                android:inputType="text"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/edCurrentStock"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Current Stock Here"
+                android:layout_marginVertical="10sp"
+                android:inputType="number"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/edReorderpoint"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Reorder Point Here"
+                android:layout_marginVertical="10sp"
+                android:inputType="number"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/edPurchasePrice"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Purchase Price Here"
+                android:layout_marginVertical="10sp"
+                android:inputType="number"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/edSalePrice"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:hint="Enter Sale Price Here"
+                android:layout_marginVertical="10sp"
+                android:inputType="number"
+                android:textSize="20sp"/>
+
+            <Button
+                android:id="@+id/btnAddProduct"
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:padding="10sp"
+                android:text="Add Product"
+                android:textSize="24sp"
+                android:onClick="btnAddProductClicked"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

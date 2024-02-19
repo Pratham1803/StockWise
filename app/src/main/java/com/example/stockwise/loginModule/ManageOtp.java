@@ -67,6 +67,7 @@ public class ManageOtp extends AppCompatActivity {
                 // calling LoginModule activity to change the mobile number
                 Intent intent = new Intent(ManageOtp.this,LoginModule.class);
                 intent.putExtra("MOBILE_NUM",mobileNum); // giving mobile number to the activity
+                intent.putExtra("VERIFICATION_ID",verificationId); // giving verification id
                 startActivity(intent);
                 ((Activity)ManageOtp.this).finish();
             }
@@ -96,6 +97,7 @@ public class ManageOtp extends AppCompatActivity {
                             Params.getREFERENCE().addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    bind.progrssBarOtp.setVisibility(View.INVISIBLE); // invisible the progress bar
                                     if(snapshot.hasChildren()){
                                         // user id is available
                                         // opening main activity with all the user details of current user who logged in
@@ -117,7 +119,6 @@ public class ManageOtp extends AppCompatActivity {
                             // displaying an error message to the user.
                             Toast.makeText(ManageOtp.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
-                        bind.progrssBarOtp.setVisibility(View.INVISIBLE); // invisible the progress bar
                     }
                 });
     }
