@@ -4,6 +4,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -18,12 +21,19 @@ import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityAddProductBinding;
 import com.example.stockwise.model.ProductModel;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.UploadTask;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,6 +43,7 @@ public class AddProduct extends AppCompatActivity {
     private ActivityAddProductBinding bind;
     ProductModel productModel;
     private String barCodeId; // to store the bar code numbers
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,20 +149,72 @@ public class AddProduct extends AppCompatActivity {
                 && (productModel.getSale_price().isEmpty())){
             Toast.makeText(this, "Fill All the Details", Toast.LENGTH_SHORT).show();
         }else{
-
-            Params.getREFERENCE().child(Params.getPRODUCT()).push().setValue(productModel).addOnSuccessListener(
-                    new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
-                            bind.edProductName.setText("");
-                            bind.edCurrentStock.setText("");
-                            bind.edReorderpoint.setText("");
-                            bind.edPurchasePrice.setText("");
-                            bind.edSalePrice.setText("");
-                        }
-                    }
-            );
+            isProductAvailable();
         }
+    }
+
+    private void isProductAvailable(){
+        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isAvailable = false;
+                for(DataSnapshot post: snapshot.getChildren()){
+                    if(post.child(Params.getNAME()).getValue().toString().equals(productModel.getName())){
+                        isAvailable = true;
+                        break;
+                    }
+                }
+
+                if(isAvailable)
+                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
+                else{
+                    bind.progrssBarAdd.setVisibility(View.VISIBLE);
+                    uploadData();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void uploadData(){
+        // Upload bitmap to Firebase Storage
+        String image = productModel.getName()+".jpg";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(
+                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                productModel.setPicture(uri.toString());
+                                Params.getREFERENCE().child(Params.getPRODUCT()).push().setValue(productModel).addOnSuccessListener(
+                                        new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
+                                                bind.edProductName.setText("");
+                                                bind.edCurrentStock.setText("");
+                                                bind.edReorderpoint.setText("");
+                                                bind.edPurchasePrice.setText("");
+                                                bind.edSalePrice.setText("");
+                                                bind.progrssBarAdd.setVisibility(View.GONE);
+                                            }
+                                        }
+                                );
+                            }
+                        });
+                    }
+                }
+        );
     }
 }

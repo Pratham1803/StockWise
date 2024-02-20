@@ -12,6 +12,7 @@ import com.google.firebase.storage.StorageReference;
 public class Params {
     private static OwnerModel OWNER_MODEL;
     private static String ID;
+    private static String NAME;
     private static String SHOP_NAME;
     private static String OWNER_NAME;
     private static String EMAIL_ID;
@@ -36,6 +37,7 @@ public class Params {
 
     public Params() {
         ID = "id";
+        NAME = "name";
         SHOP_NAME = "shop_name";
         OWNER_NAME = "owner_name";
         EMAIL_ID = "email_id";
@@ -79,6 +81,11 @@ public class Params {
     }
 
     // getters
+
+    public static String getNAME() {
+        return NAME;
+    }
+
     public static OwnerModel getOwnerModel() {
         return OWNER_MODEL;
     }
