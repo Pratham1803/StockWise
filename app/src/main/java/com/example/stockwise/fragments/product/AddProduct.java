@@ -43,7 +43,7 @@ public class AddProduct extends AppCompatActivity {
     private ActivityAddProductBinding bind;
     ProductModel productModel;
     private String barCodeId; // to store the bar code numbers
-    Bitmap bitmap;
+    Bitmap bitmap; // to store the bytes of image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,17 @@ public class AddProduct extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // reset all fields
+    private void reset(){
+        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector));
+        bind.edProductName.setText("");
+        bind.edCurrentStock.setText("");
+        bind.edReorderpoint.setText("");
+        bind.edPurchasePrice.setText("");
+        bind.edSalePrice.setText("");
+        bind.progrssBarAdd.setVisibility(View.GONE);
+    }
+
     // scanner result
     ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
         if(result.getContents()!=null) {
@@ -99,11 +110,15 @@ public class AddProduct extends AppCompatActivity {
 
     // get product data from api call of barcode id
     private void getProductDetail(){
-        String Url = "https://api.barcodelookup.com/v3/products?barcode="+barCodeId+"&formatted=y&key=gyjvlv8szmafys678c5zarsiykx9yo";
+        // https://barcodes1.p.rapidapi.com/?query=8901012157046
+        String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId;
         try {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(Url)
+                    .get()
+                    .addHeader("X-RapidAPI-Key", "8b95b432c8mshbc8aee1d626616ap199372jsnb71b43f2a8fc")
+                    .addHeader("X-RapidAPI-Host", "barcodes1.p.rapidapi.com")
                     .build();
 
             Response responses = client.newCall(request).execute();
@@ -111,14 +126,13 @@ public class AddProduct extends AppCompatActivity {
             String data = responses.body().string();
 
             JSONObject jsonObject = new JSONObject(data);
-            JSONArray jsonArray = (JSONArray) jsonObject.get("products");
+            jsonObject = (JSONObject) jsonObject.get("product");
 
             // collecting product name
-            jsonObject = (JSONObject) jsonArray.get(0);
             productModel.setName(jsonObject.get("title").toString());
 
             // collecting product image
-            jsonArray = (JSONArray) jsonObject.get("images");
+            JSONArray jsonArray = (JSONArray) jsonObject.get("images");
             productModel.setPicture(jsonArray.get(0).toString());
 
             Log.d("ProductData", "get: Name = "+jsonObject.get("title"));
@@ -134,7 +148,7 @@ public class AddProduct extends AppCompatActivity {
         bind.progrssBarAdd.setVisibility(View.GONE);
     }
 
-    // add product clicked
+    // add product button clicked
     public void btnAddProductClicked(View view) {
         // store all the data from textboxes to the productModel Class object
         productModel.setName(bind.edProductName.getText().toString());
@@ -144,15 +158,18 @@ public class AddProduct extends AppCompatActivity {
         productModel.setSale_price(bind.edSalePrice.getText().toString());
 
         // check that is there any input available or not
-        if((productModel.getName().isEmpty()) && (productModel.getCurrent_stock().isEmpty())
-                && (productModel.getReorder_point().isEmpty()) && (productModel.getPurchase_price().isEmpty())
-                && (productModel.getSale_price().isEmpty())){
-            Toast.makeText(this, "Fill All the Details", Toast.LENGTH_SHORT).show();
-        }else{
+        if((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty())
+                && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty())
+                && (!productModel.getSale_price().isEmpty())){
+            // all the details field, check product is already there or not
             isProductAvailable();
+        }else{
+            Toast.makeText(this, "Fill All the Details", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // check that is product already available or not in database
+    // is not then add the product in database
     private void isProductAvailable(){
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -164,7 +181,6 @@ public class AddProduct extends AppCompatActivity {
                         break;
                     }
                 }
-
                 if(isAvailable)
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else{
@@ -174,12 +190,10 @@ public class AddProduct extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+            public void onCancelled(@NonNull DatabaseError error) {}});
     }
 
+    // uploading product details in firebase
     private void uploadData(){
         // Upload bitmap to Firebase Storage
         String image = productModel.getName()+".jpg";
@@ -189,25 +203,24 @@ public class AddProduct extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
+        // uploading image of product
         Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(
                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // getting url of the image from firebase storage
                         Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                // setting product url
                                 productModel.setPicture(uri.toString());
+                                // storing product details is database
                                 Params.getREFERENCE().child(Params.getPRODUCT()).push().setValue(productModel).addOnSuccessListener(
                                         new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
-                                                bind.edProductName.setText("");
-                                                bind.edCurrentStock.setText("");
-                                                bind.edReorderpoint.setText("");
-                                                bind.edPurchasePrice.setText("");
-                                                bind.edSalePrice.setText("");
-                                                bind.progrssBarAdd.setVisibility(View.GONE);
+                                                reset(); // reseting all the fields
                                             }
                                         }
                                 );
