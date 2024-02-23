@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     transactionFragment transactionFragment;
 
     // Bottom Navigation Objects
-    protected final int navHomeId=1;
-    protected final int navCustomerId=2;
-    protected final int navTransactionId=3;
-    protected final int navProductId=4;
-    protected final int navProfileId=5;
+    protected final int navHomeId = 1;
+    protected final int navCustomerId = 2;
+    protected final int navTransactionId = 3;
+    protected final int navProductId = 4;
+    protected final int navProfileId = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,31 +58,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // setup toolbar
         setSupportActionBar(bind.toolbar);
-        bind.toolbar.setTitle(R.string.titleHome);
+        bind.toolbar.setTitle(R.string.titleHome); // setting title of action bar
 
-        //Bottom Navigation
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector));
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navCustomerId,R.drawable.custvector));
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navTransactionId,R.drawable.ordervector));
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navProductId,R.drawable.productvector));
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navProfileId,R.drawable.profilevector));
+        // Adding Menu items in Bottom Navigation
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector)); // home menu
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navCustomerId,R.drawable.custvector)); // customer menu
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navTransactionId,R.drawable.ordervector)); // transaction menu
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navProductId,R.drawable.productvector)); // product menu
+        bind.meowBottom.add(new MeowBottomNavigation.Model(navProfileId,R.drawable.profilevector)); // profile menu
 
-        bind.meowBottom.show(navHomeId,true);
+        bind.meowBottom.show(navHomeId,true); // displaying bottom navigation on screen
+        // setting onclick listener of bottom navigation, when menu item is click change the screen according to it
         bind.meowBottom.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
             @Override
             public Unit invoke(MeowBottomNavigation.Model model) {
-                int currentId = model.getId();
+                int currentId = model.getId(); // getting the id of currently clicked menu item
 
-                if(currentId == navHomeId){
-                    changeFragment(homeFragment,R.string.titleHome);
-                } else if (currentId == navCustomerId) {
-                    changeFragment(personFragment,R.string.titlePerson);
-                }else if(currentId == navTransactionId){
-                    changeFragment(transactionFragment,R.string.titleTransaction);
-                } else if (currentId == navProductId) {
-                    changeFragment(productFragment,R.string.titleProduct);
-                }else if (currentId == navProfileId) {
-                    changeFragment(profileFragment,R.string.titleProfile);
+                // checking that which menu item is clicked
+                if(currentId == navHomeId){ // home menu item clicked
+                    changeFragment(homeFragment,R.string.titleHome); // changing the screen to home screen
+                } else if (currentId == navCustomerId) { // Customer menu item clicked
+                    changeFragment(personFragment,R.string.titlePerson); // changing the screen to person screen
+                }else if(currentId == navTransactionId){ // Transaction menu item clicked
+                    changeFragment(transactionFragment,R.string.titleTransaction); // changing the screen to transaction screen
+                } else if (currentId == navProductId) { // Product menu item clicked
+                    changeFragment(productFragment,R.string.titleProduct); // changing the screen to product screen
+                }else if (currentId == navProfileId) { // Profile menu item clicked
+                    changeFragment(profileFragment,R.string.titleProfile); // changing the screen to profile screen
                 }
                 return null;
             }
@@ -102,10 +104,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bind.navDrawerView.setNavigationItemSelectedListener(this); // drawer navigation item select listener setup
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,bind.mainDrawerLayout,bind.toolbar,R.string.open_nav,R.string.close_nav);
+        // drawer listener, to show bottom navigation when drawer is closed or when drawer is open show bottom navigation
         bind.mainDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                bind.meowBottom.setVisibility(View.GONE);
+                // drawer is opened/ slide
+                bind.meowBottom.setVisibility(View.GONE); // setting visibility gone to bottom nav
+
+                // setting values to name, number and image of view
                 TextView txtName = findViewById(R.id.txtDrawerName);
                 txtName.setText(Params.getOwnerModel().getOwner_name());
 
@@ -123,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
+                // drawer is closed, so visible the bottom nav
                 bind.meowBottom.setVisibility(View.VISIBLE);
             }
 
@@ -131,29 +138,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        bind.mainDrawerLayout.addDrawerListener(toggle);
+        bind.mainDrawerLayout.addDrawerListener(toggle); // adding listener to drawer
         toggle.syncState();
 
+        // setting home screen as default screen when app is open
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, homeFragment).commit();
     }
 
     // on drawer navigating item select listener
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId(); // id of selected fragment item
+        int id = item.getItemId(); // storing currently selected id
 
         if(id == R.id.nav_home) { // home fragment selected
-            changeFragment(homeFragment,R.string.titleHome);
-            bind.meowBottom.show(navHomeId,true);
+            changeFragment(homeFragment,R.string.titleHome); // change the screen to home screen
+            bind.meowBottom.show(navHomeId,true); // displaying the home item is selected in bottom nav
         }
         else if (id == R.id.nav_profile) { // profile fragment selected
-            changeFragment(profileFragment,R.string.titleProfile);
-            bind.meowBottom.show(navProfileId,true);
+            changeFragment(profileFragment,R.string.titleProfile); // change the screen to profile screen
+            bind.meowBottom.show(navProfileId,true);  // displaying the profile item is selected in bottom nav
         }
         else if (id == R.id.nav_manageProducts) { // Products fragment selected
-            changeFragment(productFragment,R.string.titleProduct);
-            bind.meowBottom.show(navProductId,true);
+            changeFragment(productFragment,R.string.titleProduct); // change the screen to product screen
+            bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
         } else if (id == R.id.nav_category) { // category fragment
+            // changing screen to category screen
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, categoryFragment).commit();
         }
 
@@ -163,13 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_settings) // user click on log out
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view,profileFragment).commit();
 
-        bind.mainDrawerLayout.closeDrawer(GravityCompat.START);
+        bind.mainDrawerLayout.closeDrawer(GravityCompat.START); // when any item is click after that close the drawer
         return true;
     }
 
-    // change the fragment
+    // change the fragment method
     private void changeFragment(Fragment fragment,int title){
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit();
-        bind.toolbar.setTitle(title);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit(); // changing the fragment that is given in argument
+        bind.toolbar.setTitle(title); // setting title of the screen in action bar
     }
 }

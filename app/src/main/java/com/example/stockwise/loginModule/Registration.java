@@ -26,44 +26,52 @@ public class Registration extends AppCompatActivity {
 
         bind = ActivityRegistrationBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
-        isConditonCheckd = false;
+        isConditonCheckd = false; // store the boolean, that terms accepted check box
 
+        // setting check box check change listener on, Terms checked check box
         bind.cbTerms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
+                    // check box is checked
                     isConditonCheckd = true;
                 else
+                    // check box is unchecked
                     isConditonCheckd = false;
             }
         });
     }
 
+    // create account button clicked
     public void btnCreateAccount_Clicked(View view) {
+        // if the terms accepted is checked then, store the data in database
         if(isConditonCheckd) {
-            String shop_name = bind.edShopName.getText().toString();
-            String owner_name = bind.edUsername.getText().toString();
-            String emailId = bind.edEmail.getText().toString();
+            String shop_name = bind.edShopName.getText().toString(); // collecting shop name from edittext
+            String owner_name = bind.edUsername.getText().toString(); // collecting owner name from edittext
+            String emailId = bind.edEmail.getText().toString(); // collecting Email id from edittext
 
+            // check that all the three fields are having values or not
             if(shop_name.isEmpty() && owner_name.isEmpty() && emailId.isEmpty() )
+                // there is no value in one of the text box
                 Toast.makeText(this, "Please Fill the Details!!", Toast.LENGTH_SHORT).show();
             else {
-                bind.btnConfirm.setText("Please Wait..");
+                bind.btnConfirm.setText("Please Wait.."); // changing the text of button
 
-                Params.getOwnerModel().setOwner_name(owner_name);
-                Params.getOwnerModel().setShop_name(shop_name);
-                Params.getOwnerModel().setEmail_id(emailId);
+                Params.getOwnerModel().setOwner_name(owner_name); // setting the owner name to Param class field
+                Params.getOwnerModel().setShop_name(shop_name); // setting the shop name to Param class field
+                Params.getOwnerModel().setEmail_id(emailId); // setting the Email id to Param class field
                 registerNewUser();
             }
         }else{
+            // user not checked terms check box
             Toast.makeText(this, "Check Terms & Conditions!!", Toast.LENGTH_SHORT).show();
         }
     }
 
     // if there is new user then register in database
     private void registerNewUser(){
-
         // adding new user in database
+        // storing image of default user image
         Params.getSTORAGE().child("default_user.jpg").getDownloadUrl().addOnSuccessListener(
                 new OnSuccessListener<Uri>() {
                     @Override

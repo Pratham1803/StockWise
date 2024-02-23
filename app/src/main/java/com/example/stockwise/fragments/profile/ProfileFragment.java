@@ -29,11 +29,12 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         bind = FragmentProfileBinding.inflate(inflater,container,false);
-        context = bind.getRoot().getContext();
+        context = bind.getRoot().getContext(); // setting view binding
 
-        Glide.with(this).load(Params.getOwnerModel().getPicture()).into(bind.shapeableImageView);
-        bind.txtProfileName.setText(Params.getOwnerModel().getOwner_name());
+        Glide.with(this).load(Params.getOwnerModel().getPicture()).into(bind.shapeableImageView); // setting profile image in image view
+        bind.txtProfileName.setText(Params.getOwnerModel().getOwner_name()); // setting name of owner in textview
 
+        // setting onclick listener on, logout field
         bind.layoutLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

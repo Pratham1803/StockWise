@@ -28,32 +28,34 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ProductFragment extends Fragment {
-    private Context context;
-    private FragmentProductBinding bind;
-    private ArrayList<ProductModel> arrProduct;
-    private ProductAdapter productAdapter;
+    private Context context; // to store context
+    private FragmentProductBinding bind; // bind view
+    private ArrayList<ProductModel> arrProduct; // List of productModule class to store the details of multiple product
+    private ProductAdapter productAdapter; // object of product adapter
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        bind = FragmentProductBinding.inflate(inflater,container,false);
-        context = bind.getRoot().getContext();
-        setHasOptionsMenu(true);
+        bind = FragmentProductBinding.inflate(inflater,container,false); // initialing view binding
+        context = bind.getRoot().getContext(); // initializing context
+        setHasOptionsMenu(true); // setting action bar
 
         // set recycler view
-        arrProduct = new ArrayList<ProductModel>();
-        productAdapter = new ProductAdapter(arrProduct,context);
-        bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context));
-        bind.recyclerProduct.setAdapter(productAdapter);
+        arrProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
+        productAdapter = new ProductAdapter(arrProduct,context); // initializing productAdapter
+        bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
+        bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
 
         // collecting product list from firebase
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // in snapshot we have all the products list, so we are getting it one by one using for each loop
                 for(DataSnapshot post : snapshot.getChildren()){
-                    ProductModel newProduct = post.getValue(ProductModel.class);
-                    newProduct.setId(post.getKey());
-                    arrProduct.add(newProduct);
+                    ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
+                    newProduct.setId(post.getKey()); // setting user id of product to class object
+                    arrProduct.add(newProduct); // adding product in product's arraylist
                 }
+                // dataset is changed, so notifying the adapter
                 productAdapter.notifyDataSetChanged();
             }
 
@@ -62,18 +64,21 @@ public class ProductFragment extends Fragment {
 
             }
         });
-
         return bind.getRoot();
     }
 
+    // setting listener to, create action bar
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.toolbar_menu,menu);
 
+        // getting addproduct button item from actionbar
         MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
+        // setting on click lister in add product item
         btnAddProduct.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
+                // starting activity of add product screen
                 startActivity(new Intent(context,AddProduct.class));
                 return true;
             }

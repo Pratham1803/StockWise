@@ -24,7 +24,7 @@ public class LandingPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LandingPage.this, LoginModule.class)); // open login activity
-                finish();
+                finish(); // ending current activity
             }
         });
 
@@ -33,7 +33,7 @@ public class LandingPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LandingPage.this, LoginModule.class)); // open log in activity
-                finish();
+                finish(); // ending current activity
             }
         });
     }

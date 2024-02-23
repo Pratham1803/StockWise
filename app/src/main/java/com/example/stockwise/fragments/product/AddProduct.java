@@ -40,13 +40,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AddProduct extends AppCompatActivity {
-    private ActivityAddProductBinding bind;
-    ProductModel productModel;
+    private ActivityAddProductBinding bind; // activity binding
+    ProductModel productModel; // object of productModel Class
     private String barCodeId; // to store the bar code numbers
     Bitmap bitmap; // to store the bytes of image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // this will pause app for the result of scanner
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -55,39 +56,42 @@ public class AddProduct extends AppCompatActivity {
                 .build());
         super.onCreate(savedInstanceState);
 
+        // initializing view binding
         bind = ActivityAddProductBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
 
-        productModel = new ProductModel();
+        productModel = new ProductModel(); // initializing object of product model
 
         // setup actionbar
-        bind.toolbarProduct.setTitle("Scan & Add Product");
+        bind.toolbarProduct.setTitle("Scan & Add Product"); // setting title
         setSupportActionBar(bind.toolbarProduct);
     }
 
+    // menu bar item selection listener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu,menu);
 
+        // scan button initialization from action bar and on click listener
         MenuItem btnScan = menu.findItem(R.id.scanner);
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                ScanOptions sc=new ScanOptions();
-                sc.setPrompt("App is ready for use");
-                sc.setBeepEnabled(true);
+                ScanOptions sc = new ScanOptions();
+                sc.setPrompt("App is ready for use"); // title on scanner
+                sc.setBeepEnabled(true); // enable beep sound
                 sc.setOrientationLocked(true);
                 sc.setCaptureActivity(CaptureActivity.class);
-                bar.launch(sc);
+                bar.launch(sc); // launching the scanner
                 return true;
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
 
-    // reset all fields
+    // reset all fields of form
     private void reset(){
-        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector));
+        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector)); // set default image
         bind.edProductName.setText("");
         bind.edCurrentStock.setText("");
         bind.edReorderpoint.setText("");
@@ -98,21 +102,22 @@ public class AddProduct extends AppCompatActivity {
 
     // scanner result
     ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
+        // if scanner has some result
         if(result.getContents()!=null) {
-            Toast.makeText(this, "Wait a While!!", Toast.LENGTH_SHORT).show();
-            bind.progrssBarAdd.setVisibility(View.VISIBLE);
-            barCodeId = result.getContents();
-            getProductDetail();
+            bind.progrssBarAdd.setVisibility(View.VISIBLE); // visible the progressbar
+            barCodeId = result.getContents(); // collect the barcode number and store it
+            getProductDetail(); // calling method to get product details
         }
+        // scanner does not have any results
         else
             Toast.makeText(this, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
     // get product data from api call of barcode id
     private void getProductDetail(){
-        // https://barcodes1.p.rapidapi.com/?query=8901012157046
-        String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId;
+        String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId; // api url
         try {
+            // building request from okHttp module
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(Url)
@@ -121,31 +126,35 @@ public class AddProduct extends AppCompatActivity {
                     .addHeader("X-RapidAPI-Host", "barcodes1.p.rapidapi.com")
                     .build();
 
+            // executing the request
             Response responses = client.newCall(request).execute();
 
+            // storing the result of api call here
             String data = responses.body().string();
 
+            // converting data into json object
             JSONObject jsonObject = new JSONObject(data);
-            jsonObject = (JSONObject) jsonObject.get("product");
+            jsonObject = (JSONObject) jsonObject.get("product"); // collecting data from the 'product' key
 
-            // collecting product name
+            // collecting product name from 'title' key
             productModel.setName(jsonObject.get("title").toString());
 
-            // collecting product image
+            // collecting product image array from 'images' key
             JSONArray jsonArray = (JSONArray) jsonObject.get("images");
-            productModel.setPicture(jsonArray.get(0).toString());
+            productModel.setPicture(jsonArray.get(0).toString()); // adding first image of product from list
 
             Log.d("ProductData", "get: Name = "+jsonObject.get("title"));
             Log.d("ProductData", "get: Image = "+jsonObject.get("images"));
 
-            // filling details
+            // filling details in text box and image view
             bind.edProductName.setText(productModel.getName());
+            bind.edProductName.setEnabled(false); // read only
             Glide.with(this).load(productModel.getPicture()).into(bind.imgAddProductMain);
         } catch (Exception e) {
             Log.d("ErrorMsg", "get: "+e.toString());
             Toast.makeText(this, "No Result"+e.toString(), Toast.LENGTH_LONG).show();
         }
-        bind.progrssBarAdd.setVisibility(View.GONE);
+        bind.progrssBarAdd.setVisibility(View.GONE); // unvisibling the progressbar
     }
 
     // add product button clicked
@@ -171,19 +180,23 @@ public class AddProduct extends AppCompatActivity {
     // check that is product already available or not in database
     // is not then add the product in database
     private void isProductAvailable(){
+        // checking that product is available or not
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isAvailable = false;
                 for(DataSnapshot post: snapshot.getChildren()){
+                    // if the name match of product in the database, that means product is already there in database
                     if(post.child(Params.getNAME()).getValue().toString().equals(productModel.getName())){
                         isAvailable = true;
                         break;
                     }
                 }
                 if(isAvailable)
+                    // product is available, so just display the message
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else{
+                    // product is not available, so visible progress bar and upload data to the database
                     bind.progrssBarAdd.setVisibility(View.VISIBLE);
                     uploadData();
                 }
@@ -196,12 +209,12 @@ public class AddProduct extends AppCompatActivity {
     // uploading product details in firebase
     private void uploadData(){
         // Upload bitmap to Firebase Storage
-        String image = productModel.getName()+".jpg";
+        String image = productModel.getName()+".jpg"; // setting the name of image
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap(); // getting bitmap from the image view
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); // compressing bitmap data into image file of jpeg
+        byte[] data = baos.toByteArray(); // storing byte data in list
 
         // uploading image of product
         Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(
@@ -219,6 +232,7 @@ public class AddProduct extends AppCompatActivity {
                                         new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
+                                                // data is uploaded in database
                                                 Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
                                                 reset(); // reseting all the fields
                                             }

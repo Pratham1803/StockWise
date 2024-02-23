@@ -26,20 +26,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
      * (custom ViewHolder)
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView txtProductName;
-        private final TextView txtCurrentStock;
-        private final TextView txtPrice;
-        private final ImageView imgProduct;
+        private final TextView txtProductName; // to display product name
+        private final TextView txtCurrentStock; // to display current stock
+        private final TextView txtPrice; // to display price
+        private final ImageView imgProduct; // display image
 
         public ViewHolder(View view) {
             super(view);
-            // Define click listener for the ViewHolder's View
-            txtProductName = (TextView) view.findViewById(R.id.txtProductName);
-            txtCurrentStock = (TextView) view.findViewById(R.id.txtCurrentStock);
-            txtPrice = (TextView) view.findViewById(R.id.txtPrice);
-            imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
+            txtProductName = (TextView) view.findViewById(R.id.txtProductName); // getting view of product name textView
+            txtCurrentStock = (TextView) view.findViewById(R.id.txtCurrentStock); // getting view of product stock textView
+            txtPrice = (TextView) view.findViewById(R.id.txtPrice); // getting view of product price textView
+            imgProduct = (ImageView) view.findViewById(R.id.imgProduct); // getting view of product Image ImageView
         }
 
+        // defining getters to return the views of all four views
         public TextView getTxtProductName() {
             return txtProductName;
         }
@@ -63,9 +63,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
+    // Constructor of ProductAdapter class having two arguments of datalist and context
     public ProductAdapter(ArrayList<ProductModel> dataSet,Context context) {
-        this.localDataSet = dataSet;
-        this.context = context;
+        this.localDataSet = dataSet; // initialing dataset
+        this.context = context; // initialing context
     }
 
     // Create new views (invoked by the layout manager)

@@ -45,7 +45,6 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this, "Something Went Wrong!! try Again!!", Toast.LENGTH_SHORT).show();
                             }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
