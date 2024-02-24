@@ -1,19 +1,27 @@
 package com.example.stockwise.fragments.product;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
@@ -72,8 +80,22 @@ public class ProductFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.toolbar_menu,menu);
 
-        // getting addproduct button item from actionbar
+        // getting addProduct button item from actionbar
         MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
+        MenuItem btnSearch = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) btnSearch.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         // setting on click lister in add product item
         btnAddProduct.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -83,6 +105,7 @@ public class ProductFragment extends Fragment {
                 return true;
             }
         });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

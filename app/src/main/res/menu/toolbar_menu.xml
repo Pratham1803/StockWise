@@ -3,15 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView" />
+
+    <item
         android:id="@+id/scanner"
         app:showAsAction="always"
-        android:icon="@drawable/barcode"
+        android:icon="@drawable/scanner"
         android:title="Scan"/>
 
     <item
         android:id="@+id/addProduct"
         app:showAsAction="always"
-        android:icon="@drawable/plus"
+        android:icon="@drawable/add"
         android:tooltipText="Add"
         android:title="Add"/>
 </menu>

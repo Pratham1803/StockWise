@@ -2,13 +2,17 @@ package com.example.stockwise.fragments.product;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +48,8 @@ public class AddProduct extends AppCompatActivity {
     ProductModel productModel; // object of productModel Class
     private String barCodeId; // to store the bar code numbers
     Bitmap bitmap; // to store the bytes of image
+    private static final int REQUEST_IMAGE_CAPTURE = 1; // camera access
+    private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,14 @@ public class AddProduct extends AppCompatActivity {
         // setup actionbar
         bind.toolbarProduct.setTitle("Scan & Add Product"); // setting title
         setSupportActionBar(bind.toolbarProduct);
+
+        // onclick listener on imageview to change the image using camera or from gallery
+        bind.imgAddProductMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImageSelectionDialog();
+            }
+        });
     }
 
     // menu bar item selection listener
@@ -74,6 +88,14 @@ public class AddProduct extends AppCompatActivity {
 
         // scan button initialization from action bar and on click listener
         MenuItem btnScan = menu.findItem(R.id.scanner);
+
+        // search and add buttons are not useful so we are unvisibiling them
+        MenuItem btnSearch = menu.findItem(R.id.search);
+        btnSearch.setVisible(false);
+
+        MenuItem btnAdd = menu.findItem(R.id.addProduct);
+        btnAdd.setVisible(false);
+
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -87,6 +109,68 @@ public class AddProduct extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    // select image from gallery or camera  using this method, when product is not available when scan
+    private void showImageSelectionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
+        builder.setTitle("Select Image:");
+
+        String[] options = {"Capture Photo", "Choose from Gallery"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        // Capture image using Camera
+                        dispatchTakePictureIntent();
+                        break;
+                    case 1:
+                        // Choose image from Gallery
+                        dispatchPickImageIntent();
+                        break;
+                }
+            }
+        });
+
+        builder.create().show();
+    }
+
+    // opening camera for taking picture
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } else {
+            Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // opening local files to find the image
+    private void dispatchPickImageIntent() {
+        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageIntent.setType("image/*");
+        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
+        } else {
+            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // image is taken from camera or from file, now set in imageview
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // image from camera
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            bind.imgAddProductMain.setImageBitmap(imageBitmap);
+        } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
+            // image from gallery
+            Uri selectedImageUri = data.getData();
+            bind.imgAddProductMain.setImageURI(selectedImageUri);
+        }
     }
 
     // reset all fields of form
@@ -116,6 +200,7 @@ public class AddProduct extends AppCompatActivity {
     // get product data from api call of barcode id
     private void getProductDetail(){
         String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId; // api url
+        reset();
         try {
             // building request from okHttp module
             OkHttpClient client = new OkHttpClient();
@@ -152,7 +237,32 @@ public class AddProduct extends AppCompatActivity {
             Glide.with(this).load(productModel.getPicture()).into(bind.imgAddProductMain);
         } catch (Exception e) {
             Log.d("ErrorMsg", "get: "+e.toString());
-            Toast.makeText(this, "No Result"+e.toString(), Toast.LENGTH_LONG).show();
+
+            // displaying dialog box to user to inform that product details not available in barcode api
+            // user can add product manually by capturing picture or select pic from gallery or cancel it
+            bind.edProductName.setEnabled(true); // enabling product name textbox to write
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Product Details Can't Fetched!!:");
+            builder.setMessage("Add Product Manually! or\nPress Any where to exit");
+            builder.setIcon(R.drawable.logotransparent);
+
+            // positive button to add product manually
+            builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    showImageSelectionDialog(); // method call for user option of camera or gallery
+                }
+            });
+
+            // user don;t want to add product manually
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel(); // close dialog box
+                }
+            });
+
+            builder.create().show();
         }
         bind.progrssBarAdd.setVisibility(View.GONE); // unvisibling the progressbar
     }
