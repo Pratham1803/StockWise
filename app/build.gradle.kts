@@ -66,4 +66,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Dependency For Sweet Alert
+    implementation ("com.github.f0ris.sweetalert:library:1.6.2")
+
 }

@@ -83,6 +83,6 @@ public class SplashActivity extends AppCompatActivity {
                     openMainActivity(SplashActivity.this);
                 }
             }
-        }, 1000);
+        }, 10);
     }
 }

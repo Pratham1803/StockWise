@@ -17,6 +17,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="rectangleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+    </style>
     <style name="Theme.StockWise" parent="Base.Theme.StockWise" />
 
 </resources>

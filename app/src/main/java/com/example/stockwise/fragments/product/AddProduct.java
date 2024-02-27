@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.CamcorderProfile;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -100,10 +103,10 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 ScanOptions sc = new ScanOptions();
-                sc.setPrompt("App is ready for use"); // title on scanner
+                sc.setPrompt("Scan your product here."); // title on scanner
                 sc.setBeepEnabled(true); // enable beep sound
                 sc.setOrientationLocked(true);
-                sc.setCaptureActivity(CaptureActivity.class);
+                sc.setCaptureActivity(ScannerOrientation.class);
                 bar.launch(sc); // launching the scanner
                 return true;
             }
@@ -175,7 +178,7 @@ public class AddProduct extends AppCompatActivity {
 
     // reset all fields of form
     private void reset(){
-        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector)); // set default image
+        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.addimg)); // set default image
         bind.edProductName.setText("");
         bind.edCurrentStock.setText("");
         bind.edReorderpoint.setText("");
@@ -303,8 +306,8 @@ public class AddProduct extends AppCompatActivity {
                     }
                 }
                 if(isAvailable)
-                    // product is available, so just display the message
-                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
+                    // If product is already available, then show a warning alert
+                    AlertAlreadyAvailable();
                 else{
                     // product is not available, so visible progress bar and upload data to the database
                     bind.progrssBarAdd.setVisibility(View.VISIBLE);
@@ -315,6 +318,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}});
     }
+
 
     // uploading product details in firebase
     private void uploadData(){
@@ -343,9 +347,9 @@ public class AddProduct extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 // data is uploaded in database
-                                                Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
-                                                reset(); // reseting all the fields
-                                            }
+                                                AlertProductAdded(); // Show success Alert
+                                                reset(); // Resetting all the fields
+                                             }
                                         }
                                 );
                             }
@@ -353,5 +357,42 @@ public class AddProduct extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    // Success Alert
+    private void AlertProductAdded() {
+        new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Product Added!!") // Set title
+                .setConfirmButtonBackgroundColor(Color.parseColor("#4BB543")) // Set background color of Ok Button
+                .show();
+    }
+
+    // Warning Alert
+    private void AlertAlreadyAvailable() {
+        SweetAlertDialog pDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.WARNING_TYPE);
+        pDialog.setTitleText("Product is Already Available!!"); // Set title
+        pDialog.setCancelable(false);
+        pDialog.setConfirmText("Ok");  // Set Ok Button
+        pDialog.setConfirmButtonBackgroundColor(Color.parseColor("#1A6AEA")); // Set background color of OK Button
+        pDialog.setCancelText("Cancel");  // Set Cancel Button
+        pDialog.setCancelButtonBackgroundColor(Color.parseColor("#D3D3D3"));  // Set background color of Cancel Button
+
+        // Button Ok onclick event
+        pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                reset(); // Resetting all the fields
+            }
+        });
+
+        // Button Cancel onclick event
+        pDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                // Dismiss the alert
+                pDialog.dismiss();
+            }
+        });
+        pDialog.show(); // Show the alert
     }
 }

@@ -30,8 +30,12 @@
                 android:elevation="4dp"
                 android:background="@color/blue"
                 app:titleTextColor="@color/white"
+                app:subtitleTextAppearance="@font/lexend_bold"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                >
+                
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <ScrollView
                 android:layout_width="match_parent"

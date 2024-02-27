@@ -5,6 +5,7 @@ import com.example.stockwise.loginModule.Registration;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,6 +21,9 @@ import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentProfileBinding;
+
+import MenuScreens.Settings;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class ProfileFragment extends Fragment {
@@ -42,42 +46,44 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        bind.LayoutSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, Settings.class)); // redirecting user to settings activity
+                ((Activity)context).finish(); // finishing this activity
+            }
+        });
+
         return bind.getRoot();
     }
 
     // log out user from the app
     public void logOutUser(Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        // Set the message show for the Alert time
-        builder.setMessage("Are you sure to LogOut ?");
-
-        // Set Alert Title
-        builder.setTitle("Log Out !");
-
-        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
-        builder.setCancelable(false);
-
-        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
-        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+        SweetAlertDialog pDialog = new SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE);
+        pDialog.setTitleText("Log Out !");
+        pDialog.setContentText("Are you sure want to Logout?");
+        pDialog.setCancelable(false);
+        pDialog.setConfirmText("Yes");
+        pDialog.setConfirmButtonBackgroundColor(Color.parseColor("#E01C29"));
+        pDialog.setCancelText("No");
+        pDialog.setCancelButtonBackgroundColor(Color.parseColor("#1A6AEA"));
+        pDialog.setContentTextSize(20);
+        pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
                 Params.getAUTH().signOut(); // signing out current user
                 context.startActivity(new Intent(context, LandingPage.class)); // redirecting user to sign in activity
                 ((Activity)context).finish(); // finishing this activity
             }
         });
-
-        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
-        builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
-            // If user click no then dialog box is canceled.
-            dialog.cancel();
+        pDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                pDialog.dismiss();
+            }
         });
-
-        // Create the Alert dialog
-        AlertDialog alertDialog = builder.create();
-        // Show the Alert Dialog box
-        alertDialog.show();
+        pDialog.show();
     }
 
 }
