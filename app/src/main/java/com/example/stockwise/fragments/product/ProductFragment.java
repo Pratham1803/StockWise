@@ -58,13 +58,15 @@ public class ProductFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop
+                arrProduct.clear(); // deleting all products from the list
                 for(DataSnapshot post : snapshot.getChildren()){
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                    newProduct.setId(post.getKey()); // setting user id of product to class object
+                    newProduct.setId(post.getKey().toString()); // setting user id of product to class object
                     arrProduct.add(newProduct); // adding product in product's arraylist
+
+                    // notifying the adapter that product is added in list
+                    productAdapter.notifyItemInserted(arrProduct.size());
                 }
-                // dataset is changed, so notifying the adapter
-                productAdapter.notifyDataSetChanged();
             }
 
             @Override
