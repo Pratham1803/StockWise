@@ -50,6 +50,7 @@ public class AddProduct extends AppCompatActivity {
     Bitmap bitmap; // to store the bytes of image
     private static final int REQUEST_IMAGE_CAPTURE = 1; // camera access
     private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
+    private ScanOptions scanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +100,13 @@ public class AddProduct extends AppCompatActivity {
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                ScanOptions sc = new ScanOptions();
-                sc.setPrompt("App is ready for use"); // title on scanner
-                sc.setBeepEnabled(true); // enable beep sound
-                sc.setOrientationLocked(true);
-                sc.setCaptureActivity(CaptureActivity.class);
-                bar.launch(sc); // launching the scanner
+                reset();
+                scanner = new ScanOptions();
+                scanner.setPrompt("App is ready for use"); // title on scanner
+                scanner.setBeepEnabled(true); // enable beep sound
+                scanner.setOrientationLocked(true);
+                scanner.setCaptureActivity(CaptureActivity.class);
+                bar.launch(scanner); // launching the scanner
                 return true;
             }
         });
@@ -178,6 +180,7 @@ public class AddProduct extends AppCompatActivity {
         bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector)); // set default image
         bind.edProductName.setText("");
         bind.edCurrentStock.setText("");
+        bind.edBarCodeNum.setText("");
         bind.edReorderpoint.setText("");
         bind.edPurchasePrice.setText("");
         bind.edSalePrice.setText("");
@@ -187,20 +190,53 @@ public class AddProduct extends AppCompatActivity {
     // scanner result
     ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
         // if scanner has some result
-        if(result.getContents()!=null) {
-            bind.progrssBarAdd.setVisibility(View.VISIBLE); // visible the progressbar
+        if(result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
-            getProductDetail(); // calling method to get product details
+            checkBarCodeNum();
         }
         // scanner does not have any results
         else
             Toast.makeText(this, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
+    private boolean checkBarCodeNum(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Scanner Result!!:");
+        builder.setMessage("Is this, Correct Result? :\n"+barCodeId);
+        builder.setIcon(R.drawable.logotransparent);
+
+        // positive button to add product manually
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                getProductDetail(); // calling method to get product details
+            }
+        });
+
+        // user don;t want to add product manually
+        builder.setNegativeButton("Scan Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                bar.launch(scanner);
+            }
+        });
+
+        // set cancel button
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.create().show();
+        return true;
+    }
+
     // get product data from api call of barcode id
     private void getProductDetail(){
         String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId; // api url
-        reset();
         try {
             // building request from okHttp module
             OkHttpClient client = new OkHttpClient();
@@ -233,7 +269,7 @@ public class AddProduct extends AppCompatActivity {
 
             // filling details in text box and image view
             bind.edProductName.setText(productModel.getName());
-            bind.edProductName.setEnabled(false); // read only
+            bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
             Glide.with(this).load(productModel.getPicture()).into(bind.imgAddProductMain);
         } catch (Exception e) {
             Log.d("ErrorMsg", "get: "+e.toString());
@@ -275,11 +311,12 @@ public class AddProduct extends AppCompatActivity {
         productModel.setReorder_point(bind.edReorderpoint.getText().toString());
         productModel.setPurchase_price(bind.edPurchasePrice.getText().toString());
         productModel.setSale_price(bind.edSalePrice.getText().toString());
+        productModel.setBarCodeNum(bind.edBarCodeNum.getText().toString());
 
         // check that is there any input available or not
         if((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty())
                 && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty())
-                && (!productModel.getSale_price().isEmpty())){
+                && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty())){
             // all the details field, check product is already there or not
             isProductAvailable();
         }else{
@@ -297,7 +334,7 @@ public class AddProduct extends AppCompatActivity {
                 boolean isAvailable = false;
                 for(DataSnapshot post: snapshot.getChildren()){
                     // if the name match of product in the database, that means product is already there in database
-                    if(post.child(Params.getNAME()).getValue().toString().equals(productModel.getName())){
+                    if(post.child(Params.getBarCode()).getValue().toString().equals(productModel.getBarCodeNum())){
                         isAvailable = true;
                         break;
                     }
@@ -344,7 +381,7 @@ public class AddProduct extends AppCompatActivity {
                                             public void onSuccess(Void unused) {
                                                 // data is uploaded in database
                                                 Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
-                                                reset(); // reseting all the fields
+                                                reset(); // resetting all the fields
                                             }
                                         }
                                 );

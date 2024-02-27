@@ -3,6 +3,7 @@ package com.example.stockwise.model;
 public class ProductModel {
     private String id;
     private String name;
+    private String barCodeNum;
     private String current_stock;
     private String reorder_point;
     private String purchase_price;
@@ -14,8 +15,9 @@ public class ProductModel {
 
     public ProductModel() {}
 
-    public ProductModel(String name, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture) {
+    public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture) {
         this.name = name;
+        this.barCodeNum = barCodeNum;
         this.current_stock = current_stock;
         this.reorder_point = reorder_point;
         this.purchase_price = purchase_price;
@@ -25,6 +27,11 @@ public class ProductModel {
     }
 
     // setters
+
+    public void setBarCodeNum(String barCodeNum) {
+        this.barCodeNum = barCodeNum;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -59,6 +66,11 @@ public class ProductModel {
 
 
     // getters
+
+    public String getBarCodeNum() {
+        return barCodeNum;
+    }
+
     public String getId() {
         return id;
     }

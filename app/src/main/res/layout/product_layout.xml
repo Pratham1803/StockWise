@@ -10,6 +10,16 @@
     app:cardCornerRadius="12dp"
     app:cardMaxElevation="12dp">
 
+    <TextView
+        android:id="@+id/txtBarcodeNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="demo text"
+        android:padding="3sp"
+        android:textSize="12sp"
+        android:layout_gravity="end"
+        />
+
     <androidx.cardview.widget.CardView
         android:layout_width="100sp"
         android:layout_height="100sp"

@@ -15,6 +15,7 @@ public class Params {
     private static String NAME;
     private static String SHOP_NAME;
     private static String OWNER_NAME;
+    private static String BAR_CODE;
     private static String EMAIL_ID;
     private static String CONTACT_NUMBER;
     private static String FCM_TOKEN;
@@ -55,7 +56,7 @@ public class Params {
         CUSTOMER = "customer";
         DATE = "date";
         TRANSACTION = "transaction";
-
+        BAR_CODE = "barCodeNum";
 
         OWNER_MODEL = new OwnerModel();
         // database models
@@ -81,6 +82,10 @@ public class Params {
     }
 
     // getters
+
+    public static String getBarCode() {
+        return BAR_CODE;
+    }
 
     public static String getNAME() {
         return NAME;
