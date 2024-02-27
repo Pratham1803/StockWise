@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -32,11 +33,16 @@ import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.journeyapps.barcodescanner.CaptureActivity;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 
 public class ProductFragment extends Fragment {
     private Context context; // to store context
+    private ScanOptions scanner; // scanner
+    private String barCodeId; // setting bar code number
     private FragmentProductBinding bind; // bind view
     private ArrayList<ProductModel> arrProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
@@ -85,7 +91,22 @@ public class ProductFragment extends Fragment {
         // getting addProduct button item from actionbar
         MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
         MenuItem btnSearch = menu.findItem(R.id.search);
+        MenuItem btnScan = menu.findItem(R.id.scanner);
         SearchView searchView = (SearchView) btnSearch.getActionView();
+
+        btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                scanner = new ScanOptions();
+                scanner.setPrompt("App is ready for use"); // title on scanner
+                scanner.setBeepEnabled(true); // enable beep sound
+                scanner.setOrientationLocked(true);
+                scanner.setCaptureActivity(CaptureActivity.class);
+                bar.launch(scanner); // launching the scanner
+                return true;
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -109,5 +130,40 @@ public class ProductFragment extends Fragment {
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // scanner result
+    ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
+        // if scanner has some result
+        if(result.getContents() != null) {
+            barCodeId = result.getContents(); // collect the barcode number and store it
+            searchProduct_barcode();
+        }
+        // scanner does not have any results
+        else
+            Toast.makeText(context, "Unable to Scan!!", Toast.LENGTH_LONG).show();
+    });
+
+    // search using Barcode num
+    private void searchProduct_barcode(){
+        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrProduct.clear();
+                for(DataSnapshot post : snapshot.getChildren()){
+                    if(post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
+                        ProductModel productModel = post.getValue(ProductModel.class);
+                        productModel.setId(post.getKey().toString());
+                        arrProduct.add(productModel);
+                        productAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
