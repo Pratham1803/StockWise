@@ -1,4 +1,4 @@
-package MenuScreens;
+package com.example.stockwise.MenuScreens;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +9,9 @@ import android.view.View;
 
 import com.example.stockwise.MainActivity;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.databinding.ActivitySettingsBinding;
 
-import SettingsNavigation.PrivacyPolicy;
+import com.example.stockwise.SettingsNavigation.PrivacyPolicy;
 
 public class Settings extends AppCompatActivity {
     private ActivitySettingsBinding bind; // declaring view binding
@@ -24,14 +23,6 @@ public class Settings extends AppCompatActivity {
 
         bind = ActivitySettingsBinding.inflate(getLayoutInflater()); // initializing view binding
         setContentView(bind.getRoot());
-
-        bind.backFromSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Settings.this, MainActivity.class));
-                finish();
-            }
-        });
 
         bind.LayoutReportIssue.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,14 +9,10 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
@@ -29,7 +25,7 @@ import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import MenuScreens.Settings;
+import com.example.stockwise.MenuScreens.Settings;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -173,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view,categoryFragment).commit();
         else if (id == R.id.nav_settings) // user click on settings
             startActivity(new Intent(MainActivity.this,Settings.class));
-            finish();
 
         bind.mainDrawerLayout.closeDrawer(GravityCompat.START); // when any item is click after that close the drawer
         return true;

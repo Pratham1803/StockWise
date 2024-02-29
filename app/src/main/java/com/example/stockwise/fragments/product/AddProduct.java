@@ -19,6 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
@@ -34,14 +42,14 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AddProduct extends AppCompatActivity {
     private ActivityAddProductBinding bind; // activity binding
@@ -50,23 +58,19 @@ public class AddProduct extends AppCompatActivity {
     Bitmap bitmap; // to store the bytes of image
     private static final int REQUEST_IMAGE_CAPTURE = 1; // camera access
     private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
-    private ScanOptions scanner;
+    private ScanOptions scanner; // scanner fields declaration
+    private SweetAlertDialog sweetAlertDialog; // alert dialog box declaration
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // this will pause app for the result of scanner
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()   // or .detectAll() for all detectable problems
-                .penaltyLog()
-                .build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork()   // or .detectAll() for all detectable problems
+                .penaltyLog().build());
         super.onCreate(savedInstanceState);
 
         // initializing view binding
         bind = ActivityAddProductBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
-
         productModel = new ProductModel(); // initializing object of product model
 
         // setup actionbar
@@ -85,7 +89,7 @@ public class AddProduct extends AppCompatActivity {
     // menu bar item selection listener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 
         // scan button initialization from action bar and on click listener
         MenuItem btnScan = menu.findItem(R.id.scanner);
@@ -105,7 +109,7 @@ public class AddProduct extends AppCompatActivity {
                 scanner.setPrompt("App is ready for use"); // title on scanner
                 scanner.setBeepEnabled(true); // enable beep sound
                 scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(CaptureActivity.class);
+                scanner.setCaptureActivity(ScannerOrientation.class);
                 bar.launch(scanner); // launching the scanner
                 return true;
             }
@@ -176,8 +180,8 @@ public class AddProduct extends AppCompatActivity {
     }
 
     // reset all fields of form
-    private void reset(){
-        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector)); // set default image
+    private void reset() {
+        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.addimg)); // set default image
         bind.edProductName.setText("");
         bind.edCurrentStock.setText("");
         bind.edBarCodeNum.setText("");
@@ -188,21 +192,20 @@ public class AddProduct extends AppCompatActivity {
     }
 
     // scanner result
-    ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
+    ActivityResultLauncher<ScanOptions> bar = registerForActivityResult(new ScanContract(), result -> {
         // if scanner has some result
-        if(result.getContents() != null) {
+        if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
             checkBarCodeNum();
         }
         // scanner does not have any results
-        else
-            Toast.makeText(this, "Unable to Scan!!", Toast.LENGTH_LONG).show();
+        else Toast.makeText(this, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
-    private boolean checkBarCodeNum(){
+    private boolean checkBarCodeNum() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scanner Result!!:");
-        builder.setMessage("Is this, Correct Result? :\n"+barCodeId);
+        builder.setMessage("Is this, Correct Result? :\n" + barCodeId);
         builder.setIcon(R.drawable.logotransparent);
 
         // positive button to add product manually
@@ -210,7 +213,14 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                getProductDetail(); // calling method to get product details
+                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Fetching Product Details!!").setContentText("Please Wait...");
+                sweetAlertDialog.setCancelable(false); // setting un cancelable
+                sweetAlertDialog.show();
+                try {
+                    getProductDetail();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -235,72 +245,79 @@ public class AddProduct extends AppCompatActivity {
     }
 
     // get product data from api call of barcode id
-    private void getProductDetail(){
-        String Url = "https://barcodes1.p.rapidapi.com/?query="+barCodeId; // api url
-        try {
-            // building request from okHttp module
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(Url)
-                    .get()
-                    .addHeader("X-RapidAPI-Key", "8b95b432c8mshbc8aee1d626616ap199372jsnb71b43f2a8fc")
-                    .addHeader("X-RapidAPI-Host", "barcodes1.p.rapidapi.com")
-                    .build();
+    private void getProductDetail() throws JSONException {
+        String Url = "https://barcodes1.p.rapidapi.com/?query=" + barCodeId; // api url
+        RequestQueue queue = Volley.newRequestQueue(this); // request queue
 
-            // executing the request
-            Response responses = client.newCall(request).execute();
+        // Request a json response from the provided URL.
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // Response is received
+                try {
+                    JSONObject jsonObject = (JSONObject) response.get("product"); // collecting data from the 'product' key
 
-            // storing the result of api call here
-            String data = responses.body().string();
+                    // collecting product name from 'title' key
+                    productModel.setName(jsonObject.get("title").toString());
+                    // collecting product image array from 'images' key
+                    JSONArray jsonArray = (JSONArray) jsonObject.get("images");
+                    productModel.setPicture(jsonArray.get(0).toString()); // adding first image of product from list
+                    Log.d("ProductData", "get: Name = " + jsonObject.get("title"));
+                    Log.d("ProductData", "get: Image = " + jsonObject.get("images"));
 
-            // converting data into json object
-            JSONObject jsonObject = new JSONObject(data);
-            jsonObject = (JSONObject) jsonObject.get("product"); // collecting data from the 'product' key
-
-            // collecting product name from 'title' key
-            productModel.setName(jsonObject.get("title").toString());
-
-            // collecting product image array from 'images' key
-            JSONArray jsonArray = (JSONArray) jsonObject.get("images");
-            productModel.setPicture(jsonArray.get(0).toString()); // adding first image of product from list
-
-            Log.d("ProductData", "get: Name = "+jsonObject.get("title"));
-            Log.d("ProductData", "get: Image = "+jsonObject.get("images"));
-
-            // filling details in text box and image view
-            bind.edProductName.setText(productModel.getName());
-            bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
-            Glide.with(this).load(productModel.getPicture()).into(bind.imgAddProductMain);
-        } catch (Exception e) {
-            Log.d("ErrorMsg", "get: "+e.toString());
-
-            // displaying dialog box to user to inform that product details not available in barcode api
-            // user can add product manually by capturing picture or select pic from gallery or cancel it
-            bind.edProductName.setEnabled(true); // enabling product name textbox to write
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Product Details Can't Fetched!!:");
-            builder.setMessage("Add Product Manually! or\nPress Any where to exit");
-            builder.setIcon(R.drawable.logotransparent);
-
-            // positive button to add product manually
-            builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    showImageSelectionDialog(); // method call for user option of camera or gallery
+                    // filling details in text box and image view
+                    bind.edProductName.setText(productModel.getName());
+                    bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
+                    Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain);
+                    sweetAlertDialog.cancel(); // cancel the progress dialog
+                } catch (Exception e) {
+                    Log.d("ErrorMsg", "get: " + e.toString());
                 }
-            });
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ErrorMsg", "get: Volley error : " + error.toString());
+                sweetAlertDialog.cancel(); // cancel the progress dialog
 
-            // user don;t want to add product manually
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel(); // close dialog box
-                }
-            });
+                // displaying dialog box to user to inform that product details not available in barcode api
+                // user can add product manually by capturing picture or select pic from gallery or cancel it
+                bind.edProductName.setEnabled(true); // enabling product name textbox to write
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
+                builder.setTitle("Product Details Can't Fetched!!:");
+                builder.setMessage("Add Product Manually! or\nPress Any where to exit");
+                builder.setIcon(R.drawable.logotransparent);
 
-            builder.create().show();
-        }
-        bind.progrssBarAdd.setVisibility(View.GONE); // unvisibling the progressbar
+                // positive button to add product manually
+                builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showImageSelectionDialog(); // method call for user option of camera or gallery
+                    }
+                });
+
+                // user don;t want to add product manually
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel(); // close dialog box
+                    }
+                });
+
+                builder.create().show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("X-RapidAPI-Key", "8b95b432c8mshbc8aee1d626616ap199372jsnb71b43f2a8fc");
+                params.put("X-RapidAPI-Host", "barcodes1.p.rapidapi.com");
+                return params;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(jsonObjectRequest);
     }
 
     // add product button clicked
@@ -314,35 +331,33 @@ public class AddProduct extends AppCompatActivity {
         productModel.setBarCodeNum(bind.edBarCodeNum.getText().toString());
 
         // check that is there any input available or not
-        if((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty())
-                && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty())
-                && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty())){
+        if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty())) {
             // all the details field, check product is already there or not
             isProductAvailable();
-        }else{
+        } else {
             Toast.makeText(this, "Fill All the Details", Toast.LENGTH_SHORT).show();
         }
     }
 
     // check that is product already available or not in database
     // is not then add the product in database
-    private void isProductAvailable(){
+    private void isProductAvailable() {
         // checking that product is available or not
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isAvailable = false;
-                for(DataSnapshot post: snapshot.getChildren()){
+                for (DataSnapshot post : snapshot.getChildren()) {
                     // if the name match of product in the database, that means product is already there in database
-                    if(post.child(Params.getBarCode()).getValue().toString().equals(productModel.getBarCodeNum())){
+                    if (post.child(Params.getBarCode()).getValue().toString().equals(productModel.getBarCodeNum())) {
                         isAvailable = true;
                         break;
                     }
                 }
-                if(isAvailable)
+                if (isAvailable)
                     // product is available, so just display the message
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
-                else{
+                else {
                     // product is not available, so visible progress bar and upload data to the database
                     bind.progrssBarAdd.setVisibility(View.VISIBLE);
                     uploadData();
@@ -350,13 +365,15 @@ public class AddProduct extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}});
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     // uploading product details in firebase
-    private void uploadData(){
+    private void uploadData() {
         // Upload bitmap to Firebase Storage
-        String image = productModel.getName()+".jpg"; // setting the name of image
+        String image = productModel.getName() + ".jpg"; // setting the name of image
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap(); // getting bitmap from the image view
@@ -364,31 +381,27 @@ public class AddProduct extends AppCompatActivity {
         byte[] data = baos.toByteArray(); // storing byte data in list
 
         // uploading image of product
-        Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(
-                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // getting url of the image from firebase storage
+                Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // getting url of the image from firebase storage
-                        Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    public void onSuccess(Uri uri) {
+                        // setting product url
+                        productModel.setPicture(uri.toString());
+                        // storing product details is database
+                        Params.getREFERENCE().child(Params.getPRODUCT()).push().setValue(productModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(Uri uri) {
-                                // setting product url
-                                productModel.setPicture(uri.toString());
-                                // storing product details is database
-                                Params.getREFERENCE().child(Params.getPRODUCT()).push().setValue(productModel).addOnSuccessListener(
-                                        new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                // data is uploaded in database
-                                                Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
-                                                reset(); // resetting all the fields
-                                            }
-                                        }
-                                );
+                            public void onSuccess(Void unused) {
+                                // data is uploaded in database
+                                Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
+                                reset(); // resetting all the fields
                             }
                         });
                     }
-                }
-        );
+                });
+            }
+        });
     }
 }

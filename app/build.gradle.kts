@@ -58,13 +58,13 @@ dependencies {
     implementation("com.etebarian:meow-bottom-navigation:1.2.0")
 
     // okHttp
-    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.android.volley:volley:1.2.1")
     // define a BOM and its version
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
 
     // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
+//    implementation("com.squareup.okhttp3:okhttp")
+//    implementation("com.squareup.okhttp3:logging-interceptor")
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Dependency For Sweet Alert

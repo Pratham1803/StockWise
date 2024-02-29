@@ -1,5 +1,6 @@
 package com.example.stockwise.fragments.product;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,16 +48,17 @@ public class ProductFragment extends Fragment {
     private FragmentProductBinding bind; // bind view
     private ArrayList<ProductModel> arrProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        bind = FragmentProductBinding.inflate(inflater,container,false); // initialing view binding
+        bind = FragmentProductBinding.inflate(inflater, container, false); // initialing view binding
         context = bind.getRoot().getContext(); // initializing context
         setHasOptionsMenu(true); // setting action bar
 
         // set recycler view
         arrProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
-        productAdapter = new ProductAdapter(arrProduct,context); // initializing productAdapter
+        productAdapter = new ProductAdapter(arrProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
 
@@ -65,7 +68,7 @@ public class ProductFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop
                 arrProduct.clear(); // deleting all products from the list
-                for(DataSnapshot post : snapshot.getChildren()){
+                for (DataSnapshot post : snapshot.getChildren()) {
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
                     newProduct.setId(post.getKey().toString()); // setting user id of product to class object
                     arrProduct.add(newProduct); // adding product in product's arraylist
@@ -86,7 +89,7 @@ public class ProductFragment extends Fragment {
     // setting listener to, create action bar
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_menu,menu);
+        inflater.inflate(R.menu.toolbar_menu, menu);
 
         // getting addProduct button item from actionbar
         MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
@@ -124,7 +127,7 @@ public class ProductFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 // starting activity of add product screen
-                startActivity(new Intent(context,AddProduct.class));
+                startActivity(new Intent(context, AddProduct.class));
                 return true;
             }
         });
@@ -133,9 +136,9 @@ public class ProductFragment extends Fragment {
     }
 
     // scanner result
-    ActivityResultLauncher<ScanOptions> bar =registerForActivityResult(new ScanContract(), result-> {
+    ActivityResultLauncher<ScanOptions> bar = registerForActivityResult(new ScanContract(), result -> {
         // if scanner has some result
-        if(result.getContents() != null) {
+        if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
             searchProduct_barcode();
         }
@@ -145,13 +148,13 @@ public class ProductFragment extends Fragment {
     });
 
     // search using Barcode num
-    private void searchProduct_barcode(){
+    private void searchProduct_barcode() {
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrProduct.clear();
-                for(DataSnapshot post : snapshot.getChildren()){
-                    if(post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
+                for (DataSnapshot post : snapshot.getChildren()) {
+                    if (post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
                         ProductModel productModel = post.getValue(ProductModel.class);
                         productModel.setId(post.getKey().toString());
                         arrProduct.add(productModel);
