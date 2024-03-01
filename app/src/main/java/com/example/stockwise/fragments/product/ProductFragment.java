@@ -104,7 +104,7 @@ public class ProductFragment extends Fragment {
                 scanner.setPrompt("App is ready for use"); // title on scanner
                 scanner.setBeepEnabled(true); // enable beep sound
                 scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(CaptureActivity.class);
+                scanner.setCaptureActivity(ScannerOrientation.class);
                 bar.launch(scanner); // launching the scanner
                 return true;
             }

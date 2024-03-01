@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityAddProductBinding;
@@ -60,7 +61,7 @@ public class AddProduct extends AppCompatActivity {
     private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
     private ScanOptions scanner; // scanner fields declaration
     private SweetAlertDialog sweetAlertDialog; // alert dialog box declaration
-
+    private AlertDialog.Builder builder; // alert dialog box builder
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // this will pause app for the result of scanner
@@ -119,21 +120,19 @@ public class AddProduct extends AppCompatActivity {
 
     // select image from gallery or camera  using this method, when product is not available when scan
     private void showImageSelectionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
-        builder.setTitle("Select Image:");
+        builder = DialogBuilder.showDialog(AddProduct.this, "Select Image Source :", "");
+        builder.setMessage(null);
 
         String[] options = {"Capture Photo", "Choose from Gallery"};
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+        builder.setItems(options,new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        // Capture image using Camera
-                        dispatchTakePictureIntent();
+                        dispatchTakePictureIntent(); // open camera
                         break;
                     case 1:
-                        // Choose image from Gallery
-                        dispatchPickImageIntent();
+                        dispatchPickImageIntent(); // open gallery
                         break;
                 }
             }
@@ -203,10 +202,7 @@ public class AddProduct extends AppCompatActivity {
     });
 
     private boolean checkBarCodeNum() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scanner Result!!:");
-        builder.setMessage("Is this, Correct Result? :\n" + barCodeId);
-        builder.setIcon(R.drawable.logotransparent);
+        builder = DialogBuilder.showDialog(this, "Scanner Result!!:", "Is this, Correct Result? :\n" + barCodeId);
 
         // positive button to add product manually
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -224,7 +220,7 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
-        // user don;t want to add product manually
+        // user don't want to add product manually
         builder.setNegativeButton("Scan Again", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -248,6 +244,7 @@ public class AddProduct extends AppCompatActivity {
     private void getProductDetail() throws JSONException {
         String Url = "https://barcodes1.p.rapidapi.com/?query=" + barCodeId; // api url
         RequestQueue queue = Volley.newRequestQueue(this); // request queue
+        bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
 
         // Request a json response from the provided URL.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
@@ -267,7 +264,6 @@ public class AddProduct extends AppCompatActivity {
 
                     // filling details in text box and image view
                     bind.edProductName.setText(productModel.getName());
-                    bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
                     Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain);
                     sweetAlertDialog.cancel(); // cancel the progress dialog
                 } catch (Exception e) {
@@ -283,10 +279,7 @@ public class AddProduct extends AppCompatActivity {
                 // displaying dialog box to user to inform that product details not available in barcode api
                 // user can add product manually by capturing picture or select pic from gallery or cancel it
                 bind.edProductName.setEnabled(true); // enabling product name textbox to write
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddProduct.this);
-                builder.setTitle("Product Details Can't Fetched!!:");
-                builder.setMessage("Add Product Manually! or\nPress Any where to exit");
-                builder.setIcon(R.drawable.logotransparent);
+                builder = DialogBuilder.showDialog(AddProduct.this, "Product Details Can't Fetched", "Add Product Manually! or\nPress Any where to exit");
 
                 // positive button to add product manually
                 builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
@@ -395,7 +388,8 @@ public class AddProduct extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void unused) {
                                 // data is uploaded in database
-                                Toast.makeText(AddProduct.this, "Product Added!!", Toast.LENGTH_SHORT).show();
+                                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added Successfully!!").setContentText("Product is Added in Database");
+                                sweetAlertDialog.show();
                                 reset(); // resetting all the fields
                             }
                         });
