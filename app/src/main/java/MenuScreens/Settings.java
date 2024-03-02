@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.stockwise.MainActivity;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.databinding.ActivitySettingsBinding;
 
 import SettingsNavigation.PrivacyPolicy;
@@ -44,6 +46,7 @@ public class Settings extends AppCompatActivity {
                 final View customLayout = getLayoutInflater().inflate(R.layout.report_alert, null);
                 builder.setView(customLayout);
 
+
                 // add a button
                 builder.setPositiveButton("OK", (dialog, which) -> {
                     //todo code
@@ -52,15 +55,18 @@ public class Settings extends AppCompatActivity {
                 // create and show the alert dialog
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
             }
+
         });
 
         bind.LayoutPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Settings.this, PrivacyPolicy.class));
-                finish();
+                //finish();
             }
         });
-    }// End of Oncreate
+
+    }// End of OnCreate
 }

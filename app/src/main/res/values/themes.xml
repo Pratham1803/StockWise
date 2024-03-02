@@ -18,6 +18,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="CircleButton" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="android:backgroundTint">@color/blue</item>
+    </style>
+
     <style name="rectangleImageView" parent="">
         <item name="cornerFamily">rounded</item>
     </style>

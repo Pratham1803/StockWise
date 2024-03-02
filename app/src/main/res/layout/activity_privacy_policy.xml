@@ -57,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout4"
         android:layout_marginTop="12dp"
-        android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -66,6 +65,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical">
+
+
 
             <TextView
                 android:id="@+id/textView11"
@@ -415,7 +416,7 @@
             android:background="@drawable/btn_login"
             android:orientation="vertical"
             android:padding="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
 
             <TextView
@@ -485,7 +486,7 @@
                 android:background="@drawable/btn_login"
                 android:orientation="vertical"
                 android:padding="10dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
 
                 <TextView

@@ -23,6 +23,7 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.CategoryFragment;
+import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
 import com.example.stockwise.fragments.transaction.transactionFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId(); // storing currently selected id
 
-        if(id == R.id.nav_home) { // home fragment selected
+        if(id == R.id.nav_home) {
             changeFragment(homeFragment,R.string.titleHome); // change the screen to home screen
             bind.meowBottom.show(navHomeId,true); // displaying the home item is selected in bottom nav
         }
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
         } else if (id == R.id.nav_category) { // category fragment
             // changing screen to category screen
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, categoryFragment).commit();
+            startActivity(new Intent(MainActivity.this, ManageCategory.class));
         }
 
         // unused right now

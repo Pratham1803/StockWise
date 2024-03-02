@@ -35,17 +35,49 @@ public class PrivacyPolicy extends AppCompatActivity {
         bind.btnIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(bind.ShowIntroduction.getVisibility()==View.GONE){
+
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                    {
+
+                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowInformation.setVisibility(View.GONE);
+                        bind.ShowUseInformation.setVisibility(View.GONE);
+                        bind.ShowUpdates.setVisibility(View.GONE);
+                    }
+                }
+
                 if(bind.ShowIntroduction.getVisibility() == View.GONE) {
                     bind.ShowIntroduction.setVisibility(View.VISIBLE);
                 } else {
                     bind.ShowIntroduction.setVisibility(View.GONE);
                 }
+
             }
         });
 
         bind.btnInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(bind.ShowInformation.getVisibility()==View.GONE){
+
+                    if(bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                    {
+
+                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowIntroduction.setVisibility(View.GONE);
+                        bind.ShowUseInformation.setVisibility(View.GONE);
+                        bind.ShowUpdates.setVisibility(View.GONE);
+                    }
+                }
+
                 if(bind.ShowInformation.getVisibility() == View.GONE) {
                     bind.ShowInformation.setVisibility(View.VISIBLE);
                 } else {
@@ -57,6 +89,21 @@ public class PrivacyPolicy extends AppCompatActivity {
         bind.btnUseInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(bind.ShowUseInformation.getVisibility()==View.GONE){
+
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                    {
+
+                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowInformation.setVisibility(View.GONE);
+                        bind.ShowIntroduction.setVisibility(View.GONE);
+                        bind.ShowUpdates.setVisibility(View.GONE);
+                    }
+                }
                 if(bind.ShowUseInformation.getVisibility() == View.GONE) {
                     bind.ShowUseInformation.setVisibility(View.VISIBLE);
                 } else {
@@ -68,6 +115,21 @@ public class PrivacyPolicy extends AppCompatActivity {
         bind.btnSecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(bind.ShowSecurity.getVisibility()==View.GONE){
+
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE)
+                    {
+
+                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowInformation.setVisibility(View.GONE);
+                        bind.ShowUseInformation.setVisibility(View.GONE);
+                        bind.ShowIntroduction.setVisibility(View.GONE);
+                    }
+                }
                 if(bind.ShowSecurity.getVisibility() == View.GONE) {
                     bind.ShowSecurity.setVisibility(View.VISIBLE);
                 } else {
@@ -79,6 +141,21 @@ public class PrivacyPolicy extends AppCompatActivity {
         bind.btnUpdatees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(bind.ShowUpdates.getVisibility()==View.GONE){
+
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                    {
+
+                        bind.ShowIntroduction.setVisibility(View.GONE);
+                        bind.ShowInformation.setVisibility(View.GONE);
+                        bind.ShowUseInformation.setVisibility(View.GONE);
+                        bind.ShowSecurity.setVisibility(View.GONE);
+                    }
+                }
                 if(bind.ShowUpdates.getVisibility() == View.GONE) {
                     bind.ShowUpdates.setVisibility(View.VISIBLE);
                 } else {

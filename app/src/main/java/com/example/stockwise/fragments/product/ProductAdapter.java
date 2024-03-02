@@ -37,7 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             txtProductName = (TextView) view.findViewById(R.id.txtProductName); // getting view of product name textView
             txtCurrentStock = (TextView) view.findViewById(R.id.txtCurrentStock); // getting view of product stock textView
             txtPrice = (TextView) view.findViewById(R.id.txtPrice); // getting view of product price textView
-            txtSKU_num = (TextView) view.findViewById(R.id.txtBarcodeNum); // getting view of product Bar code textView
+            txtSKU_num = (TextView) view.findViewById(R.id.txtSerialNumber); // getting view of product Bar code textView
             imgProduct = (ImageView) view.findViewById(R.id.imgProduct); // getting view of product Image ImageView
         }
 

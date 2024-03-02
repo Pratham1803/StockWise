@@ -102,10 +102,10 @@ public class AddProduct extends AppCompatActivity {
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 reset();
                 scanner = new ScanOptions();
-                scanner.setPrompt("App is ready for use"); // title on scanner
+                scanner.setPrompt("Scan your product here"); // title on scanner
                 scanner.setBeepEnabled(true); // enable beep sound
                 scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(CaptureActivity.class);
+                scanner.setCaptureActivity(ScannerOrientation.class);
                 bar.launch(scanner); // launching the scanner
                 return true;
             }
@@ -152,11 +152,11 @@ public class AddProduct extends AppCompatActivity {
     private void dispatchPickImageIntent() {
         Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageIntent.setType("image/*");
-        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+       // if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
-        } else {
-            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
-        }
+       // } else {
+         //   Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        //}
     }
 
     // image is taken from camera or from file, now set in imageview
@@ -177,7 +177,7 @@ public class AddProduct extends AppCompatActivity {
 
     // reset all fields of form
     private void reset(){
-        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.productvector)); // set default image
+        bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.addimg)); // set default image
         bind.edProductName.setText("");
         bind.edCurrentStock.setText("");
         bind.edBarCodeNum.setText("");
