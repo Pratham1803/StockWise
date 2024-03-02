@@ -93,7 +93,6 @@
         android:textColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/CircleButton"
         app:tint="@android:color/white" />
 
 
