@@ -1,13 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.product.ProductFragment">
 
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="180sp"
+            android:layout_height="100sp"
+            android:layout_marginVertical="10sp"
+            android:layout_marginHorizontal="5sp"
+            app:cardCornerRadius="20sp"
+            android:backgroundTint="@color/red">
+
+            <TextView
+                android:id="@+id/txtOutOfStockNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Total Items Out of Stock : 0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="5sp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="180sp"
+            android:layout_height="100sp"
+            android:layout_marginVertical="10sp"
+            android:layout_marginHorizontal="5sp"
+            app:cardCornerRadius="20sp"
+            android:backgroundTint="@color/main_orange_color">
+            <TextView
+                android:id="@+id/txtReorderPointNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Total Items at Reorder Point : 0"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="5sp"/>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerProduct"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
-</FrameLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

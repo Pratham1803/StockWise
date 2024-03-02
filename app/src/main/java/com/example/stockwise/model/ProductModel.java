@@ -10,12 +10,14 @@ public class ProductModel {
     private String category;
     private String sale_price;
     private String picture;
+    private String isReorderPointReached;
+    private String isOutOfStock;
 
     // constructor
 
     public ProductModel() {}
 
-    public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture) {
+    public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture, String isReorderPointReached, String isOutOfStock) {
         this.name = name;
         this.barCodeNum = barCodeNum;
         this.current_stock = current_stock;
@@ -24,12 +26,22 @@ public class ProductModel {
         this.category = category;
         this.sale_price = sale_price;
         this.picture = picture;
+        this.isReorderPointReached = isReorderPointReached;
+        this.isOutOfStock = isOutOfStock;
     }
 
     // setters
 
     public void setBarCodeNum(String barCodeNum) {
         this.barCodeNum = barCodeNum;
+    }
+
+    public void setIsReorderPointReached(String isReorderPointReached) {
+        this.isReorderPointReached = isReorderPointReached;
+    }
+
+    public void setIsOutOfStock(String isOutOfStock) {
+        this.isOutOfStock = isOutOfStock;
     }
 
     public void setId(String id) {
@@ -101,5 +113,13 @@ public class ProductModel {
 
     public String getPicture() {
         return picture;
+    }
+
+    public String getIsReorderPointReached() {
+        return isReorderPointReached;
+    }
+
+    public String getIsOutOfStock() {
+        return isOutOfStock;
     }
 }

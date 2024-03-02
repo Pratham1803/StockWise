@@ -63,6 +63,8 @@ public class AddProduct extends AppCompatActivity {
     private ScanOptions scanner; // scanner fields declaration
     private SweetAlertDialog sweetAlertDialog; // alert dialog box declaration
     private AlertDialog.Builder builder; // alert dialog box builder
+    private boolean isReorderPointReached = false; // to check the reorder point reached or not
+    private boolean isOutOfStock = false; // to check the product is out of stock or not
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // this will pause app for the result of scanner
@@ -84,6 +86,58 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showImageSelectionDialog();
+            }
+        });
+
+        // current stock input field focus change listener
+        bind.edCurrentStock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    try {
+                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
+                        if(stock<1){
+                            bind.txtHeading.setText("Product is Out of Stock!!");
+                            bind.txtHeading.setVisibility(View.VISIBLE);
+                            bind.edCurrentStock.setTextColor(getColor(R.color.red));
+                            Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show();
+                            isOutOfStock = true;
+                        }else {
+                            bind.txtHeading.setVisibility(View.GONE);
+                            bind.edCurrentStock.setTextColor(getColor(R.color.black));
+                            isOutOfStock = false;
+                        }
+                    } catch (Exception e) {
+                        Log.d("ErrorMsg", "onFocusChange: "+e.getMessage());
+                    }
+                }
+            }
+        });
+
+        // reorder point input field focus change listener
+        bind.edReorderpoint.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    try {
+                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
+                        int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString());
+
+                        if (stock < reorder) {
+                            bind.edCurrentStock.setTextColor(getColor(R.color.red));
+                            Toast.makeText(AddProduct.this, "Insufficient Stock", Toast.LENGTH_SHORT).show();
+                            bind.txtHeading.setText("Insufficient Stock!! less Than Reorder Point");
+                            bind.txtHeading.setVisibility(View.VISIBLE);
+                            isReorderPointReached = true;
+                        } else {
+                            bind.txtHeading.setVisibility(View.GONE);
+                            bind.edCurrentStock.setTextColor(getColor(R.color.black));
+                            isReorderPointReached = false;
+                        }
+                    } catch (Exception e) {
+                        Log.d("ErrorMsg", "onFocusChange: "+e.getMessage());
+                    }
+                }
             }
         });
     }
@@ -188,6 +242,7 @@ public class AddProduct extends AppCompatActivity {
         bind.edReorderpoint.setText("");
         bind.edPurchasePrice.setText("");
         bind.edSalePrice.setText("");
+        bind.txtHeading.setVisibility(View.GONE);
     }
 
     // scanner result
@@ -379,6 +434,9 @@ public class AddProduct extends AppCompatActivity {
         bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap(); // getting bitmap from the image view
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); // compressing bitmap data into image file of jpeg
         byte[] data = baos.toByteArray(); // storing byte data in list
+
+        productModel.setIsOutOfStock(String.valueOf(isOutOfStock)); // setting the out of stock status
+        productModel.setIsReorderPointReached(String.valueOf(isReorderPointReached)); // setting the reorder point status
 
         // uploading image of product
         Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

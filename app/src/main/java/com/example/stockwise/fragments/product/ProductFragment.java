@@ -48,6 +48,8 @@ public class ProductFragment extends Fragment {
     private FragmentProductBinding bind; // bind view
     private ArrayList<ProductModel> arrProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
+    private int totalOutOfStockIteams = 0; // to store total out of stock items
+    private int totalReorderPointReachedIteams = 0; // to store total reorder point reached items
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,13 +70,23 @@ public class ProductFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop
                 arrProduct.clear(); // deleting all products from the list
+                totalOutOfStockIteams = 0; // setting total out of stock items to 0
+                totalReorderPointReachedIteams = 0; // setting total reorder point reached items to 0
 
                 for (DataSnapshot post : snapshot.getChildren()) {
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
                     newProduct.setId(post.getKey().toString()); // setting user id of product to class object
+
+                    if (newProduct.getIsOutOfStock().equals("true")) // if product is out of stock
+                        totalOutOfStockIteams++; // increasing the count of out of stock items
+                    if (newProduct.getIsReorderPointReached().equals("true")) // if product is out of stock
+                        totalReorderPointReachedIteams++; // increasing the count of out of stock items
+
                     arrProduct.add(newProduct); // adding product in product's arraylist
                 }
                 productAdapter.notifyItemInserted(arrProduct.size()); // notifying the adapter that new products are added
+                bind.txtOutOfStockNum.setText("Total Items Out of Stock : " + totalOutOfStockIteams); // setting total products count
+                bind.txtReorderPointNum.setText("Total Items at Reorder Point : "+totalReorderPointReachedIteams);
             }
 
             @Override
