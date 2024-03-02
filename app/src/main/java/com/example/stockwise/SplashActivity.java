@@ -78,6 +78,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                boolean isConnected = true;
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (connectivityManager != null) {
                     NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -89,15 +90,18 @@ public class SplashActivity extends AppCompatActivity {
                         }else{ // else open main activity with all data of user
                             openMainActivity(SplashActivity.this);
                         }
-                    } else {
-                        AlertDialog.Builder builder = DialogBuilder.showDialog(SplashActivity.this, "No Internet Connection", "Please check your internet connection and try again");
-                        builder.setPositiveButton("OK", (dialog, which) -> {
-                            finish();
-                        });
-                        builder.show();
-                    }
+                    } else
+                        isConnected = false;
                 } else
-                    Toast.makeText(SplashActivity.this, "Not Connected", Toast.LENGTH_SHORT).show();
+                    isConnected = false;
+
+                if(!isConnected) {
+                    AlertDialog.Builder builder = DialogBuilder.showDialog(SplashActivity.this, "No Internet Connection", "Please check your internet connection and try again");
+                    builder.setPositiveButton("OK", (dialog, which) -> {
+                        finish();
+                    });
+                    builder.show();
+                }
             }
         }, 10);
     }
