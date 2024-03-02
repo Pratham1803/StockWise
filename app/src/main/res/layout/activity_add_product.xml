@@ -24,8 +24,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -39,6 +37,7 @@
             android:gravity="center"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
+            android:layout_marginTop="30sp"
             android:orientation="vertical">
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -52,13 +51,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/rectangleImageView"
                 tools:ignore="MissingConstraints" />
-
-            <ProgressBar
-                android:id="@+id/progrssBarAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/edProductName"
@@ -168,6 +160,7 @@
                 android:id="@+id/btnAddProduct"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:layout_marginBottom="50sp"
                 android:background="@drawable/btn_signup"
                 android:onClick="btnAddProductClicked"
                 android:text="Add Product"

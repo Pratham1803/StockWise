@@ -179,5 +179,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void changeFragment(Fragment fragment,int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit(); // changing the fragment that is given in argument
         bind.toolbar.setTitle(title); // setting title of the screen in action bar
+
+        if(title == R.string.titleHome){
+            bind.toolbar.setTitle(Params.getOwnerModel().getShop_name()); // setting title of the screen in action bar
+        }
     }
 }

@@ -1,11 +1,14 @@
 package com.example.stockwise;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -75,13 +78,26 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // is the user is not logged in, open login screen (LoginModule)
-                if(Params.getAUTH().getCurrentUser() == null){
-                    startActivity(new Intent(SplashActivity.this, LandingPage.class));
-                    finish();
-                }else{ // else open main activity with all data of user
-                    openMainActivity(SplashActivity.this);
-                }
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager != null) {
+                    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                    if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                        // is the user is not logged in, open login screen (LoginModule)
+                        if(Params.getAUTH().getCurrentUser() == null){
+                            startActivity(new Intent(SplashActivity.this, LandingPage.class));
+                            finish();
+                        }else{ // else open main activity with all data of user
+                            openMainActivity(SplashActivity.this);
+                        }
+                    } else {
+                        AlertDialog.Builder builder = DialogBuilder.showDialog(SplashActivity.this, "No Internet Connection", "Please check your internet connection and try again");
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            finish();
+                        });
+                        builder.show();
+                    }
+                } else
+                    Toast.makeText(SplashActivity.this, "Not Connected", Toast.LENGTH_SHORT).show();
             }
         }, 10);
     }

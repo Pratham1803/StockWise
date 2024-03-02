@@ -63,19 +63,18 @@ public class ProductFragment extends Fragment {
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
 
         // collecting product list from firebase
-        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop
                 arrProduct.clear(); // deleting all products from the list
+
                 for (DataSnapshot post : snapshot.getChildren()) {
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
                     newProduct.setId(post.getKey().toString()); // setting user id of product to class object
                     arrProduct.add(newProduct); // adding product in product's arraylist
-
-                    // notifying the adapter that product is added in list
-                    productAdapter.notifyItemInserted(arrProduct.size());
                 }
+                productAdapter.notifyItemInserted(arrProduct.size()); // notifying the adapter that new products are added
             }
 
             @Override

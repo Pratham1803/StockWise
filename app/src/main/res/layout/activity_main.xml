@@ -32,10 +32,7 @@
                 app:titleTextColor="@color/white"
                 app:subtitleTextAppearance="@font/lexend_bold"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                >
-                
-            </com.google.android.material.appbar.MaterialToolbar>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -57,8 +54,7 @@
             app:itemIconSize="26dp"
             app:itemIconTint="@color/blue"
             app:itemTextAppearance="@style/menu_text_style"
-            app:menu="@menu/drawer_menu"
-            tools:ignore="MissingConstraints" />
+            app:menu="@menu/drawer_menu" />
 
 
     </androidx.drawerlayout.widget.DrawerLayout>

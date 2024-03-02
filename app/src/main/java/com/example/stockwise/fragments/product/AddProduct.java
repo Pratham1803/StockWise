@@ -33,6 +33,7 @@ import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityAddProductBinding;
 import com.example.stockwise.model.ProductModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -187,7 +188,6 @@ public class AddProduct extends AppCompatActivity {
         bind.edReorderpoint.setText("");
         bind.edPurchasePrice.setText("");
         bind.edSalePrice.setText("");
-        bind.progrssBarAdd.setVisibility(View.GONE);
     }
 
     // scanner result
@@ -267,37 +267,13 @@ public class AddProduct extends AppCompatActivity {
                     Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain);
                     sweetAlertDialog.cancel(); // cancel the progress dialog
                 } catch (Exception e) {
-                    Log.d("ErrorMsg", "get: " + e.toString());
+                    productApiErrorHandel(e.getMessage()); // this method will handel the error
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ErrorMsg", "get: Volley error : " + error.toString());
-                sweetAlertDialog.cancel(); // cancel the progress dialog
-
-                // displaying dialog box to user to inform that product details not available in barcode api
-                // user can add product manually by capturing picture or select pic from gallery or cancel it
-                bind.edProductName.setEnabled(true); // enabling product name textbox to write
-                builder = DialogBuilder.showDialog(AddProduct.this, "Product Details Can't Fetched", "Add Product Manually! or\nPress Any where to exit");
-
-                // positive button to add product manually
-                builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showImageSelectionDialog(); // method call for user option of camera or gallery
-                    }
-                });
-
-                // user don;t want to add product manually
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel(); // close dialog box
-                    }
-                });
-
-                builder.create().show();
+                productApiErrorHandel(error.toString()); // this method will handel the error
             }
         }) {
             @Override
@@ -311,6 +287,35 @@ public class AddProduct extends AppCompatActivity {
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjectRequest);
+    }
+
+    // API can't fetch the product details || Error Rise
+    private void productApiErrorHandel(String errorMsg){
+        Log.d("ErrorMsg", "get: Volley error : " + errorMsg);
+        sweetAlertDialog.cancel(); // cancel the progress dialog
+
+        // displaying dialog box to user to inform that product details not available in barcode api
+        // user can add product manually by capturing picture or select pic from gallery or cancel it
+        bind.edProductName.setEnabled(true); // enabling product name textbox to write
+        builder = DialogBuilder.showDialog(AddProduct.this, "Product Details Can't Fetched", "Add Product Manually! or\nPress Any where to exit");
+
+        // positive button to add product manually
+        builder.setPositiveButton("Add Product", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showImageSelectionDialog(); // method call for user option of camera or gallery
+            }
+        });
+
+        // user don;t want to add product manually
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel(); // close dialog box
+            }
+        });
+
+        builder.create().show();
     }
 
     // add product button clicked
@@ -352,7 +357,9 @@ public class AddProduct extends AppCompatActivity {
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else {
                     // product is not available, so visible progress bar and upload data to the database
-                    bind.progrssBarAdd.setVisibility(View.VISIBLE);
+                    sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Adding Product!!").setContentText("Please Wait...");
+                    sweetAlertDialog.setCancelable(false);
+                    sweetAlertDialog.show();
                     uploadData();
                 }
             }
@@ -388,13 +395,23 @@ public class AddProduct extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void unused) {
                                 // data is uploaded in database
-                                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added Successfully!!").setContentText("Product is Added in Database");
+                                sweetAlertDialog.cancel();
+                                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added Successfully!!");
                                 sweetAlertDialog.show();
                                 reset(); // resetting all the fields
                             }
                         });
                     }
                 });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("ErrorMsg", "onFailure: Product Not Upload : "+e.getMessage());
+                sweetAlertDialog.cancel();
+                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.ERROR_TYPE).setTitleText("Product Not Added!!");
+                sweetAlertDialog.show();
+                reset();
             }
         });
     }
