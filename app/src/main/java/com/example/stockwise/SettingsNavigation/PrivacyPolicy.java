@@ -1,4 +1,4 @@
-package SettingsNavigation;
+package com.example.stockwise.SettingsNavigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivitySettingsBinding;
 
-import MenuScreens.Settings;
+import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.databinding.ActivityPrivacyPolicyBinding;
 
 public class PrivacyPolicy extends AppCompatActivity {
-    private com.example.stockwise.databinding.ActivityPrivacyPolicyBinding bind; // declaring view binding
+    private ActivityPrivacyPolicyBinding bind; // declaring view binding
 
 
     @Override
@@ -20,7 +20,7 @@ public class PrivacyPolicy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
 
-        bind = com.example.stockwise.databinding.ActivityPrivacyPolicyBinding.inflate(getLayoutInflater()); // initializing view binding
+        bind = ActivityPrivacyPolicyBinding.inflate(getLayoutInflater()); // initializing view binding
         setContentView(bind.getRoot());
         bind.scrollView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 

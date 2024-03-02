@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,17 +15,15 @@
         android:theme="@style/Theme.StockWise"
         tools:targetApi="31">
         <activity
-            android:name=".fragments.category.ManageCategory"
+            android:name=".SettingsNavigation.PrivacyPolicy"
             android:exported="false" />
         <activity
-            android:name="SettingsNavigation.PrivacyPolicy"
-            android:exported="false" />
-        <activity
-            android:name="MenuScreens.Settings"
+            android:name=".MenuScreens.Settings"
             android:exported="false" />
         <activity
             android:name=".fragments.product.AddProduct"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".loginModule.Registration"
             android:exported="false" />
@@ -57,7 +53,6 @@
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

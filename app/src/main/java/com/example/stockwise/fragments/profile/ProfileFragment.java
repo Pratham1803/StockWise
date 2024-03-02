@@ -1,14 +1,11 @@
 package com.example.stockwise.fragments.profile;
 
 import android.app.Activity;
-import com.example.stockwise.loginModule.Registration;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,12 +14,10 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.stockwise.LandingPage;
-import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
-import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentProfileBinding;
 
-import MenuScreens.Settings;
+import com.example.stockwise.MenuScreens.Settings;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
@@ -50,7 +45,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 context.startActivity(new Intent(context, Settings.class)); // redirecting user to settings activity
-                ((Activity)context).finish(); // finishing this activity
             }
         });
 
