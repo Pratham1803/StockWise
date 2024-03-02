@@ -14,6 +14,7 @@ public class Params {
     private static String ID;
     private static String NAME;
     private static String SHOP_NAME;
+    private static String ARR_PRODUCTS;
     private static String OWNER_NAME;
     private static String BAR_CODE;
     private static String EMAIL_ID;
@@ -55,6 +56,7 @@ public class Params {
         VENDOR = "vendor";
         CUSTOMER = "customer";
         DATE = "date";
+        ARR_PRODUCTS = "arrProducts";
         TRANSACTION = "transaction";
         BAR_CODE = "barCodeNum";
 
@@ -165,6 +167,10 @@ public class Params {
 
     public static String getDATE() {
         return DATE;
+    }
+
+    public static String getArrProducts() {
+        return ARR_PRODUCTS;
     }
 
     public static FirebaseDatabase getDATABASE() {

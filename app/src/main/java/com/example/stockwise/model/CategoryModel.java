@@ -1,9 +1,12 @@
 package com.example.stockwise.model;
 
+import java.util.ArrayList;
+
 public class CategoryModel {
     private String id;
     private String name;
     private String numOfProducts;
+    private ArrayList<String> arrProducts;
 
     public CategoryModel() {
     }
@@ -15,6 +18,11 @@ public class CategoryModel {
     }
 
     // setters
+
+    public void setArrProducts(ArrayList<String> arrProducts) {
+        this.arrProducts = arrProducts;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -35,5 +43,9 @@ public class CategoryModel {
     }
     public String getNumOfProducts() {
         return numOfProducts;
+    }
+
+    public ArrayList<String> getArrProducts() {
+        return arrProducts;
     }
 }

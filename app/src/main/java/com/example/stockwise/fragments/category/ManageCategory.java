@@ -5,14 +5,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.stockwise.DialogBuilder;
@@ -58,7 +55,9 @@ public class ManageCategory extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrCategoryList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    CategoryModel newCategory = dataSnapshot.getValue(CategoryModel.class);
+                    CategoryModel newCategory = new CategoryModel();
+                    newCategory.setName(dataSnapshot.child("name").getValue().toString());
+                    newCategory.setNumOfProducts(dataSnapshot.child("numOfProducts").getValue().toString());
                     newCategory.setId(dataSnapshot.getKey());
                     arrCategoryList.add(newCategory);
                 }
