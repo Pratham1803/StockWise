@@ -1,77 +1,137 @@
 package com.example.stockwise.fragments.category;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.AlertDialog;
+import android.app.ActionBar;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.stockwise.MainActivity;
+import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.Params;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.databinding.ActivityManageCategoryBinding;
+import com.example.stockwise.model.CategoryModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ManageCategory extends AppCompatActivity {
-
+    private Context context;
     private ActivityManageCategoryBinding bind;
-
+    private CategoryModel categoryModel;
+    private CategoryAdapter categoryAdapter;
+    private ArrayList<CategoryModel> arrCategoryList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_category);
 
         bind = ActivityManageCategoryBinding.inflate(getLayoutInflater()); // initializing view binding
+        context = bind.getRoot().getContext(); // initializing context
         setContentView(bind.getRoot());
 
-        bind.btnBack.setOnClickListener(new View.OnClickListener() {
+        // setting recycler view
+        arrCategoryList = new ArrayList<CategoryModel>();
+        categoryAdapter = new CategoryAdapter(arrCategoryList, context);
+        bind.recyclerCategory.setLayoutManager(new LinearLayoutManager(this));
+        bind.recyclerCategory.setAdapter(categoryAdapter);
+
+        // collecting data from database for recyclerview of category
+        Params.getREFERENCE().child(Params.getCATEGORY()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ManageCategory.this, MainActivity.class));
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrCategoryList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    CategoryModel newCategory = dataSnapshot.getValue(CategoryModel.class);
+                    newCategory.setId(dataSnapshot.getKey());
+                    arrCategoryList.add(newCategory);
+                }
+                categoryAdapter.notifyItemInserted(arrCategoryList.size());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
+        // show the dialog box to add category
         bind.btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ManageCategory.this);
+                AlertDialog.Builder builder = DialogBuilder.showDialog(ManageCategory.this, "Add Category", "");
+                builder.setMessage(null);
 
-                // Get the layout inflater
-                LayoutInflater inflater = getLayoutInflater();
+                final EditText edCategoryName = new EditText(ManageCategory.this);
+                edCategoryName.setHint("Enter Category Name");
+                edCategoryName.setTextSize(18);
+                builder.setView(edCategoryName);
 
-                // Inflate the custom layout for the dialog
-                View view = inflater.inflate(R.layout.add_category_dialog, null);
-                final EditText categoryEditText = view.findViewById(R.id.categoryEditText);
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        categoryModel = new CategoryModel();
+                        categoryModel.setName(edCategoryName.getText().toString());
+                        // Add category to database
+                        addCategory();
+                    }
+                });
 
-                // Set the custom layout to the builder
-                builder.setView(view)
-                        .setTitle("Add Product")
-                        .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                // Handle the "ADD" button click here
-                                String categoryName = categoryEditText.getText().toString();
-                                // Do something with the entered category
-                                // For example, you can display a Toast message
-                                // or save the category to a database
-                            }
-                        })
-                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Handle the "CANCEL" button click here
-                                dialog.dismiss();
-                            }
-                        });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
 
                 // Show the AlertDialog
                 builder.create().show();
             }
         });
+    }
+
+    // adding category to database
+    private void addCategory() {
+        // Add category to database
+        DatabaseReference reference = Params.getREFERENCE().child(Params.getCATEGORY()).push();
+        categoryModel.setId(reference.getKey());
+        categoryModel.setNumOfProducts("0");
+
+        reference.setValue(categoryModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // Show success message
+                        new SweetAlertDialog(ManageCategory.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Success")
+                                .setContentText("Category added successfully")
+                                .show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("ErrorMsg", "onFailure: "+e.getMessage());
+                        new SweetAlertDialog(ManageCategory.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Error")
+                                .setContentText("Failed to add category")
+                                .show();
+                    }
+                });
     }
 }

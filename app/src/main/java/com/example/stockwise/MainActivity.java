@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
-import com.example.stockwise.fragments.category.CategoryFragment;
 import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
 import com.example.stockwise.fragments.transaction.transactionFragment;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding bind; // declaring view binding
 
     // declaring fragments object
-    CategoryFragment categoryFragment;
     ProductFragment productFragment;
     PersonFragment personFragment;
     ProfileFragment profileFragment;
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // setup toolbar
         setSupportActionBar(bind.toolbar);
-        bind.toolbar.setTitle(R.string.titleHome); // setting title of action bar
 
         // Adding Menu items in Bottom Navigation
         bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector)); // home menu
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // setup of drawer navigation
         // initializing Fragments object
-        categoryFragment = new CategoryFragment();
         productFragment = new ProductFragment();
         personFragment = new PersonFragment();
         profileFragment = new ProfileFragment();
@@ -141,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         // setting home screen as default screen when app is open
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, homeFragment).commit();
+        changeFragment(homeFragment,R.string.titleHome);
     }
 
     // on drawer navigating item select listener
@@ -166,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // unused right now
-        else if (id == R.id.nav_shop)
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view,categoryFragment).commit();
         else if (id == R.id.nav_settings) // user click on settings
             startActivity(new Intent(MainActivity.this,Settings.class));
 
