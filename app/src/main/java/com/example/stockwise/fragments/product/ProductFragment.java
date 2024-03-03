@@ -91,7 +91,7 @@ public class ProductFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
             }
         });
         return bind.getRoot();

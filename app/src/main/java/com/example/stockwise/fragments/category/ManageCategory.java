@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
@@ -66,7 +67,7 @@ public class ManageCategory extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
             }
         });
 
@@ -77,10 +78,13 @@ public class ManageCategory extends AppCompatActivity {
                 AlertDialog.Builder builder = DialogBuilder.showDialog(ManageCategory.this, "Add Category", "");
                 builder.setMessage(null);
 
-                final EditText edCategoryName = new EditText(ManageCategory.this);
-                edCategoryName.setHint("Enter Category Name");
-                edCategoryName.setTextSize(18);
-                builder.setView(edCategoryName);
+                LayoutInflater inflater = getLayoutInflater();
+
+                // Inflate the custom layout for the dialog
+                View view = inflater.inflate(R.layout.add_category_dialog, null);
+                final EditText edCategoryName = view.findViewById(R.id.categoryEditText);
+
+                builder.setView(view);
 
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
