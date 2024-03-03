@@ -190,8 +190,8 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
                         ProductModel productModel = post.getValue(ProductModel.class);
                         productModel.setId(post.getKey().toString());
                         arrProduct.add(productModel);
-                        productAdapter.notifyDataSetChanged();
                     }
+                    productAdapter.notifyItemInserted(arrProduct.size());
                 }
             }
 
