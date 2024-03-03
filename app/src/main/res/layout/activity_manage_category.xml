@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Category"
+        app:titleMarginStart="35sp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         app:titleTextColor="@color/white" />

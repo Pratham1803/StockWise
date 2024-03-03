@@ -2,6 +2,7 @@ package com.example.stockwise.fragments.product;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.tv.TvContract;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -18,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -54,6 +57,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -81,9 +85,13 @@ public class AddProduct extends AppCompatActivity {
         setContentView(bind.getRoot());
         productModel = new ProductModel(); // initializing object of product model
 
-        // setup actionbar
+        // setup actionbar and adding back press button
         bind.toolbarProduct.setTitle("Scan & Add Product"); // setting title
         setSupportActionBar(bind.toolbarProduct);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrow); // changing customize back button
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting spinner for category
         Params.getREFERENCE().child(Params.getCATEGORY()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -163,6 +171,17 @@ public class AddProduct extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // back press event of actionbar back button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // menu bar item selection listener

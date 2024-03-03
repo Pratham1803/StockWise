@@ -1,6 +1,7 @@
 package com.example.stockwise.fragments.category;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -43,6 +45,13 @@ public class ManageCategory extends AppCompatActivity {
         bind = ActivityManageCategoryBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
         setContentView(bind.getRoot());
+
+        // setting Action bar
+        setSupportActionBar(bind.toolbar); // setting action bar
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrow); // changing customize back button
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting recycler view
         arrCategoryList = new ArrayList<CategoryModel>();
@@ -107,6 +116,17 @@ public class ManageCategory extends AppCompatActivity {
                 builder.create().show();
             }
         });
+    }
+
+    // back press event of actionbar back button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // adding category to database
