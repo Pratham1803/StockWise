@@ -498,7 +498,9 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot post : snapshot.getChildren()) {
-                    CategoryModel categoryModel = post.getValue(CategoryModel.class);
+                    CategoryModel categoryModel = new CategoryModel();
+                    categoryModel.setName(post.child("name").getValue().toString());
+                    categoryModel.setNumOfProducts(post.child("numOfProducts").getValue().toString());
                     categoryModel.setId(post.getKey());
 
                     // finding the category of product from database
