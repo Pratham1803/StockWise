@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.stockwise.LandingPage;
 import com.example.stockwise.Params;
+import com.example.stockwise.ProfileNavigation.Account;
 import com.example.stockwise.databinding.FragmentProfileBinding;
 
 import com.example.stockwise.MenuScreens.Settings;
@@ -45,6 +46,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 context.startActivity(new Intent(context, Settings.class)); // redirecting user to settings activity
+            }
+        });
+
+        bind.LayoutAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, Account.class)); // redirecting user to Account activity
             }
         });
 

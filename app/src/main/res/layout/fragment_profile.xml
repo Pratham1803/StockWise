@@ -16,53 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="34dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:src="@drawable/leftarrow"
-        app:layout_constraintEnd_toStartOf="@+id/txtProfile"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lexend_bold"
-        android:text="Profile"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_EditProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#6B9EF1"
-        android:fontFamily="@font/lexend_"
-        android:text="Edit Profile"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/txtProfile"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shapeableImageView"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="90dp"
         android:scaleType="fitXY"
         android:src="@drawable/default_user"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +63,7 @@
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/AccClick"
+                android:id="@+id/LayoutAccount"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"

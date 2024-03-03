@@ -23,7 +23,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.stockwise.MainActivity;
@@ -41,7 +45,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private Context context; // to store context
     private ScanOptions scanner; // scanner
     private String barCodeId; // setting bar code number
@@ -50,6 +54,8 @@ public class ProductFragment extends Fragment {
     private ProductAdapter productAdapter; // object of product adapter
     private int totalOutOfStockIteams = 0; // to store total out of stock items
     private int totalReorderPointReachedIteams = 0; // to store total reorder point reached items
+
+    String[] filter = { "All Products","Unavailable Products","Products at Reorder Point"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +91,8 @@ public class ProductFragment extends Fragment {
                     arrProduct.add(newProduct); // adding product in product's arraylist
                 }
                 productAdapter.notifyItemInserted(arrProduct.size()); // notifying the adapter that new products are added
-                bind.txtOutOfStockNum.setText("Total Items Out of Stock : " + totalOutOfStockIteams); // setting total products count
-                bind.txtReorderPointNum.setText("Total Items at Reorder Point : "+totalReorderPointReachedIteams);
+                //bind.txtOutOfStockNum.setText("Total Items Out of Stock : " + totalOutOfStockIteams); // setting total products count
+                //bind.txtReorderPointNum.setText("Total Items at Reorder Point : "+totalReorderPointReachedIteams);
             }
 
             @Override
@@ -94,6 +100,21 @@ public class ProductFragment extends Fragment {
                 Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
             }
         });
+        Spinner spin = bind.getRoot().findViewById(R.id.FilterSpinner);
+        spin.setOnItemSelectedListener(this);
+
+        // Create the instance of ArrayAdapter 
+        // having the list of courses 
+        ArrayAdapter ad = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, filter);
+
+        // set simple layout resource file 
+        // for each item of spinner 
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spin.setAdapter(ad);
+
         return bind.getRoot();
     }
 
@@ -179,5 +200,15 @@ public class ProductFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

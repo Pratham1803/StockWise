@@ -23,4 +23,19 @@
     </style>
     <style name="Theme.StockWise" parent="Base.Theme.StockWise" />
 
+    <style name="spinner_style">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:dropDownWidth">match_parent</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:showDividers">none</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:popupBackground">@color/white</item>
+        <item name="android:dropDownHeight">70dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="fontFamily">@font/lexend_ </item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:dropDownSelector">@android:color/white</item>
+    </style>
+
 </resources>
