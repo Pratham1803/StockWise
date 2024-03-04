@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/PopUpEdit"
-        android:title="Edit" />
-
-    <item
-        android:id="@+id/PopUpSettings"
-        android:title="Settings" />
-
-
+        android:id="@+id/PopUp"
+        android:title="Edit"
+        android:icon="@drawable/threedotsvector"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/PopUpEdit"
+                android:title="Edit Profile" />
+            <item
+                android:id="@+id/PopUpSettings"
+                android:title="Settings" /></menu>
+    </item>
 </menu>

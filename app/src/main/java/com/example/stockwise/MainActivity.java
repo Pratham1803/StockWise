@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bind.navDrawerView.setNavigationItemSelectedListener(this); // drawer navigation item select listener setup
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,bind.mainDrawerLayout,bind.toolbar,R.string.open_nav,R.string.close_nav);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white)); // setting color of 3 line icon to open drawer
+
         // drawer listener, to show bottom navigation when drawer is closed or when drawer is open show bottom navigation
         bind.mainDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override

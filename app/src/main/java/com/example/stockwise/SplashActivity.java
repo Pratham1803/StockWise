@@ -40,6 +40,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Params.getOwnerModel().setId(snapshot.getKey().toString()); // user id of current user
                                 Params.getOwnerModel().setContact_num(snapshot.child(Params.getContactNumber()).getValue().toString()); // contact number
                                 Params.getOwnerModel().setPicture(snapshot.child(Params.getProfilePic()).getValue().toString()); // profile picture
+                                Params.getOwnerModel().setEmail_id(snapshot.child(Params.getEmailId()).getValue().toString()); // email id
 
                                 con.startActivity(new Intent(con, MainActivity.class)); // start main activity
                                 ((Activity) con).finish(); // finish this activity
