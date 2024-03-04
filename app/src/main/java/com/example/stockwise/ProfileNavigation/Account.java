@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class Account extends AppCompatActivity {
     private ActivityAccountBinding bind; // view binding
     private boolean isImageChanged = false; // to check if image is changed or not
+    private SweetAlertDialog sweetAlertDialog; // sweet alert dialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,19 +128,19 @@ public class Account extends AppCompatActivity {
             Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
         }
     }
+
     // image is taken from camera or from file, now set in imageview
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            // image from gallery
-            Uri selectedImageUri = data.getData();
-            bind.UserProfileImage.setImageURI(selectedImageUri);
-            isImageChanged = true; // image is changed
+        // image from gallery
+        Uri selectedImageUri = data.getData();
+        bind.UserProfileImage.setImageURI(selectedImageUri);
+        isImageChanged = true; // image is changed
     }
 
     // on click of update profile button
     public void btnUpdateProfileClicked(View view) {
-        Toast.makeText(this, "Updating..", Toast.LENGTH_SHORT).show();
         // get all values from fields
         String name = bind.EditUserName.getText().toString();
         String email = bind.EditEmail.getText().toString();
@@ -149,9 +151,14 @@ public class Account extends AppCompatActivity {
         Params.getOwnerModel().setEmail_id(email);
         Params.getOwnerModel().setShop_name(shopName);
 
+        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.setTitleText("Updating Profile");
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.show();
+
         bind.button.setText("Please Wait...");
 
-        if(isImageChanged){
+        if (isImageChanged) {
             String image = Params.getOwnerModel().getId() + ".jpg"; // setting the name of image
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -166,14 +173,19 @@ public class Account extends AppCompatActivity {
                     Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Params.getOwnerModel().setPicture(uri.toString()); // setting the image url in owner model
-                            Log.d("SuccessMsg", "onSuccess: Image Updated : "+image);
+                            Params.getOwnerModel().setPicture(uri.toString()); // setting the image url in owner modelMediaStore.Images
+                            updateText();
+                            Log.d("SuccessMsg", "onSuccess: Image Updated : " + image);
                         }
                     });
                 }
             });
-        }
+        }else
+            updateText();
+    }
 
+    // updating Text of profile
+    private void updateText(){
         // uploading owner model to firebase database
         Params.getREFERENCE().child(Params.getOwnerName()).setValue(Params.getOwnerModel().getOwner_name());
         Params.getREFERENCE().child(Params.getEmailId()).setValue(Params.getOwnerModel().getEmail_id());
@@ -182,12 +194,13 @@ public class Account extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        new SweetAlertDialog(Account.this, SweetAlertDialog.SUCCESS_TYPE)
-                                .setTitleText("Profile Updated")
-                                .show();
+                        sweetAlertDialog.cancel();
+                        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.SUCCESS_TYPE);
+                        sweetAlertDialog.setTitleText("Profile Updated");
+                        sweetAlertDialog.show();
+                        reset(false); // set all fields non-editable
+                        bind.button.setText("UPDATE");
                     }
                 });
-        reset(false); // set all fields non-editable
-        bind.button.setText("UPDATE");
     }
 }
