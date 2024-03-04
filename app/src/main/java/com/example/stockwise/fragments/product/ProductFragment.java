@@ -50,10 +50,10 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ScanOptions scanner; // scanner
     private String barCodeId; // setting bar code number
     private FragmentProductBinding bind; // bind view
-    private ArrayList<ProductModel> arrProduct; // List of productModule class to store the details of multiple product
+    private ArrayList<ProductModel> arrAllProduct; // List of productModule class to store the details of multiple product
+    private ArrayList<ProductModel> arrUnAvailableProduct; // List of productModule class to store the details of multiple product
+    private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
-    private int totalOutOfStockIteams = 0; // to store total out of stock items
-    private int totalReorderPointReachedIteams = 0; // to store total reorder point reached items
 
     String[] filter = { "All Products","Unavailable Products","Products at Reorder Point"};
 
@@ -65,47 +65,19 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         setHasOptionsMenu(true); // setting action bar
 
         // set recycler view
-        arrProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
-        productAdapter = new ProductAdapter(arrProduct, context); // initializing productAdapter
+        arrAllProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
+        arrUnAvailableProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
+        arrAtReorderPointProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
+        productAdapter = new ProductAdapter(arrAllProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
 
-        // collecting product list from firebase
-        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // in snapshot we have all the products list, so we are getting it one by one using for each loop
-                arrProduct.clear(); // deleting all products from the list
-                totalOutOfStockIteams = 0; // setting total out of stock items to 0
-                totalReorderPointReachedIteams = 0; // setting total reorder point reached items to 0
-
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                    newProduct.setId(post.getKey().toString()); // setting user id of product to class object
-
-                    if (newProduct.getIsOutOfStock().equals("true")) // if product is out of stock
-                        totalOutOfStockIteams++; // increasing the count of out of stock items
-                    if (newProduct.getIsReorderPointReached().equals("true")) // if product is out of stock
-                        totalReorderPointReachedIteams++; // increasing the count of out of stock items
-
-                    arrProduct.add(newProduct); // adding product in product's arraylist
-                }
-                productAdapter.notifyItemInserted(arrProduct.size()); // notifying the adapter that new products are added
-                //bind.txtOutOfStockNum.setText("Total Items Out of Stock : " + totalOutOfStockIteams); // setting total products count
-                //bind.txtReorderPointNum.setText("Total Items at Reorder Point : "+totalReorderPointReachedIteams);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
-            }
-        });
-        Spinner spin = bind.getRoot().findViewById(R.id.FilterSpinner);
-        spin.setOnItemSelectedListener(this);
+        // setting spinner
+        bind.FilterSpinner.setOnItemSelectedListener(this);
 
         // Create the instance of ArrayAdapter 
         // having the list of courses 
-        ArrayAdapter ad = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, filter);
+        ArrayAdapter ad = new ArrayAdapter(context, android.R.layout.simple_spinner_item, filter);
 
         // set simple layout resource file 
         // for each item of spinner 
@@ -113,9 +85,44 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
 
         // Set the ArrayAdapter (ad) data on the
         // Spinner which binds data to spinner
-        spin.setAdapter(ad);
+        bind.FilterSpinner.setAdapter(ad);
 
+        dbGetAllProducts();
         return bind.getRoot();
+    }
+
+    // get all products from firebase
+    private void dbGetAllProducts(){
+        // collecting product list from firebase
+        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // in snapshot we have all the products list, so we are getting it one by one using for each loop
+                arrAllProduct.clear(); // deleting all products from the list
+                arrUnAvailableProduct.clear(); // deleting all products from the list
+                arrAtReorderPointProduct.clear(); // deleting all products from the list
+
+                for (DataSnapshot post : snapshot.getChildren()) {
+                    ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
+                    newProduct.setId(post.getKey().toString()); // setting user id of product to class object
+
+                    arrAllProduct.add(newProduct); // adding product in product's arraylist
+
+                    if(newProduct.getIsOutOfStock().equals("true")){
+                        arrUnAvailableProduct.add(newProduct);
+                    }
+                    if(newProduct.getIsReorderPointReached().equals("true")){
+                        arrAtReorderPointProduct.add(newProduct);
+                    }
+                }
+                productAdapter.notifyDataSetChanged(); // notifying the adapter that new products are added
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
+            }
+        });
     }
 
     // setting listener to, create action bar
@@ -184,14 +191,14 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrProduct.clear();
+                arrAllProduct.clear();
                 for (DataSnapshot post : snapshot.getChildren()) {
                     if (post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
                         ProductModel productModel = post.getValue(ProductModel.class);
                         productModel.setId(post.getKey().toString());
-                        arrProduct.add(productModel);
+                        arrAllProduct.add(productModel);
                     }
-                    productAdapter.notifyItemInserted(arrProduct.size());
+                    productAdapter.notifyItemInserted(arrAllProduct.size());
                 }
             }
 
@@ -204,7 +211,16 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String currentSelection = filter[i];
 
+        if(currentSelection.equals(filter[0])){
+            productAdapter.setLocalDataSet(arrAllProduct);
+        }else if(currentSelection.equals(filter[1])){
+            productAdapter.setLocalDataSet(arrUnAvailableProduct);
+        }else if (currentSelection.equals(filter[2])){
+            productAdapter.setLocalDataSet(arrAtReorderPointProduct);
+        }
+        productAdapter.notifyDataSetChanged();
     }
 
     @Override

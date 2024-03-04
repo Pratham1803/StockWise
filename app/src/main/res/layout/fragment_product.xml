@@ -33,8 +33,7 @@
             style="@style/spinner_style"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:layout_marginLeft="20dp"
-             />
+            android:layout_marginLeft="20dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

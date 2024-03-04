@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
-    private final ArrayList<ProductModel> localDataSet;
+    private ArrayList<ProductModel> localDataSet;
     private final Context context;
 
     /**
@@ -74,6 +75,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public ProductAdapter(ArrayList<ProductModel> dataSet,Context context) {
         this.localDataSet = dataSet; // initialing dataset
         this.context = context; // initialing context
+    }
+
+    public void setLocalDataSet(ArrayList<ProductModel> localDataSet){
+        this.localDataSet = localDataSet;
     }
 
     // Create new views (invoked by the layout manager)
