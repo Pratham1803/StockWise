@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(SweetAlertDialog sweetAlertDialog) {
                 Params.getAUTH().signOut(); // signing out current user
                 context.startActivity(new Intent(context, LandingPage.class)); // redirecting user to sign in activity
-                ((Activity)context).finish(); // finishing this activity
+                 // finishing this activity
             }
         });
         pDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
