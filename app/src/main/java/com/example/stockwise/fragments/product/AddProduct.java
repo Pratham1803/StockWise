@@ -90,7 +90,7 @@ public class AddProduct extends AppCompatActivity {
         setSupportActionBar(bind.toolbarProduct);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.leftarrow); // changing customize back button
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting spinner for category
