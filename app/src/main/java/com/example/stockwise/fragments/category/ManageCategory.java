@@ -59,6 +59,7 @@ public class ManageCategory extends AppCompatActivity {
         bind.recyclerCategory.setLayoutManager(new LinearLayoutManager(this));
         bind.recyclerCategory.setAdapter(categoryAdapter);
 
+
         // collecting data from database for recyclerview of category
         Params.getREFERENCE().child(Params.getCATEGORY()).addValueEventListener(new ValueEventListener() {
             @Override
