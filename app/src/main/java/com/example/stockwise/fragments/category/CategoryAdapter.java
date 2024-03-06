@@ -1,10 +1,12 @@
 package com.example.stockwise.fragments.category;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +16,7 @@ import com.example.stockwise.model.CategoryModel;
 
 import java.util.ArrayList;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
     private final ArrayList<CategoryModel> localDataSet;
     private final Context context;
 
@@ -22,11 +24,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView txtCategoryName;
         private final TextView txtAvailableProducts;
         public ViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             txtCategoryName = (TextView) view.findViewById(R.id.txtCategoryName);
             txtAvailableProducts = (TextView) view.findViewById(R.id.txtAvailableProduct);
         }
@@ -37,6 +40,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public TextView getTxtAvailableProducts() {
             return txtAvailableProducts;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = this.getAbsoluteAdapterPosition();
+            String category_id = localDataSet.get(pos).getId();
+            String category_name = localDataSet.get(pos).getName();
+
+            Intent intent = new Intent(context, ProductList.class);
+            intent.putExtra("category_id", category_id);
+            intent.putExtra("category_name", category_name);
+            context.startActivity(intent);
         }
     }
 
@@ -68,7 +83,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder viewHolder, final int position) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        // setting product name
+
         viewHolder.getTxtCategoryName().setText(localDataSet.get(position).getName());
         // setting available products
         String availableProducts =  "Total Products : " + localDataSet.get(position).getNumOfProducts();

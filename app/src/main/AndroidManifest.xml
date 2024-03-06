@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StockWise"
         tools:targetApi="31">
+        <activity android:name=".fragments.category.ProductList"
+            android:exported="false" />
+        <activity
+            android:name=".fragments.product.ProductView"
+            android:exported="false" />
         <activity
             android:name=".ProfileNavigation.Account"
             android:exported="false" />

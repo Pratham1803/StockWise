@@ -50,7 +50,7 @@ public class ManageCategory extends AppCompatActivity {
         setSupportActionBar(bind.toolbar); // setting action bar
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.leftarrow); // changing customize back button
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting recycler view
@@ -58,6 +58,7 @@ public class ManageCategory extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(arrCategoryList, context);
         bind.recyclerCategory.setLayoutManager(new LinearLayoutManager(this));
         bind.recyclerCategory.setAdapter(categoryAdapter);
+
 
         // collecting data from database for recyclerview of category
         Params.getREFERENCE().child(Params.getCATEGORY()).addValueEventListener(new ValueEventListener() {
