@@ -4,13 +4,15 @@ public class PersonModel {
     private String id;
     private String name;
     private String contact_num;
+    private String gender;
 
     // constructor
     public PersonModel() {}
 
-    public PersonModel(String name, String contact_num) {
+    public PersonModel(String name, String contact_num,String gender) {
         this.name = name;
         this.contact_num = contact_num;
+        this.gender = gender;
     }
 
     // setter
@@ -26,6 +28,10 @@ public class PersonModel {
         this.contact_num = contact_num;
     }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     // getter
     public String getId() {
         return id;
@@ -37,5 +43,9 @@ public class PersonModel {
 
     public String getContact_num() {
         return contact_num;
+    }
+
+    public String getGender() {
+        return gender;
     }
 }
