@@ -50,7 +50,7 @@ public class ManageCategory extends AppCompatActivity {
         setSupportActionBar(bind.toolbar); // setting action bar
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.leftarrow); // changing customize back button
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting recycler view

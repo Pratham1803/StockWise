@@ -1,5 +1,6 @@
 package com.example.stockwise.MenuScreens;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -26,6 +27,8 @@ public class Settings extends AppCompatActivity {
 
         bind = ActivitySettingsBinding.inflate(getLayoutInflater()); // initializing view binding
         setContentView(bind.getRoot());
+
+
 
         bind.LayoutReportIssue.setOnClickListener(new View.OnClickListener() {
             @Override

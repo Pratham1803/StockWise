@@ -9,4 +9,5 @@
     <color name="SuccessGreen">#4BB543</color>
     <color name="CancelGrey">#D3D3D3</color>
     <color name="TextGrey">#7F828A</color>
+    <color name="Grey">#808080</color>
 </resources>
