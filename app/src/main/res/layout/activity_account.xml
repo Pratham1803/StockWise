@@ -134,7 +134,7 @@
                 android:layout_marginTop="60dp"
                 android:background="@drawable/btn_signup"
                 android:fontFamily="@font/lexend_bold"
-                android:text="UPDATE"
+                android:text="SAVE"
                 android:onClick="btnUpdateProfileClicked"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

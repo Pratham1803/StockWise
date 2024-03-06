@@ -14,7 +14,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="titleHome">Home</string>
     <string name="titleProduct">Product</string>
-    <string name="titlePerson">Person</string>
+    <string name="titlePerson">Contacts Hub</string>
     <string name="titleCategory">Category</string>
     <string name="titleTransaction">Transaction</string>
     <string name="titleProfile">Profile</string>
