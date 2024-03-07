@@ -1,6 +1,7 @@
 package com.example.stockwise.fragments.product;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView txtProductName; // to display product name
         private final TextView txtCurrentStock; // to display current stock
         private final TextView txtPrice; // to display price
@@ -35,6 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             txtProductName = (TextView) view.findViewById(R.id.txtProductName); // getting view of product name textView
             txtCurrentStock = (TextView) view.findViewById(R.id.txtCurrentStock); // getting view of product stock textView
             txtPrice = (TextView) view.findViewById(R.id.txtPrice); // getting view of product price textView
@@ -62,6 +64,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public ImageView getImgProduct() {
             return imgProduct;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAbsoluteAdapterPosition();
+            ProductModel product = localDataSet.get(pos);
+            Intent intent = new Intent(context, ProductView.class);
+            intent.putExtra("productObj", product);
+            context.startActivity(intent);
         }
     }
 

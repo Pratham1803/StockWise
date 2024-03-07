@@ -7,21 +7,25 @@
     android:background="#EFEFEF"
     tools:context=".fragments.product.ProductView">
 
-    <Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarProductView"
         android:layout_width="match_parent"
-        android:layout_height="70sp"
+        android:layout_height="60sp"
         android:background="@color/blue"
-        android:title="Manage Product"
-        android:titleMarginStart="40sp"
-        android:titleTextColor="@color/white"
+        android:elevation="4dp"
+        app:title="Product View"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarProductView">
@@ -29,8 +33,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginHorizontal="10sp"
+            android:layout_marginBottom="50sp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -50,11 +54,13 @@
                     android:padding="20dp">
 
                     <TextView
-                        android:id="@+id/txtContactName"
+                        android:id="@+id/txtProductViewName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lexend_bold"
                         android:text="Product Name"
+                        android:maxHeight="70sp"
+                        android:maxWidth="180sp"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
@@ -65,10 +71,11 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/txtContactDetails"
+                            android:id="@+id/txtSerialNumberView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5sp"
+                            android:maxWidth="140sp"
                             android:fontFamily="@font/lexend_"
                             android:text="Serial Number "
                             android:textColor="@color/black"
@@ -77,12 +84,11 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ContactImage"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgProductImageView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_gravity="end"
-                    android:layout_marginLeft="30dp"
                     android:gravity="end"
                     android:padding="5dp"
                     android:scaleType="centerCrop"
@@ -99,10 +105,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:padding="15dp"
                 android:background="@drawable/btn_signup"
                 android:backgroundTint="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -150,6 +156,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:maxWidth="120sp"
                             android:fontFamily="@font/lexend_"
                             android:text="Selling Price"
                             android:textColor="@color/Grey"
@@ -161,6 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:layout_weight="1"
+                            android:maxWidth="120sp"
                             android:fontFamily="@font/lexend_"
                             android:text="Rs."
                             android:textColor="@color/black"
@@ -172,6 +180,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:layout_weight="1"
+                            android:maxWidth="130sp"
                             android:fontFamily="@font/lexend_"
                             android:text="Sales Account"
                             android:textColor="@color/Grey"
@@ -181,6 +190,7 @@
                             android:id="@+id/txtShopNameShow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxWidth="130sp"
                             android:layout_marginTop="2dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lexend_"
@@ -201,6 +211,7 @@
                             android:id="@+id/lblPurchase"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxWidth="130sp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lexend_"
                             android:text="Purchase Cost"
@@ -212,6 +223,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
+                            android:maxWidth="130sp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lexend_"
                             android:text="Rs."
@@ -223,6 +235,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
+                            android:maxWidth="130sp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lexend_"
                             android:text="Purchase From"
@@ -234,6 +247,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
+                            android:maxWidth="130sp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lexend_"
                             android:text="Vendor name"
@@ -245,138 +259,140 @@
 
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="15dp"
-            android:background="@drawable/btn_signup"
-            android:backgroundTint="@color/white"
-            android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/btn_signup"
+                android:backgroundTint="@color/white"
+                android:orientation="vertical"
+                android:padding="15dp">
 
-                <ImageView
-                    android:id="@+id/imageInfo"
-                    android:layout_width="30dp"
-                    android:layout_height="28dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/productvector"
-                    android:backgroundTint="@color/black"/>
-
-                <TextView
-                    android:id="@+id/txtmoreinfo"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:text="More Information"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageInfo"
+                        android:layout_width="30dp"
+                        android:layout_height="28dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/productvector"
+                        android:backgroundTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/txtmoreinfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lexend_bold"
+                        android:text="More Information"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/lblItemType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="Item Type"
+                        android:textColor="@color/Grey"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/txtItemCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="Category"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/lblSku"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="SKU"
+                        android:textColor="@color/Grey"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/txtSkuShow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="7845968512"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/lblCurrentStock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="Availabe Stock"
+                        android:textColor="@color/Grey"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/txtCurrentStockShow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="50"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/lblReorder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="Reorder Level"
+                        android:textColor="@color/Grey"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/txtReorderPoint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/lexend_"
+                        android:text="10"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/lblItemType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Item Type"
-                    android:textColor="@color/Grey"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/txtItemType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Category"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/lblSku"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="SKU"
-                    android:textColor="@color/Grey"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/txtSkuShow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="7845968512"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/lblCurrentStock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Availabe Stock"
-                    android:textColor="@color/Grey"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/txtCurrentStockShow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="50"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/lblReorder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Reorder Level"
-                    android:textColor="@color/Grey"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/txtReorderPoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lexend_"
-                    android:text="10"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-            </LinearLayout>
-
-        </LinearLayout>
 
         </LinearLayout>
 
 
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
