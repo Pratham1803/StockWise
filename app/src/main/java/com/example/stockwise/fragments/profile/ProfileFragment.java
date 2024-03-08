@@ -79,13 +79,6 @@ public class ProfileFragment extends Fragment {
                  // finishing this activity
             }
         });
-        pDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-            @Override
-            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                pDialog.dismiss();
-            }
-        });
-        pDialog.show();
     }
 
 }
