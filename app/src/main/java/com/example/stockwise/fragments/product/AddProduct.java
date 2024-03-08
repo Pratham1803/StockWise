@@ -241,22 +241,22 @@ public class AddProduct extends AppCompatActivity {
     // opening camera for taking picture
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } else {
-            Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
-        }
+        //} else {
+         //   Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
+        //}
     }
 
     // opening local files to find the image
     private void dispatchPickImageIntent() {
         Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageIntent.setType("image/*");
-        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+       // if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
-        } else {
-            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
-        }
+        //} else {
+        //    Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        //}
     }
 
     // image is taken from camera or from file, now set in imageview

@@ -1,6 +1,6 @@
 package com.example.stockwise.model;
-
-public class ProductModel {
+import  java.io.Serializable;
+public class ProductModel implements Serializable {
     private String id;
     private String name;
     private String barCodeNum;
