@@ -120,12 +120,13 @@ public class Account extends AppCompatActivity {
 
     // opening local files to find the image
     private void dispatchPickImageIntent() {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+        try {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, 2);
-        } else {
-            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+            Toast.makeText(this, "Can't open gallery", Toast.LENGTH_SHORT).show();
         }
     }
 

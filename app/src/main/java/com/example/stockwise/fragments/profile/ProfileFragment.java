@@ -61,7 +61,6 @@ public class ProfileFragment extends Fragment {
 
     // log out user from the app
     public void logOutUser(Context context){
-
         SweetAlertDialog pDialog = new SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE);
         pDialog.setTitleText("Log Out !");
         pDialog.setContentText("Are you sure want to Logout?");
@@ -88,5 +87,4 @@ public class ProfileFragment extends Fragment {
         });
         pDialog.show();
     }
-
 }

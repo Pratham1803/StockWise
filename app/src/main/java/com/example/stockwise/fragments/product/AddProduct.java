@@ -33,6 +33,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityAddProductBinding;
@@ -86,7 +87,6 @@ public class AddProduct extends AppCompatActivity {
         productModel = new ProductModel(); // initializing object of product model
 
         // setup actionbar and adding back press button
-        bind.toolbarProduct.setTitle("Scan & Add Product"); // setting title
         setSupportActionBar(bind.toolbarProduct);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -203,11 +203,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 reset();
-                scanner = new ScanOptions();
-                scanner.setPrompt("App is ready for use"); // title on scanner
-                scanner.setBeepEnabled(true); // enable beep sound
-                scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(ScannerOrientation.class);
+                scanner = MainToolbar.getScanner(); // getting scanner options
                 bar.launch(scanner); // launching the scanner
                 return true;
             }
@@ -240,23 +236,25 @@ public class AddProduct extends AppCompatActivity {
 
     // opening camera for taking picture
     private void dispatchTakePictureIntent() {
+        try{
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        //} else {
-         //   Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
-        //}
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }catch (Exception e){
+            Toast.makeText(AddProduct.this, "Can not Open Camera", Toast.LENGTH_SHORT).show();
+            Log.d("ErrorMsg", "dispatchTakePictureIntent: "+e.getMessage());
+        }
     }
 
     // opening local files to find the image
     private void dispatchPickImageIntent() {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-       // if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+        try {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
-        //} else {
-        //    Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
-        //}
+        }catch (Exception e){
+            Toast.makeText(AddProduct.this, "Can not Open Gallery", Toast.LENGTH_SHORT).show();
+            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+        }
     }
 
     // image is taken from camera or from file, now set in imageview

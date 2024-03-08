@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityManageCategoryBinding;
@@ -122,12 +123,7 @@ public class ManageCategory extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item,context);
     }
 
     // adding category to database

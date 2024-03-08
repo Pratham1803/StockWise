@@ -1,21 +1,14 @@
 package com.example.stockwise.fragments.product;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,21 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentProductBinding;
-import com.example.stockwise.databinding.FragmentProfileBinding;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -55,7 +44,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
 
-    String[] filter = { "All Products","Unavailable Products","Products at Reorder Point"};
+    String[] filter = {"All Products","Unavailable Products","Products at Reorder Point","Selected Products"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,12 +128,8 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                scanner = new ScanOptions();
-                scanner.setPrompt("App is ready for use"); // title on scanner
-                scanner.setBeepEnabled(true); // enable beep sound
-                scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(ScannerOrientation.class);
-                bar.launch(scanner); // launching the scanner
+                scanner = MainToolbar.getScanner();
+                bar.launch(scanner);
                 return true;
             }
         });
@@ -179,35 +164,14 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         // if scanner has some result
         if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
-            searchProduct_barcode();
+            MainToolbar.searchProduct_Barcode(arrAllProduct,productAdapter,barCodeId);
+            bind.FilterSpinner.setSelection(3);
+//            searchProduct_barcode();
         }
         // scanner does not have any results
         else
             Toast.makeText(context, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
-
-    // search using Barcode num
-    private void searchProduct_barcode() {
-        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrAllProduct.clear();
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    if (post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
-                        ProductModel productModel = post.getValue(ProductModel.class);
-                        productModel.setId(post.getKey().toString());
-                        arrAllProduct.add(productModel);
-                    }
-                    productAdapter.notifyItemInserted(arrAllProduct.size());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

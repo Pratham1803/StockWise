@@ -4,36 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MenuScreens.Settings"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context=".MenuScreens.Settings">
 
-    <Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarSetting"
         android:layout_width="match_parent"
-        android:layout_height="70sp"
+        android:layout_height="60sp"
         android:background="@color/blue"
-        android:title="Settings"
-        android:titleMarginStart="40sp"
-        android:titleTextColor="@color/white"
+        android:elevation="4dp"
+        app:title="Settings"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:subtitleTextAppearance="@font/lexend_bold"
+        app:titleTextColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/toolbarSetting">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -46,8 +49,7 @@
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:background="@drawable/keyvector"
-                    android:backgroundTint="@color/TextGrey"
-                    />
+                    android:backgroundTint="@color/TextGrey" />
             </LinearLayout>
 
             <LinearLayout
@@ -61,28 +63,27 @@
                     android:id="@+id/textView12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Account"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="Account"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Security notifications, change email"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="Security notifications, change email"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -93,8 +94,8 @@
                     android:id="@+id/iconSales"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:padding="13dp"
                     android:layout_weight="1"
+                    android:padding="13dp"
                     android:src="@drawable/salessettingsvector" />
             </LinearLayout>
 
@@ -109,28 +110,27 @@
                     android:id="@+id/txtSalesSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sales Settings"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="Sales Settings"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/txtSalesBrief"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Payement options"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="Payement options"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -141,8 +141,8 @@
                     android:id="@+id/iconAbout"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:padding="13dp"
                     android:layout_weight="1"
+                    android:padding="13dp"
                     android:src="@drawable/aboutvector" />
             </LinearLayout>
 
@@ -157,29 +157,28 @@
                     android:id="@+id/txtAboutSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="About"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="About"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/txtAboutBrief"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="All the stuff you need to know"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="All the stuff you need to know"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/LayoutPrivacyPolicy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:id="@+id/LayoutPrivacyPolicy"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -190,8 +189,8 @@
                     android:id="@+id/iconPrivacy"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:padding="13dp"
                     android:layout_weight="1"
+                    android:padding="13dp"
                     android:src="@drawable/privacyvector" />
             </LinearLayout>
 
@@ -206,29 +205,28 @@
                     android:id="@+id/txtPrivacySettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Privacy Policy"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="Privacy Policy"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/txtPrivacyBrief"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Terms &amp; conditions"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="Terms &amp; conditions"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/LayoutReportIssue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/LayoutReportIssue"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -239,8 +237,8 @@
                     android:id="@+id/iconReport"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:padding="15dp"
                     android:layout_weight="1"
+                    android:padding="15dp"
                     android:src="@drawable/reportvector" />
             </LinearLayout>
 
@@ -255,28 +253,27 @@
                     android:id="@+id/txtReportSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Report app issues"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="Report app issues"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/txtReportBrief"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tell us your problem"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="Tell us your problem"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -287,8 +284,8 @@
                     android:id="@+id/iconHelp"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:padding="12dp"
                     android:layout_weight="1"
+                    android:padding="12dp"
                     android:src="@drawable/helpvector" />
             </LinearLayout>
 
@@ -303,19 +300,19 @@
                     android:id="@+id/txtHelpSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Help"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"/>
+                    android:text="Help"
+                    android:textColor="@color/black"
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/txtHelpBrief"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Help center, Contact us"
-                    android:textSize="15dp"
                     android:fontFamily="@font/lexend_"
-                    android:textColor="@color/TextGrey" />
+                    android:text="Help center, Contact us"
+                    android:textColor="@color/TextGrey"
+                    android:textSize="15dp" />
             </LinearLayout>
         </LinearLayout>
 

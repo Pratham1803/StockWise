@@ -7,7 +7,7 @@
     tools:context=".fragments.product.ProductFragment">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutFilter"
         android:layout_width="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -24,7 +24,7 @@
             android:id="@+id/imageView8"
             android:layout_width="30dp"
             android:layout_height="28dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/filtervector"
             android:backgroundTint="@color/TextGrey"/>
 
@@ -33,20 +33,18 @@
             style="@style/spinner_style"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginStart="20dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerProduct"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutFilter"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
