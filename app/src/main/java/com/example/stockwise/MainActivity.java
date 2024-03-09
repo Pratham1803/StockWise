@@ -21,13 +21,12 @@ import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
-import com.example.stockwise.fragments.product.ProductView;
 import com.example.stockwise.fragments.transaction.transactionFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.fragments.profile.Settings;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 

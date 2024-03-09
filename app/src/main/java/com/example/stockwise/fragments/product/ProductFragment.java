@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.stockwise.Params;
@@ -125,6 +128,10 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         MenuItem btnScan = menu.findItem(R.id.scanner);
         SearchView searchView = (SearchView) btnSearch.getActionView();
 
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -134,15 +141,24 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                MainToolbar.btnSearch(query.toLowerCase(),arrAllProduct,productAdapter);
+                Log.d("SuccessMsg", "onQueryTextSubmit: Text = "+query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if (newText.length() > 1) {
+                    MainToolbar.btnSearch(newText.toLowerCase(), arrAllProduct, productAdapter);
+                    Log.d("SuccessMsg", "onQueryTextChange: Text = "+newText);
+                } else if (newText.length() == 0){
+                    productAdapter.setLocalDataSet(arrAllProduct);
+                }
+                return true;
             }
         });
 

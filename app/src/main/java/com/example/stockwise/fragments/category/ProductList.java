@@ -16,7 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.SearchView;
+import android.widget.EditText;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.stockwise.MainToolbar;
@@ -175,6 +176,10 @@ public class ProductList extends AppCompatActivity implements AdapterView.OnItem
         MenuItem btnScan = menu.findItem(R.id.scanner);
         SearchView searchView = (SearchView) btnSearch.getActionView();
 
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -184,15 +189,24 @@ public class ProductList extends AppCompatActivity implements AdapterView.OnItem
             }
         });
 
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                MainToolbar.btnSearch(query.toLowerCase(),arrAllProduct,productAdapter);
+                Log.d("SuccessMsg", "onQueryTextSubmit: Text = "+query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if (newText.length() > 1) {
+                    MainToolbar.btnSearch(newText.toLowerCase(), arrAllProduct, productAdapter);
+                    Log.d("SuccessMsg", "onQueryTextChange: Text = "+newText);
+                } else if (newText.length() == 0){
+                    productAdapter.setLocalDataSet(arrAllProduct);
+                }
+                return true;
             }
         });
 

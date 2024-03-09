@@ -11,11 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bumptech.glide.Glide;
-import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
-import com.example.stockwise.ProfileNavigation.Account;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityAccountBinding;
 import com.example.stockwise.databinding.ActivityProductViewBinding;
 import com.example.stockwise.model.ProductModel;
 
@@ -60,12 +58,7 @@ public class ProductView extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item,context);
     }
 
     // popup menu for Edit and Delete the products

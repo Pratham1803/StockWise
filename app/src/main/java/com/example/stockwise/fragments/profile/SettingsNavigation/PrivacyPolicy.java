@@ -1,19 +1,16 @@
-package com.example.stockwise.SettingsNavigation;
+package com.example.stockwise.fragments.profile.SettingsNavigation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.R;
-
-import com.example.stockwise.MenuScreens.Settings;
 import com.example.stockwise.databinding.ActivityPrivacyPolicyBinding;
 
 public class PrivacyPolicy extends AppCompatActivity {

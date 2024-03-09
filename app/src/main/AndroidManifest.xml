@@ -21,10 +21,10 @@
             android:name=".fragments.product.ProductView"
             android:exported="false" />
         <activity
-            android:name=".ProfileNavigation.Account"
+            android:name=".fragments.profile.Account"
             android:exported="false" />
         <activity
-            android:name="ProfileNavigation.Account"
+            android:name=".fragments.profile.Account"
             android:exported="false" />
         <activity
             android:name=".MenuScreens.Account"
@@ -36,10 +36,10 @@
             android:name=".fragments.category.ManageCategory"
             android:exported="false" />
         <activity
-            android:name=".SettingsNavigation.PrivacyPolicy"
+            android:name=".fragments.profile.SettingsNavigation.PrivacyPolicy"
             android:exported="false" />
         <activity
-            android:name=".MenuScreens.Settings"
+            android:name=".fragments.profile.Settings"
             android:exported="false" />
         <activity
             android:name=".fragments.product.AddProduct"

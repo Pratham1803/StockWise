@@ -1,9 +1,11 @@
-package com.example.stockwise.ProfileNavigation;
+package com.example.stockwise.fragments.profile;
 
+import com.example.stockwise.databinding.ActivityAccountBinding;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,19 +16,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.stockwise.MainActivity;
-import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityAccountBinding;
-import com.example.stockwise.databinding.ActivitySettingsBinding;
-import com.example.stockwise.databinding.FragmentProfileBinding;
-import com.example.stockwise.fragments.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
 
@@ -36,6 +31,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Account extends AppCompatActivity {
     private ActivityAccountBinding bind; // view binding
+    private Context context; // context
     private boolean isImageChanged = false; // to check if image is changed or not
     private SweetAlertDialog sweetAlertDialog; // sweet alert dialog
 
@@ -44,6 +40,7 @@ public class Account extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         bind = ActivityAccountBinding.inflate(getLayoutInflater()); // initializing view binding
+        context = bind.getRoot().getContext(); // setting context
         setContentView(bind.getRoot());
         reset(false); // setting all fields non-editable
 
@@ -74,12 +71,7 @@ public class Account extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item, context);
     }
 
     // reset all fields

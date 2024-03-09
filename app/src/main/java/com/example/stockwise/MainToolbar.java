@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class MainToolbar {
     private static ScanOptions scanner;
+    private static ArrayList<ProductModel> arrProductSearch;
 
     public static ScanOptions getScanner(){
         scanner = new ScanOptions();
@@ -33,34 +34,30 @@ public class MainToolbar {
     }
 
     public static void searchProduct_Barcode(ArrayList<ProductModel> arrAllProduct, ProductAdapter productAdapter,String barCodeId){
-        ArrayList<ProductModel> arrProductSearch = new ArrayList<ProductModel>();
-        arrProductSearch.addAll(arrAllProduct);
-        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrProductSearch.clear();
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    if (post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
-                        ProductModel productModel = post.getValue(ProductModel.class);
-                        productModel.setId(post.getKey().toString());
-                        arrProductSearch.add(productModel);
-                    }
-                }
-                productAdapter.setLocalDataSet(arrProductSearch);
+        arrProductSearch = new ArrayList<ProductModel>();
+        for(ProductModel productModel: arrAllProduct){
+            if(productModel.getBarCodeNum().equals(barCodeId)){
+                arrProductSearch.add(productModel);
             }
+        }
+        productAdapter.setLocalDataSet(arrProductSearch);
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
+    public static void btnSearch(String query,ArrayList<ProductModel> arrAllProduct, ProductAdapter productAdapter){
+        ArrayList<ProductModel> arrProductSearch = new ArrayList<ProductModel>();
+
+        for(ProductModel productModel: arrAllProduct){
+            if(productModel.getName().toLowerCase().contains(query.toLowerCase())){
+                arrProductSearch.add(productModel);
             }
-        });
+        }
+        productAdapter.setLocalDataSet(arrProductSearch);
     }
 
     public static boolean btnBack_clicked(MenuItem item,Context context){
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((Activity)context).finish();
-                return true;
         }
         return true;
     }
