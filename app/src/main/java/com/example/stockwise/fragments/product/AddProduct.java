@@ -1,17 +1,9 @@
 package com.example.stockwise.fragments.product;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.tv.TvContract;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -21,8 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -47,7 +44,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.UploadTask;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -59,7 +55,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -68,6 +63,7 @@ public class AddProduct extends AppCompatActivity {
     ProductModel productModel; // object of productModel Class
     private String barCodeId; // to store the bar code numbers
     Bitmap bitmap; // to store the bytes of image
+    ArrayList<CategoryModel> arrCategory; // to store the category list
     private static final int REQUEST_IMAGE_CAPTURE = 1; // camera access
     private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
     private ScanOptions scanner; // scanner fields declaration
@@ -98,12 +94,17 @@ public class AddProduct extends AppCompatActivity {
         Params.getREFERENCE().child(Params.getCATEGORY()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> arrCategory = new ArrayList<>();
-                arrCategory.add("Select Category");
+                arrCategory = new ArrayList<>();
+                arrCategory.add(new CategoryModel("1", "Select Category", "0",null));
+
+                ArrayList<String>arrCategoryName = new ArrayList<>();
+                arrCategoryName.add(arrCategory.get(0).getName());
                 for (DataSnapshot post : snapshot.getChildren()) {
-                    arrCategory.add(post.child(Params.getNAME()).getValue().toString());
+                    CategoryModel categoryModel = post.getValue(CategoryModel.class);
+                    arrCategoryName.add(categoryModel.getName());
+                    arrCategory.add(categoryModel);
                 }
-                ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategory);
+                ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategoryName);
                 adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 bind.spCategory.setAdapter(adapter);
             }
@@ -418,7 +419,7 @@ public class AddProduct extends AppCompatActivity {
         productModel.setPurchase_price(bind.edPurchasePrice.getText().toString());
         productModel.setSale_price(bind.edSalePrice.getText().toString());
         productModel.setBarCodeNum(bind.edBarCodeNum.getText().toString());
-        productModel.setCategory(bind.spCategory.getSelectedItem().toString());
+        productModel.setCategory(arrCategory.get(bind.spCategory.getSelectedItemPosition()).getId());
 
         // check that is there any input available or not
         if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty()) && (!productModel.getCategory().equals("Select Category"))) {
@@ -506,50 +507,23 @@ public class AddProduct extends AppCompatActivity {
     }
 
     private void addProductToCategory(){
-        DatabaseReference reference = Params.getREFERENCE().child(Params.getCATEGORY()); // getting reference of category
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot post : snapshot.getChildren()) {
-                    CategoryModel categoryModel = new CategoryModel();
-                    categoryModel.setName(post.child("name").getValue().toString());
-                    categoryModel.setNumOfProducts(post.child("numOfProducts").getValue().toString());
-                    categoryModel.setId(post.getKey());
+        CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition());
+        categoryModel.setNumOfProducts(String.valueOf(Integer.parseInt(categoryModel.getNumOfProducts())+1));
+        categoryModel.getArrProducts().put(categoryModel.getNumOfProducts(), productModel.getId());
 
-                    // finding the category of product from database
-                    if (categoryModel.getName().equals(productModel.getCategory())) {
-                        // uploading product id in category
-                        reference.child(categoryModel.getId()).child(Params.getArrProducts()).push().setValue(productModel.getId())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        // updating num of products in category
-                                        int numProduct = Integer.parseInt(categoryModel.getNumOfProducts());
-                                        reference.child(categoryModel.getId()).child("numOfProducts").setValue(String.valueOf(numProduct+1));
-                                        // data is uploaded in database
-                                        sweetAlertDialog.cancel();
-                                        sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added Successfully!!");
-                                        sweetAlertDialog.show();
-                                        reset(); // resetting all the fields
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("ErrorMsg", "onFailure: "+e.getMessage());
-                                        sweetAlertDialog.cancel();
-                                        sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.ERROR_TYPE).setTitleText("Product Not Added!!");
-                                        sweetAlertDialog.show();
-                                        reset();
-                                    }
-                                });
-                        break;
-                    }
-                }
+        Params.getREFERENCE().child(Params.getCATEGORY()).child(categoryModel.getId()).setValue(categoryModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                sweetAlertDialog.cancel();
+                new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added").setContentText("Product has been added successfully").show();
+                reset();
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onFailure(@NonNull Exception e) {
+                sweetAlertDialog.cancel();
+                new SweetAlertDialog(AddProduct.this, SweetAlertDialog.ERROR_TYPE).setTitleText("Error").setContentText("Product could not be added").show();
+                Log.d("ErrorMsg", "onFailure: "+e.getMessage());
             }
         });
     }

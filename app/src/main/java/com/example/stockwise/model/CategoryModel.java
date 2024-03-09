@@ -1,25 +1,29 @@
 package com.example.stockwise.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CategoryModel {
     private String id;
     private String name;
     private String numOfProducts;
-    private ArrayList<String> arrProducts;
+    private Map<String,String> arrProducts;
 
     public CategoryModel() {
     }
 
-    public CategoryModel(String id, String name, String numOfProducts) {
+    public CategoryModel(String id, String name, String numOfProducts,Map<String,String> arrProducts) {
         this.id = id;
         this.name = name;
         this.numOfProducts = numOfProducts;
+        this.arrProducts = arrProducts;
     }
 
     // setters
 
-    public void setArrProducts(ArrayList<String> arrProducts) {
+    public void setArrProducts(Map<String,String> arrProducts) {
         this.arrProducts = arrProducts;
     }
 
@@ -45,7 +49,7 @@ public class CategoryModel {
         return numOfProducts;
     }
 
-    public ArrayList<String> getArrProducts() {
+    public Map<String,String> getArrProducts() {
         return arrProducts;
     }
 }
