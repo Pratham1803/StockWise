@@ -13,7 +13,6 @@
         android:layout_height="60sp"
         android:background="@color/blue"
         android:elevation="4dp"
-        app:title="Settings"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -21,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:subtitleTextAppearance="@font/lexend_bold"
+        app:title="Settings"
         app:titleTextColor="@color/white" />
 
     <LinearLayout
@@ -30,9 +30,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarSetting">
 
         <LinearLayout
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -80,6 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -127,6 +132,7 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -175,6 +181,7 @@
 
         <LinearLayout
             android:id="@+id/LayoutPrivacyPolicy"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -223,6 +230,7 @@
 
         <LinearLayout
             android:id="@+id/LayoutReportIssue"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -270,6 +278,7 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
