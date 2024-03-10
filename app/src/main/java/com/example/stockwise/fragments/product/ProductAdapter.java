@@ -90,6 +90,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     public void setLocalDataSet(ArrayList<ProductModel> localDataSet){
         this.localDataSet = localDataSet;
+        this.notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)

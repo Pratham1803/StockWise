@@ -1,9 +1,12 @@
-package com.example.stockwise.ProfileNavigation;
+package com.example.stockwise.fragments.profile;
 
+import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.databinding.ActivityAccountBinding;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,19 +17,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.stockwise.MainActivity;
-import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.ActivityAccountBinding;
-import com.example.stockwise.databinding.ActivitySettingsBinding;
-import com.example.stockwise.databinding.FragmentProfileBinding;
-import com.example.stockwise.fragments.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
 
@@ -36,6 +32,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Account extends AppCompatActivity {
     private ActivityAccountBinding bind; // view binding
+    private Context context; // context
     private boolean isImageChanged = false; // to check if image is changed or not
     private SweetAlertDialog sweetAlertDialog; // sweet alert dialog
 
@@ -44,6 +41,7 @@ public class Account extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         bind = ActivityAccountBinding.inflate(getLayoutInflater()); // initializing view binding
+        context = bind.getRoot().getContext(); // setting context
         setContentView(bind.getRoot());
         reset(false); // setting all fields non-editable
 
@@ -74,12 +72,7 @@ public class Account extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item, context);
     }
 
     // reset all fields
@@ -120,12 +113,13 @@ public class Account extends AppCompatActivity {
 
     // opening local files to find the image
     private void dispatchPickImageIntent() {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-        if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+        try {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, 2);
-        } else {
-            Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+            Toast.makeText(this, "Can't open gallery", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -151,11 +145,7 @@ public class Account extends AppCompatActivity {
         Params.getOwnerModel().setEmail_id(email);
         Params.getOwnerModel().setShop_name(shopName);
 
-        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.PROGRESS_TYPE);
-        sweetAlertDialog.setTitleText("Updating Profile");
-        sweetAlertDialog.setCancelable(false);
-        sweetAlertDialog.show();
-
+        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Updating Profile...",""); // showing sweet alert dialog
         bind.button.setText("Please Wait...");
 
         if (isImageChanged) {
@@ -194,10 +184,8 @@ public class Account extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        sweetAlertDialog.cancel();
-                        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.SUCCESS_TYPE);
-                        sweetAlertDialog.setTitleText("Profile Updated");
-                        sweetAlertDialog.show();
+                        sweetAlertDialog.dismiss();
+                        sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Profile Updated", ""); // showing sweet alert dialog
                         reset(false); // set all fields non-editable
                         bind.button.setText("UPDATE");
                     }

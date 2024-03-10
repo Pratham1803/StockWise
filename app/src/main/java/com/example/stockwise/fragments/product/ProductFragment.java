@@ -1,21 +1,14 @@
 package com.example.stockwise.fragments.product;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,21 +18,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.SearchView;
-import android.widget.Spinner;
+
+import androidx.appcompat.widget.SearchView;
+
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentProductBinding;
-import com.example.stockwise.databinding.FragmentProfileBinding;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -55,7 +47,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
 
-    String[] filter = { "All Products","Unavailable Products","Products at Reorder Point"};
+    String[] filter = {"All Products", "Unavailable Products", "Products at Reorder Point", "Selected Products"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,7 +84,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     // get all products from firebase
-    private void dbGetAllProducts(){
+    private void dbGetAllProducts() {
         // collecting product list from firebase
         Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -104,23 +96,23 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
 
                 for (DataSnapshot post : snapshot.getChildren()) {
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                    newProduct.setId(post.getKey().toString()); // setting user id of product to class object
-
+                    assert newProduct != null;
+                    newProduct.setCategory_id(newProduct.getCategory());
                     arrAllProduct.add(newProduct); // adding product in product's arraylist
 
-                    if(newProduct.getIsOutOfStock().equals("true")){
+                    if (newProduct.getIsOutOfStock().equals("true")) {
                         arrUnAvailableProduct.add(newProduct);
                     }
-                    if(newProduct.getIsReorderPointReached().equals("true")){
+                    if (newProduct.getIsReorderPointReached().equals("true")) {
                         arrAtReorderPointProduct.add(newProduct);
                     }
                 }
-                productAdapter.notifyDataSetChanged(); // notifying the adapter that new products are added
+                productAdapter.notifyDataSetChanged(); // notifying adapter that data has been changed
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
+                Log.d("ErrorMsg", "onCancelled: " + error.getMessage());
             }
         });
     }
@@ -136,28 +128,37 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         MenuItem btnScan = menu.findItem(R.id.scanner);
         SearchView searchView = (SearchView) btnSearch.getActionView();
 
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                scanner = new ScanOptions();
-                scanner.setPrompt("App is ready for use"); // title on scanner
-                scanner.setBeepEnabled(true); // enable beep sound
-                scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(ScannerOrientation.class);
-                bar.launch(scanner); // launching the scanner
+                scanner = MainToolbar.getScanner();
+                bar.launch(scanner);
                 return true;
             }
         });
 
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                MainToolbar.btnSearch(query.toLowerCase(), arrAllProduct, productAdapter);
+                Log.d("SuccessMsg", "onQueryTextSubmit: Text = " + query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if (newText.length() > 1) {
+                    MainToolbar.btnSearch(newText.toLowerCase(), arrAllProduct, productAdapter);
+                    Log.d("SuccessMsg", "onQueryTextChange: Text = " + newText);
+                } else if (newText.length() == 0) {
+                    productAdapter.setLocalDataSet(arrAllProduct);
+                }
+                return true;
             }
         });
 
@@ -179,45 +180,24 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         // if scanner has some result
         if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
-            searchProduct_barcode();
+            MainToolbar.searchProduct_Barcode(arrAllProduct, productAdapter, barCodeId);
+            bind.FilterSpinner.setSelection(3);
+//            searchProduct_barcode();
         }
         // scanner does not have any results
         else
             Toast.makeText(context, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
-    // search using Barcode num
-    private void searchProduct_barcode() {
-        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrAllProduct.clear();
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    if (post.child(Params.getBarCode()).getValue().toString().equals(barCodeId)) {
-                        ProductModel productModel = post.getValue(ProductModel.class);
-                        productModel.setId(post.getKey().toString());
-                        arrAllProduct.add(productModel);
-                    }
-                    productAdapter.notifyItemInserted(arrAllProduct.size());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String currentSelection = filter[i];
 
-        if(currentSelection.equals(filter[0])){
+        if (currentSelection.equals(filter[0])) {
             productAdapter.setLocalDataSet(arrAllProduct);
-        }else if(currentSelection.equals(filter[1])){
+        } else if (currentSelection.equals(filter[1])) {
             productAdapter.setLocalDataSet(arrUnAvailableProduct);
-        }else if (currentSelection.equals(filter[2])){
+        } else if (currentSelection.equals(filter[2])) {
             productAdapter.setLocalDataSet(arrAtReorderPointProduct);
         }
         productAdapter.notifyDataSetChanged();

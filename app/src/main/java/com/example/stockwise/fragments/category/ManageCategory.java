@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityManageCategoryBinding;
@@ -66,10 +67,7 @@ public class ManageCategory extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrCategoryList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    CategoryModel newCategory = new CategoryModel();
-                    newCategory.setName(dataSnapshot.child("name").getValue().toString());
-                    newCategory.setNumOfProducts(dataSnapshot.child("numOfProducts").getValue().toString());
-                    newCategory.setId(dataSnapshot.getKey());
+                    CategoryModel newCategory = dataSnapshot.getValue(CategoryModel.class);
                     arrCategoryList.add(newCategory);
                 }
                 categoryAdapter.notifyItemInserted(arrCategoryList.size());
@@ -122,12 +120,7 @@ public class ManageCategory extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item,context);
     }
 
     // adding category to database
@@ -135,7 +128,6 @@ public class ManageCategory extends AppCompatActivity {
         // Add category to database
         DatabaseReference reference = Params.getREFERENCE().child(Params.getCATEGORY()).push();
         categoryModel.setId(reference.getKey());
-        categoryModel.setNumOfProducts("0");
 
         reference.setValue(categoryModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

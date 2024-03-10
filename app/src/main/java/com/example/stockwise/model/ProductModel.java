@@ -8,13 +8,13 @@ public class ProductModel implements Serializable {
     private String reorder_point;
     private String purchase_price;
     private String category;
+    private String category_id;
     private String sale_price;
     private String picture;
     private String isReorderPointReached;
     private String isOutOfStock;
 
     // constructor
-
     public ProductModel() {}
 
     public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture, String isReorderPointReached, String isOutOfStock) {
@@ -31,6 +31,10 @@ public class ProductModel implements Serializable {
     }
 
     // setters
+
+    public void setCategory_id(String category_id) {
+        this.category_id = category_id;
+    }
 
     public void setBarCodeNum(String barCodeNum) {
         this.barCodeNum = barCodeNum;
@@ -78,6 +82,10 @@ public class ProductModel implements Serializable {
 
 
     // getters
+
+    public String getCategory_id() {
+        return category_id;
+    }
 
     public String getBarCodeNum() {
         return barCodeNum;

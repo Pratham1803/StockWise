@@ -1,36 +1,40 @@
-package com.example.stockwise.SettingsNavigation;
+package com.example.stockwise.fragments.profile.SettingsNavigation;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.R;
-
-import com.example.stockwise.MenuScreens.Settings;
 import com.example.stockwise.databinding.ActivityPrivacyPolicyBinding;
 
 public class PrivacyPolicy extends AppCompatActivity {
     private ActivityPrivacyPolicyBinding bind; // declaring view binding
-
-
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
 
         bind = ActivityPrivacyPolicyBinding.inflate(getLayoutInflater()); // initializing view binding
+        context = bind.getRoot().getContext(); // initializing context
+
         setContentView(bind.getRoot());
+
+        // setting action bar title
+        setSupportActionBar(bind.toolbarPrivacyPolicy);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         bind.scrollView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        bind.backFromPolicy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(PrivacyPolicy.this, Settings.class));
-                finish();
-            }
-        });
 
         bind.btnIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,4 +170,10 @@ public class PrivacyPolicy extends AppCompatActivity {
 
 
     }// End of onCreate
+
+    // back press event of actionbar back button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return MainToolbar.btnBack_clicked(item,context);
+    }
 }

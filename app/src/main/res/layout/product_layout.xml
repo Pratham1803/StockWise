@@ -76,7 +76,6 @@
                     android:textSize="16sp"
                     android:text="Available Stock : "
                     android:textColor="@color/black" />
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

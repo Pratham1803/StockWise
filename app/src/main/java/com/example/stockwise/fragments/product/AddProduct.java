@@ -1,16 +1,9 @@
 package com.example.stockwise.fragments.product;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.tv.TvContract;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -20,8 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -33,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityAddProductBinding;
@@ -45,7 +44,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.UploadTask;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -56,8 +54,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -66,6 +64,7 @@ public class AddProduct extends AppCompatActivity {
     ProductModel productModel; // object of productModel Class
     private String barCodeId; // to store the bar code numbers
     Bitmap bitmap; // to store the bytes of image
+    ArrayList<CategoryModel> arrCategory; // to store the category list
     private static final int REQUEST_IMAGE_CAPTURE = 1; // camera access
     private static final int REQUEST_IMAGE_GALLERY = 2; // gallery access
     private ScanOptions scanner; // scanner fields declaration
@@ -86,7 +85,6 @@ public class AddProduct extends AppCompatActivity {
         productModel = new ProductModel(); // initializing object of product model
 
         // setup actionbar and adding back press button
-        bind.toolbarProduct.setTitle("Scan & Add Product"); // setting title
         setSupportActionBar(bind.toolbarProduct);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -97,12 +95,16 @@ public class AddProduct extends AppCompatActivity {
         Params.getREFERENCE().child(Params.getCATEGORY()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> arrCategory = new ArrayList<>();
-                arrCategory.add("Select Category");
+                arrCategory = new ArrayList<>();
+                arrCategory.add(new CategoryModel("1", "Select Category",null));
+                ArrayList<String>arrCategoryName = new ArrayList<>();
+                arrCategoryName.add(arrCategory.get(0).getName());
                 for (DataSnapshot post : snapshot.getChildren()) {
-                    arrCategory.add(post.child(Params.getNAME()).getValue().toString());
+                    CategoryModel categoryModel = post.getValue(CategoryModel.class);
+                    arrCategoryName.add(categoryModel.getName());
+                    arrCategory.add(categoryModel);
                 }
-                ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategory);
+                ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategoryName);
                 adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 bind.spCategory.setAdapter(adapter);
             }
@@ -176,12 +178,7 @@ public class AddProduct extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return MainToolbar.btnBack_clicked(item,AddProduct.this);
     }
 
     // menu bar item selection listener
@@ -203,11 +200,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 reset();
-                scanner = new ScanOptions();
-                scanner.setPrompt("App is ready for use"); // title on scanner
-                scanner.setBeepEnabled(true); // enable beep sound
-                scanner.setOrientationLocked(true);
-                scanner.setCaptureActivity(ScannerOrientation.class);
+                scanner = MainToolbar.getScanner(); // getting scanner options
                 bar.launch(scanner); // launching the scanner
                 return true;
             }
@@ -240,23 +233,25 @@ public class AddProduct extends AppCompatActivity {
 
     // opening camera for taking picture
     private void dispatchTakePictureIntent() {
+        try{
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        //} else {
-         //   Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
-        //}
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }catch (Exception e){
+            Toast.makeText(AddProduct.this, "Can not Open Camera", Toast.LENGTH_SHORT).show();
+            Log.d("ErrorMsg", "dispatchTakePictureIntent: "+e.getMessage());
+        }
     }
 
     // opening local files to find the image
     private void dispatchPickImageIntent() {
-        Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageIntent.setType("image/*");
-       // if (pickImageIntent.resolveActivity(getPackageManager()) != null) {
+        try {
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
-        //} else {
-        //    Toast.makeText(this, "Gallery not available", Toast.LENGTH_SHORT).show();
-        //}
+        }catch (Exception e){
+            Toast.makeText(AddProduct.this, "Can not Open Gallery", Toast.LENGTH_SHORT).show();
+            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+        }
     }
 
     // image is taken from camera or from file, now set in imageview
@@ -306,9 +301,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Fetching Product Details!!").setContentText("Please Wait...");
-                sweetAlertDialog.setCancelable(false); // setting un cancelable
-                sweetAlertDialog.show();
+                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Fetching Product Details", "Please Wait...");
                 try {
                     getProductDetail();
                 } catch (JSONException e) {
@@ -424,7 +417,7 @@ public class AddProduct extends AppCompatActivity {
         productModel.setPurchase_price(bind.edPurchasePrice.getText().toString());
         productModel.setSale_price(bind.edSalePrice.getText().toString());
         productModel.setBarCodeNum(bind.edBarCodeNum.getText().toString());
-        productModel.setCategory(bind.spCategory.getSelectedItem().toString());
+        productModel.setCategory(arrCategory.get(bind.spCategory.getSelectedItemPosition()).getId());
 
         // check that is there any input available or not
         if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty()) && (!productModel.getCategory().equals("Select Category"))) {
@@ -455,9 +448,7 @@ public class AddProduct extends AppCompatActivity {
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else {
                     // product is not available, so visible progress bar and upload data to the database
-                    sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Adding Product!!").setContentText("Please Wait...");
-                    sweetAlertDialog.setCancelable(false);
-                    sweetAlertDialog.show();
+                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
                     uploadData();
                 }
             }
@@ -482,11 +473,11 @@ public class AddProduct extends AppCompatActivity {
         productModel.setIsReorderPointReached(String.valueOf(isReorderPointReached)); // setting the reorder point status
 
         // uploading image of product
-        Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Params.getSTORAGE().child(Params.getPRODUCT()).child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // getting url of the image from firebase storage
-                Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                Params.getSTORAGE().child(Params.getPRODUCT()).child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         // setting product url
@@ -512,50 +503,25 @@ public class AddProduct extends AppCompatActivity {
     }
 
     private void addProductToCategory(){
-        DatabaseReference reference = Params.getREFERENCE().child(Params.getCATEGORY()); // getting reference of category
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot post : snapshot.getChildren()) {
-                    CategoryModel categoryModel = new CategoryModel();
-                    categoryModel.setName(post.child("name").getValue().toString());
-                    categoryModel.setNumOfProducts(post.child("numOfProducts").getValue().toString());
-                    categoryModel.setId(post.getKey());
+        CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition());
 
-                    // finding the category of product from database
-                    if (categoryModel.getName().equals(productModel.getCategory())) {
-                        // uploading product id in category
-                        reference.child(categoryModel.getId()).child(Params.getArrProducts()).push().setValue(productModel.getId())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        // updating num of products in category
-                                        int numProduct = Integer.parseInt(categoryModel.getNumOfProducts());
-                                        reference.child(categoryModel.getId()).child("numOfProducts").setValue(String.valueOf(numProduct+1));
-                                        // data is uploaded in database
-                                        sweetAlertDialog.cancel();
-                                        sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added Successfully!!");
-                                        sweetAlertDialog.show();
-                                        reset(); // resetting all the fields
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("ErrorMsg", "onFailure: "+e.getMessage());
-                                        sweetAlertDialog.cancel();
-                                        sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.ERROR_TYPE).setTitleText("Product Not Added!!");
-                                        sweetAlertDialog.show();
-                                        reset();
-                                    }
-                                });
-                        break;
-                    }
-                }
+        if(categoryModel.getArrProducts() == null)
+            categoryModel.setArrProducts(new ArrayList<>());
+        categoryModel.getArrProducts().add(productModel.getId());
+
+        Params.getREFERENCE().child(Params.getCATEGORY()).child(categoryModel.getId()).setValue(categoryModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                sweetAlertDialog.cancel();
+                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", "Product Added Successfully");
+                reset();
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onFailure(@NonNull Exception e) {
+                sweetAlertDialog.cancel();
+                sweetAlertDialog = DialogBuilder.showSweetDialogError(AddProduct.this, "Error", "Failed to add product");
+                Log.d("ErrorMsg", "onFailure: "+e.getMessage());
             }
         });
     }

@@ -21,13 +21,12 @@ import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
-import com.example.stockwise.fragments.product.ProductView;
 import com.example.stockwise.fragments.transaction.transactionFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import com.example.stockwise.MenuScreens.Settings;
+import com.example.stockwise.fragments.profile.Settings;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -158,9 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bind.meowBottom.show(navProfileId,true);  // displaying the profile item is selected in bottom nav
         }
         else if (id == R.id.nav_manageProducts) { // Products fragment selected
-//            changeFragment(productFragment,R.string.titleProduct); // change the screen to product screen
-//            bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
-            startActivity(new Intent(MainActivity.this, ProductView.class));
+            changeFragment(productFragment,R.string.titleProduct); // change the screen to product screen
+            bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
         } else if (id == R.id.nav_category) { // category fragment
             // changing screen to category screen
             startActivity(new Intent(MainActivity.this, ManageCategory.class));
