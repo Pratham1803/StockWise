@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
         root = bind.getRoot();
 
         // Select Date button click event
-        bind.btnSelectDate.setOnClickListener(new View.OnClickListener() {
+        bind.DatePick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OpenDialog();
@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // Handle the selected date
-                bind.txtDateShow.setText((day)+"/"+(month+1)+"/"+(year));
+                bind.DateShow.setText((day)+"/"+(month+1)+"/"+(year));
             }
         }, 2024, 0, 15);
 

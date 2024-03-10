@@ -7,31 +7,49 @@
     tools:context=".fragments.HomeFragment">
 
 
-    <Button
-        android:id="@+id/btnSelectDate"
+    <LinearLayout
+        android:id="@+id/DatePick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_login"
+        android:backgroundTint="@color/Grey"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="9dp"
         android:layout_marginTop="60dp"
-        android:background="@drawable/btn_signup"
-        android:fontFamily="@font/lexend_bold"
-        android:textColor="@color/white"
-        android:text="Date"
-        android:textSize="17sp"
+        android:layout_marginRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/txtDateShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
-        android:fontFamily="@font/lexend_bold"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0"
+            android:background="@drawable/calendervector"
+            android:backgroundTint="@color/Grey" />
+
+        <TextView
+            android:id="@+id/DateShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0"
+            android:fontFamily="@font/lexend_bold"
+            android:text="Current Date"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0"
+            android:background="@drawable/rightarrowvector"
+            android:backgroundTint="@color/black" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
