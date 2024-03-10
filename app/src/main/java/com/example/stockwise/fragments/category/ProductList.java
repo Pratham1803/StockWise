@@ -123,8 +123,7 @@ public class ProductList extends AppCompatActivity implements AdapterView.OnItem
                         continue;
                     }
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                    newProduct.setId(post.getKey().toString()); // setting user id of product to class object
-
+                    newProduct.setCategory_id(newProduct.getCategory());
                     arrAllProduct.add(newProduct); // adding product in product's arraylist
 
                     if(newProduct.getIsOutOfStock().equals("true")){

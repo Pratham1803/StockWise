@@ -18,8 +18,16 @@ import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityProductViewBinding;
+import com.example.stockwise.model.CategoryModel;
 import com.example.stockwise.model.ProductModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -27,6 +35,8 @@ public class ProductView extends AppCompatActivity {
     private ActivityProductViewBinding bind; // view binding
     private Context context;
     private ProductModel parentProduct;
+    private AlertDialog.Builder builder;
+    private SweetAlertDialog sweetAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +51,6 @@ public class ProductView extends AppCompatActivity {
         Intent intent = getIntent();
         parentProduct = (ProductModel) intent.getSerializableExtra("productObj");
 
-        Log.d("SuccessMsg", "onCreate: "+parentProduct.getCategory_id());
-        Log.d("SuccessMsg", "onCreate: "+parentProduct.getCategory());
-
         // setting Action bar
         bind.toolbarProductView.setTitle(parentProduct.getName());
         setSupportActionBar(bind.toolbarProductView); // setting action bar
@@ -52,6 +59,15 @@ public class ProductView extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        // collecting Category
+        Params.getREFERENCE().child(Params.getCATEGORY()).child(parentProduct.getCategory_id()).child(Params.getNAME()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                parentProduct.setCategory(dataSnapshot.getValue().toString());
+                bind.txtItemCategory.setText(parentProduct.getCategory());
+            }
+        });
+
         // setting product details
         bind.txtProductViewName.setText(parentProduct.getName());
         bind.txtSerialNumberView.setText(parentProduct.getBarCodeNum());
@@ -59,7 +75,6 @@ public class ProductView extends AppCompatActivity {
         bind.txtSellingPrice.setText("Rs. " + parentProduct.getSale_price());
         bind.txtPurchasePrice.setText("Rs. " + parentProduct.getPurchase_price());
         bind.txtShopNameShow.setText(Params.getOwnerModel().getShop_name());
-        bind.txtItemCategory.setText(parentProduct.getCategory());
         bind.txtSkuShow.setText(parentProduct.getBarCodeNum());
         bind.txtCurrentStockShow.setText(parentProduct.getCurrent_stock());
         bind.txtReorderPoint.setText(parentProduct.getReorder_point());
@@ -90,7 +105,29 @@ public class ProductView extends AppCompatActivity {
         btnDelete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                deleteProduct();
+                builder = DialogBuilder.showDialog(context, "Delete Product", "Are you sure you want to delete this product?");
+                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Deleting Product", "Please Wait...");
+
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    // deleting the product from the database
+                    Params.getREFERENCE().child(Params.getPRODUCT()).child(parentProduct.getId()).removeValue()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        deleteProductImg();
+                                        Log.d("SuccessMsg", "onSuccess: Product Deleted From Real Time Database");
+                                    } else if (task.isCanceled()) {
+                                        sweetAlertDialog.dismiss();
+                                        sweetAlertDialog = DialogBuilder.showSweetDialogError(context, "Error", "Failed to delete the product");
+                                        Log.d("ErrorMsg", "onComplete: Error in deleting the product from the database : " + task.getException().getMessage());
+                                    }
+                                }
+                            });
+                });
+
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                builder.show();
                 return true;
             }
         });
@@ -98,37 +135,52 @@ public class ProductView extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // delete Product
-    private void deleteProduct() {
-        // delete product from the database
-        AlertDialog.Builder builder = DialogBuilder.showDialog(context, "Delete Product", "Are you sure you want to delete this product?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            // delete product from the database
-            Params.getREFERENCE().child(Params.getPRODUCT()).child(parentProduct.getId()).removeValue()
-                    .addOnSuccessListener(aVoid -> {
-                        // delete product from the list
-                        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
-                        sweetAlertDialog.setOnDismissListener(dialogInterface -> {
-                            dialog.dismiss();
-                            finish();
-                        });
-                        sweetAlertDialog.setTitleText("Product Deleted");
-                        sweetAlertDialog.setContentText("Product has been deleted successfully");
-                        sweetAlertDialog.show();
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Error")
-                                    .setContentText("Product could not be deleted")
-                                    .show();
-                            dialog.dismiss();
-                            Log.d("ErrorMsg", "onFailure: " + e.getMessage());
-                        }
-                    });
+    // delete Product Image
+    private void deleteProductImg() {
+        // delete the Image from the storage
+        String image = parentProduct.getName() + ".jpg"; // setting the name of image
+        Params.getSTORAGE().child(Params.getPRODUCT()).child(image).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    deleteProductFromCategory();
+                    Log.d("SuccessMsg", "onComplete: Product Image Deleted");
+                } else if(task.isCanceled()){
+                    sweetAlertDialog.dismiss();
+                    sweetAlertDialog = DialogBuilder.showSweetDialogError(context, "Error", "Failed to Delete the Product");
+                    Log.d("ErrorMsg", "onComplete: Error in deleting the product image : " + task.getException().getMessage());
+                }
+            }
         });
-        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-        builder.show();
+    }
+
+    // delete product from category
+    private void deleteProductFromCategory() {
+        DatabaseReference categoryRef = Params.getREFERENCE().child(Params.getCATEGORY()).child(parentProduct.getCategory_id());
+        categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                CategoryModel categoryModel = snapshot.getValue(CategoryModel.class);
+                assert categoryModel != null;
+                categoryModel.getArrProducts().remove(parentProduct.getId());
+
+                categoryRef.setValue(categoryModel).addOnSuccessListener(aVoid -> {
+                    sweetAlertDialog.dismissWithAnimation();
+                    sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Success", "Product Deleted Successfully");
+                    sweetAlertDialog.setOnDismissListener(dialog -> finish());
+                }).addOnFailureListener(e -> {
+                    sweetAlertDialog.dismiss();
+                    sweetAlertDialog = DialogBuilder.showSweetDialogError(context, "Error", "Failed to delete the product");
+                    Log.e("ErrorMsg", "deleteProduct: Complete " + e.getMessage());
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                sweetAlertDialog.dismiss();
+                sweetAlertDialog = DialogBuilder.showSweetDialogError(context, "Error", "Failed to delete the product");
+                Log.e("ErrorMsg", "deleteProduct: " + error.getMessage());
+            }
+        });
     }
 }

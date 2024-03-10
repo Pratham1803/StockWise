@@ -16,6 +16,7 @@ public class ProductModel implements Serializable {
 
     // constructor
     public ProductModel() {}
+
     public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture, String isReorderPointReached, String isOutOfStock) {
         this.name = name;
         this.barCodeNum = barCodeNum;

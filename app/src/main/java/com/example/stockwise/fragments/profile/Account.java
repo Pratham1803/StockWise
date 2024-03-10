@@ -1,5 +1,6 @@
 package com.example.stockwise.fragments.profile;
 
+import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.databinding.ActivityAccountBinding;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -144,11 +145,7 @@ public class Account extends AppCompatActivity {
         Params.getOwnerModel().setEmail_id(email);
         Params.getOwnerModel().setShop_name(shopName);
 
-        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.PROGRESS_TYPE);
-        sweetAlertDialog.setTitleText("Updating Profile");
-        sweetAlertDialog.setCancelable(false);
-        sweetAlertDialog.show();
-
+        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Updating Profile...",""); // showing sweet alert dialog
         bind.button.setText("Please Wait...");
 
         if (isImageChanged) {
@@ -187,10 +184,8 @@ public class Account extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        sweetAlertDialog.cancel();
-                        sweetAlertDialog = new SweetAlertDialog(Account.this, SweetAlertDialog.SUCCESS_TYPE);
-                        sweetAlertDialog.setTitleText("Profile Updated");
-                        sweetAlertDialog.show();
+                        sweetAlertDialog.dismiss();
+                        sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Profile Updated", ""); // showing sweet alert dialog
                         reset(false); // set all fields non-editable
                         bind.button.setText("UPDATE");
                     }

@@ -67,10 +67,7 @@ public class ManageCategory extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrCategoryList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    CategoryModel newCategory = new CategoryModel();
-                    newCategory.setName(dataSnapshot.child("name").getValue().toString());
-                    newCategory.setNumOfProducts(dataSnapshot.child("numOfProducts").getValue().toString());
-                    newCategory.setId(dataSnapshot.getKey());
+                    CategoryModel newCategory = dataSnapshot.getValue(CategoryModel.class);
                     arrCategoryList.add(newCategory);
                 }
                 categoryAdapter.notifyItemInserted(arrCategoryList.size());
@@ -131,7 +128,6 @@ public class ManageCategory extends AppCompatActivity {
         // Add category to database
         DatabaseReference reference = Params.getREFERENCE().child(Params.getCATEGORY()).push();
         categoryModel.setId(reference.getKey());
-        categoryModel.setNumOfProducts("0");
 
         reference.setValue(categoryModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

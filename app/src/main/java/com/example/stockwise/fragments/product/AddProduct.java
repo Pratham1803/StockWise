@@ -54,6 +54,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -95,8 +96,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrCategory = new ArrayList<>();
-                arrCategory.add(new CategoryModel("1", "Select Category", "0",null));
-
+                arrCategory.add(new CategoryModel("1", "Select Category",null));
                 ArrayList<String>arrCategoryName = new ArrayList<>();
                 arrCategoryName.add(arrCategory.get(0).getName());
                 for (DataSnapshot post : snapshot.getChildren()) {
@@ -301,9 +301,7 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Fetching Product Details!!").setContentText("Please Wait...");
-                sweetAlertDialog.setCancelable(false); // setting un cancelable
-                sweetAlertDialog.show();
+                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Fetching Product Details", "Please Wait...");
                 try {
                     getProductDetail();
                 } catch (JSONException e) {
@@ -450,9 +448,7 @@ public class AddProduct extends AppCompatActivity {
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else {
                     // product is not available, so visible progress bar and upload data to the database
-                    sweetAlertDialog = new SweetAlertDialog(AddProduct.this, SweetAlertDialog.PROGRESS_TYPE).setTitleText("Adding Product!!").setContentText("Please Wait...");
-                    sweetAlertDialog.setCancelable(false);
-                    sweetAlertDialog.show();
+                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
                     uploadData();
                 }
             }
@@ -477,11 +473,11 @@ public class AddProduct extends AppCompatActivity {
         productModel.setIsReorderPointReached(String.valueOf(isReorderPointReached)); // setting the reorder point status
 
         // uploading image of product
-        Params.getSTORAGE().child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Params.getSTORAGE().child(Params.getPRODUCT()).child(image).putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // getting url of the image from firebase storage
-                Params.getSTORAGE().child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                Params.getSTORAGE().child(Params.getPRODUCT()).child(image).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         // setting product url
@@ -508,21 +504,23 @@ public class AddProduct extends AppCompatActivity {
 
     private void addProductToCategory(){
         CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition());
-        categoryModel.setNumOfProducts(String.valueOf(Integer.parseInt(categoryModel.getNumOfProducts())+1));
-        categoryModel.getArrProducts().put(categoryModel.getNumOfProducts(), productModel.getId());
+
+        if(categoryModel.getArrProducts() == null)
+            categoryModel.setArrProducts(new ArrayList<>());
+        categoryModel.getArrProducts().add(productModel.getId());
 
         Params.getREFERENCE().child(Params.getCATEGORY()).child(categoryModel.getId()).setValue(categoryModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 sweetAlertDialog.cancel();
-                new SweetAlertDialog(AddProduct.this, SweetAlertDialog.SUCCESS_TYPE).setTitleText("Product Added").setContentText("Product has been added successfully").show();
+                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", "Product Added Successfully");
                 reset();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 sweetAlertDialog.cancel();
-                new SweetAlertDialog(AddProduct.this, SweetAlertDialog.ERROR_TYPE).setTitleText("Error").setContentText("Product could not be added").show();
+                sweetAlertDialog = DialogBuilder.showSweetDialogError(AddProduct.this, "Error", "Failed to add product");
                 Log.d("ErrorMsg", "onFailure: "+e.getMessage());
             }
         });

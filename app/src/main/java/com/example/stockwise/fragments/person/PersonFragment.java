@@ -213,10 +213,7 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
     // check that person given by user is there or not in database
     // if not then add, or show error
     private void isPersonAvailable(String personType,PersonModel personModel){
-        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        sweetAlertDialog.setCancelable(false);
-        sweetAlertDialog.setTitleText("Please wait");
-        sweetAlertDialog.show();
+        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Please wait", "Checking contact number");
 
         DatabaseReference databaseReference;
         if (personType.equals(Params.getVENDOR()))
@@ -237,11 +234,8 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
                     }
                 }
                 if (flag) {
-                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Error")
-                            .setContentText("Contact number already exists")
-                            .show();
-                    sweetAlertDialog.cancel();
+                    sweetAlertDialog.dismiss();
+                    sweetAlertDialog =  DialogBuilder.showSweetDialogError(context, "Error", "Contact number already exists");
                     alertDialog.dismiss();
                 }else {
                     dbAddPerson(databaseReference,personModel);
@@ -257,11 +251,8 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
         databaseReference.setValue(personModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Success")
-                        .setContentText("Contact added successfully")
-                        .show();
-                sweetAlertDialog.cancel();
+                sweetAlertDialog.dismiss();
+                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Success", "Contact added successfully");
                 alertDialog.dismiss();
             }
         });

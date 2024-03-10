@@ -8,22 +8,19 @@ import java.util.Map;
 public class CategoryModel {
     private String id;
     private String name;
-    private String numOfProducts;
-    private Map<String,String> arrProducts;
+    private List<String> arrProducts;
 
     public CategoryModel() {
     }
-
-    public CategoryModel(String id, String name, String numOfProducts,Map<String,String> arrProducts) {
+    public CategoryModel(String id, String name,List<String> arrProducts) {
         this.id = id;
         this.name = name;
-        this.numOfProducts = numOfProducts;
         this.arrProducts = arrProducts;
     }
 
     // setters
 
-    public void setArrProducts(Map<String,String> arrProducts) {
+    public void setArrProducts(List<String> arrProducts) {
         this.arrProducts = arrProducts;
     }
 
@@ -34,9 +31,6 @@ public class CategoryModel {
         this.name = name;
     }
 
-    public void setNumOfProducts(String numOfProducts) {
-        this.numOfProducts = numOfProducts;
-    }
 
     // GETTERS
     public String getId() {
@@ -45,11 +39,8 @@ public class CategoryModel {
     public String getName() {
         return name;
     }
-    public String getNumOfProducts() {
-        return numOfProducts;
-    }
 
-    public Map<String,String> getArrProducts() {
+    public List<String> getArrProducts() {
         return arrProducts;
     }
 }

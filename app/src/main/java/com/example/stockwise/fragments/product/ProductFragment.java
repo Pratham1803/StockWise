@@ -98,20 +98,16 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
                     assert newProduct != null;
                     newProduct.setCategory_id(newProduct.getCategory());
-                    Params.getREFERENCE().child(Params.getCATEGORY()).child(newProduct.getCategory_id()).child(Params.getNAME()).get()
-                            .addOnSuccessListener(dataSnapshot -> {
-                                newProduct.setCategory(dataSnapshot.getValue().toString());
-                                arrAllProduct.add(newProduct); // adding product in product's arraylist
+                    arrAllProduct.add(newProduct); // adding product in product's arraylist
 
-                                if (newProduct.getIsOutOfStock().equals("true")) {
-                                    arrUnAvailableProduct.add(newProduct);
-                                }
-                                if (newProduct.getIsReorderPointReached().equals("true")) {
-                                    arrAtReorderPointProduct.add(newProduct);
-                                }
-                                productAdapter.notifyItemInserted(arrAllProduct.size()); // notifying the adapter that new products are added
-                            });
+                    if (newProduct.getIsOutOfStock().equals("true")) {
+                        arrUnAvailableProduct.add(newProduct);
+                    }
+                    if (newProduct.getIsReorderPointReached().equals("true")) {
+                        arrAtReorderPointProduct.add(newProduct);
+                    }
                 }
+                productAdapter.notifyDataSetChanged(); // notifying adapter that data has been changed
             }
 
             @Override

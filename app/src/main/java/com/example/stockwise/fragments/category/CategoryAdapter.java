@@ -16,7 +16,7 @@ import com.example.stockwise.model.CategoryModel;
 
 import java.util.ArrayList;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private final ArrayList<CategoryModel> localDataSet;
     private final Context context;
 
@@ -24,9 +24,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView txtCategoryName;
         private final TextView txtAvailableProducts;
+
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
@@ -59,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
      * Initialize the dataset of the Adapter
      *
      * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
+     *                by RecyclerView
      */
     // Constructor of ProductAdapter class having two arguments of datalist and context
     public CategoryAdapter(ArrayList<CategoryModel> dataSet, Context context) {
@@ -86,7 +87,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         viewHolder.getTxtCategoryName().setText(localDataSet.get(position).getName());
         // setting available products
-        String availableProducts =  "Total Products : " + localDataSet.get(position).getNumOfProducts();
+        String availableProducts;
+        if (localDataSet.get(position).getArrProducts() == null)
+            availableProducts = "Total Products : 0";
+        else
+            // setting available products (total products in the category
+            availableProducts = "Total Products : " + localDataSet.get(position).getArrProducts().size();
         viewHolder.getTxtAvailableProducts().setText(availableProducts);
     }
 
