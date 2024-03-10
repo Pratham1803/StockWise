@@ -122,7 +122,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Glide.with(context).load(localDataSet.get(position).getPicture()).into(viewHolder.getImgProduct());
 
         // setting barcode SKU Num
-        String sku_num = "SKU : " + localDataSet.get(position).getBarCodeNum();
+        String sku_num = "SKU : " + localDataSet.get(position).getId();
         viewHolder.getTxtSKU_num().setText(sku_num);
     }
 

@@ -19,13 +19,11 @@ public class PrivacyPolicy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_privacy_policy);
 
         bind = ActivityPrivacyPolicyBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
 
         setContentView(bind.getRoot());
-
         // setting action bar title
         setSupportActionBar(bind.toolbarPrivacyPolicy);
         ActionBar actionBar = getSupportActionBar();

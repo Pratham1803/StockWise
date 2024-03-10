@@ -11,36 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.stockwise.R;
-import com.example.stockwise.Transaction.Purchase_Product;
-import com.example.stockwise.databinding.FragmentHomeBinding;
+import com.example.stockwise.databinding.FragmentProductBinding;
 import com.example.stockwise.databinding.FragmentTransactionBinding;
 
 public class transactionFragment extends Fragment {
 
-    private View root;
-    private Context context;
-    private FragmentTransactionBinding bind;
-
+    private FragmentTransactionBinding bind; // bind view
+    private Context context; // to store context
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //View Binding
-        bind = FragmentTransactionBinding.inflate(inflater, container, false);
-        context = bind.getRoot().getContext();
-        root = bind.getRoot();
+        bind = FragmentTransactionBinding.inflate(inflater, container, false); // initialing view binding
+        context = bind.getRoot().getContext(); // initializing context
+        setHasOptionsMenu(true); // setting action bar
+        // Inflate the layout for this fragment
 
-        // Select Date button click event
-        bind.btnPurchase.setOnClickListener(new View.OnClickListener() {
+        bind.btnSaleProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(context, Purchase_Product.class));
+                startActivity(new Intent(context, SellProduct.class));
             }
         });
 
-        // Inflate the layout for this fragment
-        return root;
-
-
+        return bind.getRoot();
     }
 }

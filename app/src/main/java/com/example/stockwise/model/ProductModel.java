@@ -3,7 +3,6 @@ import  java.io.Serializable;
 public class ProductModel implements Serializable {
     private String id;
     private String name;
-    private String barCodeNum;
     private String current_stock;
     private String reorder_point;
     private String purchase_price;
@@ -17,9 +16,8 @@ public class ProductModel implements Serializable {
     // constructor
     public ProductModel() {}
 
-    public ProductModel(String name,String barCodeNum, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture, String isReorderPointReached, String isOutOfStock) {
+    public ProductModel(String name, String current_stock, String reorder_point, String purchase_price, String category, String sale_price, String picture, String isReorderPointReached, String isOutOfStock) {
         this.name = name;
-        this.barCodeNum = barCodeNum;
         this.current_stock = current_stock;
         this.reorder_point = reorder_point;
         this.purchase_price = purchase_price;
@@ -36,9 +34,6 @@ public class ProductModel implements Serializable {
         this.category_id = category_id;
     }
 
-    public void setBarCodeNum(String barCodeNum) {
-        this.barCodeNum = barCodeNum;
-    }
 
     public void setIsReorderPointReached(String isReorderPointReached) {
         this.isReorderPointReached = isReorderPointReached;
@@ -85,10 +80,6 @@ public class ProductModel implements Serializable {
 
     public String getCategory_id() {
         return category_id;
-    }
-
-    public String getBarCodeNum() {
-        return barCodeNum;
     }
 
     public String getId() {

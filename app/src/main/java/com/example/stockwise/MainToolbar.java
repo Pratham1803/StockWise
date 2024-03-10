@@ -36,7 +36,7 @@ public class MainToolbar {
     public static void searchProduct_Barcode(ArrayList<ProductModel> arrAllProduct, ProductAdapter productAdapter,String barCodeId){
         arrProductSearch = new ArrayList<ProductModel>();
         for(ProductModel productModel: arrAllProduct){
-            if(productModel.getBarCodeNum().equals(barCodeId)){
+            if(productModel.getId().equals(barCodeId)){
                 arrProductSearch.add(productModel);
             }
         }

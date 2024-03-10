@@ -4,20 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="15dp"
-    android:layout_marginVertical="10dp"
     android:backgroundTint="#FFFFFF"
-    app:cardCornerRadius="12dp"
     app:cardMaxElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5sp">
 
         <ImageView
-            android:id="@+id/imgProduct"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:id="@+id/imgProductSell"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:gravity="end"
             android:padding="10dp"
             android:scaleType="fitCenter"
@@ -26,35 +24,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imgRemove"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgProduct"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:src="@drawable/close_vector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgProductSell"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/txtProductNameSell"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:id="@+id/txtProductName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:gravity="start"
-                    android:layout_marginTop="5dp"
-                    android:text="Product Name"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                android:layout_marginVertical="10sp"
+                android:fontFamily="@font/lexend_"
+                android:gravity="start"
+                android:text="Product Name"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,54 +72,66 @@
                     android:id="@+id/txtQuantityShow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="5dp"
                     android:fontFamily="@font/lexend_"
                     android:text="10"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/txtProductPriceSell"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="100dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="15sp"
+                    android:fontFamily="@font/lexend_"
+                    android:text="Price : "
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/btnQuantityMinus"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@color/CancelGrey"
-                        android:padding="3dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/minusvector" />
+            <LinearLayout
+                android:id="@+id/QuantityLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:fontFamily="@font/lexend_"
-                        android:text="10"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/btnQuantityMinus"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@color/CancelGrey"
+                    android:padding="3dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/minusvector" />
 
-                    <ImageView
-                        android:id="@+id/btnQuantityPlus"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:background="@color/CancelGrey"
-                        android:padding="3dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/plusvector" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/lexend_"
+                    android:text="10"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
+                <ImageView
+                    android:id="@+id/btnQuantityPlus"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@color/CancelGrey"
+                    android:padding="3dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/plusvector" />
             </LinearLayout>
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/black" />
 </androidx.cardview.widget.CardView>

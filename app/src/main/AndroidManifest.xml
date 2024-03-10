@@ -16,10 +16,10 @@
         android:theme="@style/Theme.StockWise"
         tools:targetApi="31">
         <activity
-            android:name=".Transaction.Select_items"
+            android:name=".fragments.transaction.SellProduct"
             android:exported="false" />
         <activity
-            android:name=".Transaction.Purchase_Product"
+            android:name=".fragments.transaction.SelectItem"
             android:exported="false" />
         <activity
             android:name=".fragments.category.ProductList"

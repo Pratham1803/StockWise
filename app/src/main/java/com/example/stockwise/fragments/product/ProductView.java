@@ -70,12 +70,12 @@ public class ProductView extends AppCompatActivity {
 
         // setting product details
         bind.txtProductViewName.setText(parentProduct.getName());
-        bind.txtSerialNumberView.setText(parentProduct.getBarCodeNum());
+        bind.txtSerialNumberView.setText(parentProduct.getId());
         Glide.with(context).load(parentProduct.getPicture()).into(bind.imgProductImageView);
         bind.txtSellingPrice.setText("Rs. " + parentProduct.getSale_price());
         bind.txtPurchasePrice.setText("Rs. " + parentProduct.getPurchase_price());
         bind.txtShopNameShow.setText(Params.getOwnerModel().getShop_name());
-        bind.txtSkuShow.setText(parentProduct.getBarCodeNum());
+        bind.txtSkuShow.setText(parentProduct.getId());
         bind.txtCurrentStockShow.setText(parentProduct.getCurrent_stock());
         bind.txtReorderPoint.setText(parentProduct.getReorder_point());
     }
@@ -138,7 +138,7 @@ public class ProductView extends AppCompatActivity {
     // delete Product Image
     private void deleteProductImg() {
         // delete the Image from the storage
-        String image = parentProduct.getName() + ".jpg"; // setting the name of image
+        String image = parentProduct.getId() + ".jpg"; // setting the name of image
         Params.getSTORAGE().child(Params.getPRODUCT()).child(image).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

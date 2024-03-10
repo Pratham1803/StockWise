@@ -72,6 +72,7 @@ public class AddProduct extends AppCompatActivity {
     private AlertDialog.Builder builder; // alert dialog box builder
     private boolean isReorderPointReached = false; // to check the reorder point reached or not
     private boolean isOutOfStock = false; // to check the product is out of stock or not
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // this will pause app for the result of scanner
@@ -96,8 +97,8 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrCategory = new ArrayList<>();
-                arrCategory.add(new CategoryModel("1", "Select Category",null));
-                ArrayList<String>arrCategoryName = new ArrayList<>();
+                arrCategory.add(new CategoryModel("1", "Select Category", null));
+                ArrayList<String> arrCategoryName = new ArrayList<>();
                 arrCategoryName.add(arrCategory.get(0).getName());
                 for (DataSnapshot post : snapshot.getChildren()) {
                     CategoryModel categoryModel = post.getValue(CategoryModel.class);
@@ -126,22 +127,22 @@ public class AddProduct extends AppCompatActivity {
         bind.edCurrentStock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
+                if (!hasFocus) {
                     try {
                         int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
-                        if(stock<1){
+                        if (stock < 1) {
                             bind.txtHeading.setText("Product is Out of Stock!!");
                             bind.txtHeading.setVisibility(View.VISIBLE);
                             bind.edCurrentStock.setTextColor(getColor(R.color.red));
                             Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show();
                             isOutOfStock = true;
-                        }else {
+                        } else {
                             bind.txtHeading.setVisibility(View.GONE);
                             bind.edCurrentStock.setTextColor(getColor(R.color.black));
                             isOutOfStock = false;
                         }
                     } catch (Exception e) {
-                        Log.d("ErrorMsg", "onFocusChange: "+e.getMessage());
+                        Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
                 }
             }
@@ -151,7 +152,7 @@ public class AddProduct extends AppCompatActivity {
         bind.edReorderpoint.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
+                if (!hasFocus) {
                     try {
                         int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
                         int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString());
@@ -168,7 +169,7 @@ public class AddProduct extends AppCompatActivity {
                             isReorderPointReached = false;
                         }
                     } catch (Exception e) {
-                        Log.d("ErrorMsg", "onFocusChange: "+e.getMessage());
+                        Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
                 }
             }
@@ -178,7 +179,7 @@ public class AddProduct extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item,AddProduct.this);
+        return MainToolbar.btnBack_clicked(item, AddProduct.this);
     }
 
     // menu bar item selection listener
@@ -214,7 +215,7 @@ public class AddProduct extends AppCompatActivity {
         builder.setMessage(null);
 
         String[] options = {"Capture Photo", "Choose from Gallery"};
-        builder.setItems(options,new DialogInterface.OnClickListener() {
+        builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -233,12 +234,12 @@ public class AddProduct extends AppCompatActivity {
 
     // opening camera for taking picture
     private void dispatchTakePictureIntent() {
-        try{
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }catch (Exception e){
+        try {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (Exception e) {
             Toast.makeText(AddProduct.this, "Can not Open Camera", Toast.LENGTH_SHORT).show();
-            Log.d("ErrorMsg", "dispatchTakePictureIntent: "+e.getMessage());
+            Log.d("ErrorMsg", "dispatchTakePictureIntent: " + e.getMessage());
         }
     }
 
@@ -248,9 +249,9 @@ public class AddProduct extends AppCompatActivity {
             Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(AddProduct.this, "Can not Open Gallery", Toast.LENGTH_SHORT).show();
-            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+            Log.d("ErrorMsg", "dispatchPickImageIntent: " + e.getMessage());
         }
     }
 
@@ -380,7 +381,7 @@ public class AddProduct extends AppCompatActivity {
     }
 
     // API can't fetch the product details || Error Rise
-    private void productApiErrorHandel(String errorMsg){
+    private void productApiErrorHandel(String errorMsg) {
         Log.d("ErrorMsg", "get: Volley error : " + errorMsg);
         sweetAlertDialog.cancel(); // cancel the progress dialog
 
@@ -411,16 +412,16 @@ public class AddProduct extends AppCompatActivity {
     // add product button clicked
     public void btnAddProductClicked(View view) {
         // store all the data from textboxes to the productModel Class object
+        productModel.setId(bind.edBarCodeNum.getText().toString());
         productModel.setName(bind.edProductName.getText().toString());
         productModel.setCurrent_stock(bind.edCurrentStock.getText().toString());
         productModel.setReorder_point(bind.edReorderpoint.getText().toString());
         productModel.setPurchase_price(bind.edPurchasePrice.getText().toString());
         productModel.setSale_price(bind.edSalePrice.getText().toString());
-        productModel.setBarCodeNum(bind.edBarCodeNum.getText().toString());
         productModel.setCategory(arrCategory.get(bind.spCategory.getSelectedItemPosition()).getId());
 
         // check that is there any input available or not
-        if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getBarCodeNum().isEmpty()) && (!productModel.getCategory().equals("Select Category"))) {
+        if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getId().isEmpty()) && (!productModel.getCategory().equals("Select Category"))) {
             // all the details field, check product is already there or not
             isProductAvailable();
         } else {
@@ -432,18 +433,12 @@ public class AddProduct extends AppCompatActivity {
     // is not then add the product in database
     private void isProductAvailable() {
         // checking that product is available or not
-        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getPRODUCT()).child(productModel.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isAvailable = false;
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    // if the name match of product in the database, that means product is already there in database
-                    if (post.child(Params.getBarCode()).getValue().toString().equals(productModel.getBarCodeNum())) {
-                        isAvailable = true;
-                        break;
-                    }
-                }
-                if (isAvailable)
+                // if the name match of product in the database, that means product is already there in database
+                if (snapshot.exists())
                     // product is available, so just display the message
                     Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
                 else {
@@ -462,7 +457,7 @@ public class AddProduct extends AppCompatActivity {
     // uploading product details in firebase
     private void uploadData() {
         // Upload bitmap to Firebase Storage
-        String image = productModel.getName() + ".jpg"; // setting the name of image
+        String image = productModel.getId() + ".jpg"; // setting the name of image
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap(); // getting bitmap from the image view
@@ -483,8 +478,7 @@ public class AddProduct extends AppCompatActivity {
                         // setting product url
                         productModel.setPicture(uri.toString());
                         // storing product details is database
-                        DatabaseReference reference = Params.getREFERENCE().child(Params.getPRODUCT()).push();
-                        productModel.setId(reference.getKey());
+                        DatabaseReference reference = Params.getREFERENCE().child(Params.getPRODUCT()).child(productModel.getId());
                         reference.setValue(productModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -497,15 +491,15 @@ public class AddProduct extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("ErrorMsg", "onFailure: Product Not Upload : "+e.getMessage());
+                Log.d("ErrorMsg", "onFailure: Product Not Upload : " + e.getMessage());
             }
         });
     }
 
-    private void addProductToCategory(){
+    private void addProductToCategory() {
         CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition());
 
-        if(categoryModel.getArrProducts() == null)
+        if (categoryModel.getArrProducts() == null)
             categoryModel.setArrProducts(new ArrayList<>());
         categoryModel.getArrProducts().add(productModel.getId());
 
@@ -521,7 +515,7 @@ public class AddProduct extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 sweetAlertDialog.cancel();
                 sweetAlertDialog = DialogBuilder.showSweetDialogError(AddProduct.this, "Error", "Failed to add product");
-                Log.d("ErrorMsg", "onFailure: "+e.getMessage());
+                Log.d("ErrorMsg", "onFailure: " + e.getMessage());
             }
         });
     }
