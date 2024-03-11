@@ -103,6 +103,7 @@
                     android:layout_height="35dp"
                     android:background="@color/CancelGrey"
                     android:padding="3dp"
+                    style="@style/Widget.AppCompat.ImageButton"
                     android:scaleType="fitCenter"
                     android:src="@drawable/minusvector" />
 
@@ -122,6 +123,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@color/CancelGrey"
+                    style="@style/Widget.AppCompat.ImageButton"
                     android:padding="3dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/plusvector" />
@@ -133,5 +135,5 @@
         android:layout_width="match_parent"
         android:layout_height="2sp"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/black" />
+        android:backgroundTint="@color/Grey" />
 </androidx.cardview.widget.CardView>

@@ -23,7 +23,6 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
     private ArrayList<ProductModel> localDataSet;
     private final Context context;
 
-
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
@@ -42,9 +41,6 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
             txtProductName = view.findViewById(R.id.txtProductNameSell);
             txtProductPrice = view.findViewById(R.id.txtProductPriceSell);
             txtProductQuantity = view.findViewById(R.id.txtQuantityShow);
-            LinearLayout QuantityLayout = view.findViewById(R.id.QuantityLayout);
-
-            QuantityLayout.setVisibility(View.GONE);
         }
 
         public ImageView getImgRemove() {
