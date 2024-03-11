@@ -298,7 +298,7 @@ public class AddProduct extends AppCompatActivity {
         builder = DialogBuilder.showDialog(this, "Scanner Result!!:", "Is this, Correct Result? :\n" + barCodeId);
 
         // positive button to add product manually
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Fetch Product Details", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -320,10 +320,12 @@ public class AddProduct extends AppCompatActivity {
         });
 
         // set cancel button
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Add Product Manually", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
                 dialog.cancel();
+                showImageSelectionDialog();
             }
         });
 
