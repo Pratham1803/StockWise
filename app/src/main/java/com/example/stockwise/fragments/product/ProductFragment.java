@@ -63,7 +63,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         productAdapter = new ProductAdapter(arrAllProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
-
+        bind.recyclerProduct.setNestedScrollingEnabled(false);
         // setting spinner
         bind.FilterSpinner.setOnItemSelectedListener(this);
 

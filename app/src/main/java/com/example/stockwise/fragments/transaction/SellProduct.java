@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,10 +18,13 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.stockwise.MainActivity;
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivitySellProductBinding;
+import com.example.stockwise.fragments.person.AddPerson;
+import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.model.PersonModel;
 import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
@@ -37,12 +41,14 @@ import java.util.Locale;
 public class SellProduct extends AppCompatActivity {
     private ActivitySellProductBinding bind; // declaring view binding
     private Context context; // to store context
-    private ArrayList<PersonModel> arrPerson; // to store person data
     private Calendar selectedDate;
     private ScanOptions scanner; // scanner
     private String barCodeId; // to store barcode id
+    private ArrayList<PersonModel> arrPerson; // to store person data
     private ArrayList<ProductModel> arrProduct; // to store product data
+    private ArrayList<String> arrPersonName; // to store product data
     private ProductSellAdapter productSellAdapter; // to store adapter
+    private ArrayAdapter adapterPersonName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +67,21 @@ public class SellProduct extends AppCompatActivity {
 
         // Setup Spinner for Entering Person Name
         arrPerson = new ArrayList<>();
-        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addListenerForSingleValueEvent(new ValueEventListener() {
+        arrPersonName = new ArrayList<>();
+        adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName);
+        bind.spPerson.setAdapter(adapterPersonName);
+        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> arrPersonName = new ArrayList<>();
+                arrPersonName.clear();
+                arrProduct.clear();
                 arrPersonName.add("Select Customer Name");
                 for (DataSnapshot post : snapshot.getChildren()) {
                     PersonModel personModel = post.getValue(PersonModel.class);
                     arrPerson.add(personModel);
                     arrPersonName.add(personModel.getName());
                 }
-                ArrayAdapter ad = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName);
-                bind.spPerson.setAdapter(ad);
+                adapterPersonName.notifyDataSetChanged();
             }
 
             @Override
@@ -80,8 +89,19 @@ public class SellProduct extends AppCompatActivity {
             }
         });
 
+        // add person
+        bind.btnAddPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddPerson addPerson = new AddPerson(context, getLayoutInflater());
+                addPerson.displayAddPersonDialog();
+            }
+        });
+
         // setup date
         selectedDate = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        bind.DateShow.setText(dateFormat.format(selectedDate.getTime()));
         bind.TransactionDate.setOnClickListener(v -> OpenDialog());
 
         // setup add item button

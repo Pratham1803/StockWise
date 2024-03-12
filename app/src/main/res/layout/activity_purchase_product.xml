@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFEFEF"
-    tools:context=".fragments.transaction.SellProduct">
+    tools:context=".fragments.transaction.PurchaseProduct">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarSellProduct"
+        android:id="@+id/toolbarPurchaseProduct"
         android:layout_width="match_parent"
         android:layout_height="60sp"
         android:background="@color/blue"
@@ -20,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:subtitleTextAppearance="@font/lexend_bold"
-        app:title="Sell Product"
+        app:title="Purchase Product"
         app:titleTextColor="@color/white" />
 
     <androidx.core.widget.NestedScrollView
@@ -58,31 +57,14 @@
                         android:text="Contact Name"
                         android:textSize="18sp" />
 
-                    <LinearLayout
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                        android:id="@+id/spPerson"
                         android:layout_width="match_parent"
-                        android:layout_height="50sp"
+                        android:layout_height="48sp"
                         android:layout_marginTop="5sp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                            android:id="@+id/spPerson"
-                            android:layout_width="0dp"
-                            android:layout_height="48sp"
-                            android:layout_weight="1"
-                            android:spinnerMode="dropdown"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            tools:ignore="labelFor" />
-
-                        <ImageView
-                            android:id="@+id/btnAddPerson"
-                            android:layout_width="30sp"
-                            android:layout_height="30sp"
-                            android:background="@color/white"
-                            android:layout_marginHorizontal="10sp"
-                            android:src="@drawable/add_black"/>
-                    </LinearLayout>
+                        android:spinnerMode="dialog"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView37"
@@ -102,7 +84,6 @@
                         android:backgroundTint="@color/Grey"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:padding="9dp">
 
                         <ImageView
@@ -135,6 +116,19 @@
                             android:backgroundTint="@color/black" />
                     </LinearLayout>
 
+                    <Button
+                        android:id="@+id/btnProceed"
+                        android:layout_width="match_parent"
+                        android:layout_height="48sp"
+                        android:layout_marginTop="20sp"
+                        android:background="@drawable/btn_signup"
+                        android:fontFamily="@font/lexend_bold"
+                        android:onClick="btnAddProductClicked"
+                        android:text="PROCEED"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -154,7 +148,6 @@
                     android:id="@+id/btnAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:padding="10dp">
 
                     <TextView
@@ -231,19 +224,7 @@
                 android:background="@color/white"
                 android:orientation="vertical" />
 
-            <Button
-                android:id="@+id/btnProceed"
-                android:layout_width="match_parent"
-                android:layout_height="48sp"
-                android:layout_marginHorizontal="20sp"
-                android:layout_marginVertical="20sp"
-                android:background="@drawable/btn_signup"
-                android:fontFamily="@font/lexend_bold"
-                android:onClick="btnAddProductClicked"
-                android:text="PROCEED"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
