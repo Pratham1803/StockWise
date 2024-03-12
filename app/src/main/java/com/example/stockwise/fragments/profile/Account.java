@@ -94,6 +94,9 @@ public class Account extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 reset(true);
+                if(bind.btnUpdateProfile.getVisibility()==View.GONE){
+                    bind.btnUpdateProfile.setVisibility(View.VISIBLE);
+                }
                 return true;
             }
         });
@@ -146,7 +149,7 @@ public class Account extends AppCompatActivity {
         Params.getOwnerModel().setShop_name(shopName);
 
         sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Updating Profile...",""); // showing sweet alert dialog
-        bind.button.setText("Please Wait...");
+        bind.btnUpdateProfile.setText("Please Wait...");
 
         if (isImageChanged) {
             String image = Params.getOwnerModel().getId() + ".jpg"; // setting the name of image
@@ -187,7 +190,7 @@ public class Account extends AppCompatActivity {
                         sweetAlertDialog.dismiss();
                         sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Profile Updated", ""); // showing sweet alert dialog
                         reset(false); // set all fields non-editable
-                        bind.button.setText("UPDATE");
+                        bind.btnUpdateProfile.setText("UPDATE");
                     }
                 });
     }

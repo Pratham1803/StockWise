@@ -39,7 +39,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -49,37 +49,26 @@
 
                 <ImageView
                     android:id="@+id/iconkey"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
+                    style="@style/Imageview_Settings"
                     android:background="@drawable/keyvector"
                     android:backgroundTint="@color/TextGrey" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
+                    style="@style/Txt_Settings"
                     android:text="Account"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/textView13"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Security notifications, change email"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="Security notifications, change email" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -87,7 +76,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -97,37 +85,25 @@
 
                 <ImageView
                     android:id="@+id/iconSales"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:padding="13dp"
+                    style="@style/Imageview_Settings"
                     android:src="@drawable/salessettingsvector" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/txtSalesSettings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
+                    style="@style/Txt_Settings"
                     android:text="Sales Settings"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtSalesBrief"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Payement options"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="Payement options" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -135,7 +111,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -145,37 +120,25 @@
 
                 <ImageView
                     android:id="@+id/iconAbout"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:padding="13dp"
+                    style="@style/Imageview_Settings"
                     android:src="@drawable/aboutvector" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/txtAboutSettings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
+                    style="@style/Txt_Settings"
                     android:text="About"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtAboutBrief"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="All the stuff you need to know"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="All the stuff you need to know" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -184,7 +147,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -194,37 +156,25 @@
 
                 <ImageView
                     android:id="@+id/iconPrivacy"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:padding="13dp"
+                    style="@style/Imageview_Settings"
                     android:src="@drawable/privacyvector" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/txtPrivacySettings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
+                    style="@style/Txt_Settings"
                     android:text="Privacy Policy"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtPrivacyBrief"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Terms &amp; conditions"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="Terms &amp; conditions" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -233,7 +183,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -243,37 +192,25 @@
 
                 <ImageView
                     android:id="@+id/iconReport"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
+                    style="@style/Imageview_Settings"
                     android:padding="15dp"
                     android:src="@drawable/reportvector" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/txtReportSettings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:text="Report app issues"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    style="@style/Txt_Settings"
+                    android:text="Report app issues" />
 
                 <TextView
                     android:id="@+id/txtReportBrief"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Tell us your problem"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="Tell us your problem" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -281,7 +218,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -291,40 +227,27 @@
 
                 <ImageView
                     android:id="@+id/iconHelp"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:padding="12dp"
+                    style="@style/Imageview_Settings"
                     android:src="@drawable/helpvector" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:orientation="vertical">
+                style="@style/LinearStyle_Settings">
 
                 <TextView
                     android:id="@+id/txtHelpSettings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
+                    style="@style/Txt_Settings"
                     android:text="Help"
-                    android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/txtHelpBrief"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:text="Help center, Contact us"
-                    android:textColor="@color/TextGrey"
-                    android:textSize="15dp" />
+                    style="@style/TxtSub_Settings"
+                    android:text="Help center, Contact us" />
+
             </LinearLayout>
         </LinearLayout>
-
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

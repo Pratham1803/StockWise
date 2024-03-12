@@ -38,4 +38,140 @@
         <item name="android:dropDownSelector">@android:color/white</item>
     </style>
 
+    // Registration Activity Edittext Style
+    <style name="Registration_txt" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/textboxbg</item>
+        <item name="fontFamily">@font/lexend_</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    // Settings Activity //
+
+    // LinearLayout Style
+    <style name="LinearStyle_Settings" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    // ImageView Style
+    <style name="Imageview_Settings">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">13dp</item>
+    </style>
+
+    // TextView Style
+    <style name="Txt_Settings" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="TxtSub_Settings" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/lexend_</item>
+        <item name="android:textColor">@color/TextGrey</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
+    // Profile Activity //
+
+    // TextView Style
+    <style name="txt_Profile" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    // ImageView Style
+    <style name="rightArrow_Style_Profile">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="srcCompat">@drawable/rightarrow</item>
+    </style>
+
+    <style name="vector_Style_Profile">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:scaleType">center</item>
+    </style>
+
+
+    // Privacy Policy Activity //
+
+    // Constraint layout Style
+    <style name="Constraint_Layout_Policy" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/blue</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+    // Hidden Linear Layout Style
+    <style name="Hidden_Linear_Policy" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/btn_login</item>
+        <item name="android:backgroundTint">@color/Grey</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    // TextView Privacy Policy
+    <style name="txt_Privacy_Policy" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    // Plus Icon Privacy Policy
+    <style name="Plus_Icon_Policy" >
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:background">@drawable/plusvector</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+
+
+    // Report Alert CheckBox Style
+    <style name="cb_Report" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/lexend_</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
 </resources>

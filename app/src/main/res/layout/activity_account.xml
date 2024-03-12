@@ -9,7 +9,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarAccount"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
+            android:layout_height="60dp"
             android:elevation="4sp"
             app:title="Account"
             android:background="@color/blue"
@@ -26,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,12 +36,16 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:orientation="vertical">
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/UserProfileImage"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="70dp"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                app:strokeColor="@color/CancelGrey"
+                app:strokeWidth="5dp"
+                android:padding="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_user"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -128,13 +131,14 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnUpdateProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/btn_signup"
                 android:fontFamily="@font/lexend_bold"
                 android:text="SAVE"
+                android:visibility="gone"
                 android:onClick="btnUpdateProfileClicked"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

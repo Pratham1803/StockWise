@@ -7,9 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.R;
@@ -47,15 +51,23 @@ public class Settings extends AppCompatActivity {
                 // set the custom layout
                 final View customLayout = getLayoutInflater().inflate(R.layout.report_alert, null);
                 builder.setView(customLayout);
+                CheckBox cb1 = customLayout.findViewById(R.id.cbPasword);
+                CheckBox cb2 = customLayout.findViewById(R.id.cbBug);
+                CheckBox cb3 = customLayout.findViewById(R.id.cbPerformance);
+                CheckBox cb4 = customLayout.findViewById(R.id.cbSearch);
+                CheckBox cb5 = customLayout.findViewById(R.id.cbElse);
 
                 // add a button
-                builder.setPositiveButton("OK", (dialog, which) -> {
-                    //todo code
+                builder.setPositiveButton("Submit", (dialog, which) -> {
+                    if(cb1.isChecked() || cb2.isChecked() || cb3.isChecked() || cb4.isChecked() || cb5.isChecked()){
+                        // If any one checkbox is checked then toast is display
+                        Toast.makeText(Settings.this, "Report Submitted", Toast.LENGTH_SHORT).show();
+                    }
+
                 });
                 // create and show the alert dialog
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
             }
 
         });

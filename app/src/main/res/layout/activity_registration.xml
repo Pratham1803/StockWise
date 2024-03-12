@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_marginHorizontal="10dp"
     tools:context=".loginModule.Registration">
 
     <ImageView
@@ -83,16 +84,10 @@
 
         <EditText
             android:id="@+id/edUsername"
-            android:layout_width="318dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/textboxbg"
+            style="@style/Registration_txt"
             android:ems="10"
-            android:fontFamily="@font/lexend_"
-            android:hint="Enter Your Username"
             android:inputType="text"
-            android:paddingStart="10dp" />
+            android:hint="Enter Your Username" />
 
         <TextView
             android:id="@+id/textView9"
@@ -106,16 +101,11 @@
 
         <EditText
             android:id="@+id/edEmail"
-            android:layout_width="318dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/textboxbg"
+            style="@style/Registration_txt"
             android:ems="10"
-            android:fontFamily="@font/lexend_"
             android:hint="Enter Your Email"
             android:inputType="textEmailAddress"
-            android:paddingStart="10dp" />
+            />
 
         <TextView
             android:id="@+id/textView10"
@@ -129,16 +119,10 @@
 
         <EditText
             android:id="@+id/edShopName"
-            android:layout_width="318dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/textboxbg"
+            style="@style/Registration_txt"
             android:ems="10"
-            android:fontFamily="@font/lexend_"
             android:hint="Enter Your Shop Name"
-            android:inputType="text"
-            android:paddingStart="10dp" />
+            android:inputType="text" />
 
         <CheckBox
             android:id="@+id/cbTerms"
@@ -160,10 +144,10 @@
             android:background="@drawable/btn_signup"
             android:fontFamily="@font/lexend_bold"
             android:onClick="btnCreateAccount_Clicked"
-            android:text="Create Account"
+            android:text="Continue"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

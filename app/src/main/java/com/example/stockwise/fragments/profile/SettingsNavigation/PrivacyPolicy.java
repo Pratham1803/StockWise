@@ -126,7 +126,7 @@ public class PrivacyPolicy extends AppCompatActivity {
                             bind.ShowIntroduction.getVisibility()==View.VISIBLE)
                     {
 
-                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowUpdates.setVisibility(View.GONE);
                         bind.ShowInformation.setVisibility(View.GONE);
                         bind.ShowUseInformation.setVisibility(View.GONE);
                         bind.ShowIntroduction.setVisibility(View.GONE);
@@ -165,7 +165,6 @@ public class PrivacyPolicy extends AppCompatActivity {
                 }
             }
         });
-
 
     }// End of onCreate
 

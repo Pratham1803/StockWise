@@ -47,7 +47,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
 
-    String[] filter = {"All Products", "Unavailable Products", "Products at Reorder Point", "Selected Products"};
+    String[] filter = {"All Products", "Unavailable Products", "Products at Reorder Point"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
