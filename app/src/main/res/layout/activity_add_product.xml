@@ -110,6 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48sp"
                     android:layout_marginTop="5sp"
+                    android:background="@drawable/textboxbg"
                     android:spinnerMode="dialog"
                     android:textColor="@color/black"
                     android:textSize="22sp" />
