@@ -26,7 +26,7 @@ public class MainToolbar {
 
     public static ScanOptions getScanner(){
         scanner = new ScanOptions();
-        scanner.setPrompt("App is ready for use"); // title on scanner
+        scanner.setPrompt("Scan The Barcode Of Your Product"); // title on scanner
         scanner.setBeepEnabled(true); // enable beep sound
         scanner.setOrientationLocked(true);
         scanner.setCaptureActivity(ScannerOrientation.class);

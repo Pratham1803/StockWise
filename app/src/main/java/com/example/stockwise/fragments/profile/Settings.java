@@ -8,11 +8,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.stockwise.MainToolbar;
@@ -70,6 +72,39 @@ public class Settings extends AppCompatActivity {
                 dialog.show();
             }
 
+        });
+
+        bind.LayoutHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create an alert builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+                builder.setTitle("Contact Us");
+
+                // set the custom layout
+                final View customLayout = getLayoutInflater().inflate(R.layout.contact_us_alert, null);
+                builder.setView(customLayout);
+                ImageView btnEmail = customLayout.findViewById(R.id.btnEmail);
+
+                // add a button
+                builder.setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+
+                btnEmail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact.stockwise@gmail.com"}); // specify recipients
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Team StockWise"); // email subject
+                        startActivity(intent);
+                    }
+                });
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         });
 
         bind.LayoutPrivacyPolicy.setOnClickListener(new View.OnClickListener() {

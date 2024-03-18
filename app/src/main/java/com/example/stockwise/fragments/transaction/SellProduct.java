@@ -105,7 +105,13 @@ public class SellProduct extends AppCompatActivity {
         bind.TransactionDate.setOnClickListener(v -> OpenDialog());
 
         // setup add item button
-        bind.btnAddItem.setOnClickListener(v -> btnAddItem_click());
+        //bind.btnAddItem.setOnClickListener(v -> btnAddItem_click());
+        bind.btnAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SellProduct.this, Select_Items.class));
+            }
+        });
 
         // setup recycler view
         arrProduct = new ArrayList<>();

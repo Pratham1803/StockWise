@@ -233,6 +233,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/LayoutHelp"
                 style="@style/LinearStyle_Settings">
 
                 <TextView

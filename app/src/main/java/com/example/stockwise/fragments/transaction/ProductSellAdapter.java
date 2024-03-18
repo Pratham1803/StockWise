@@ -31,7 +31,7 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
         private final ImageView imgProductImage;
         private final ImageView imgRemove;
         private final TextView txtProductName;
-        private final TextView txtProductPrice;
+//        private final TextView txtProductPrice;
         private final TextView txtProductQuantity;
 
         public ViewHolder(View view) {
@@ -39,7 +39,6 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
             imgProductImage = view.findViewById(R.id.imgProductSell);
             imgRemove = view.findViewById(R.id.imgRemove);
             txtProductName = view.findViewById(R.id.txtProductNameSell);
-            txtProductPrice = view.findViewById(R.id.txtProductPriceSell);
             txtProductQuantity = view.findViewById(R.id.txtQuantityShow);
         }
 
@@ -55,9 +54,9 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
             return txtProductName;
         }
 
-        public TextView getTxtProductPrice() {
-            return txtProductPrice;
-        }
+//        public TextView getTxtProductPrice() {
+//            return txtProductPrice;
+//        }
 
         public TextView getTxtProductQuantity() {
             return txtProductQuantity;
@@ -98,8 +97,8 @@ public class ProductSellAdapter extends RecyclerView.Adapter<ProductSellAdapter.
         viewHolder.getTxtProductName().setText(localDataSet.get(position).getName());
 
         // setting product price
-        String price = "Price : " + localDataSet.get(position).getSale_price();
-        viewHolder.getTxtProductPrice().setText(price);
+//        String price = "Price : " + localDataSet.get(position).getSale_price();
+//        viewHolder.getTxtProductPrice().setText(price);
 
         // setting product quantity
         viewHolder.getTxtProductQuantity().setText(String.valueOf(localDataSet.get(position).getCurrent_stock()));

@@ -274,12 +274,12 @@ public class AddProduct extends AppCompatActivity {
     // reset all fields of form
     private void reset() {
         bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.addimg)); // set default image
-        bind.edProductName.setText("");
-        bind.edCurrentStock.setText("");
-        bind.edBarCodeNum.setText("");
-        bind.edReorderpoint.setText("");
-        bind.edPurchasePrice.setText("");
-        bind.edSalePrice.setText("");
+        bind.edProductName.setText(null);
+        bind.edCurrentStock.setText(null);
+        bind.edBarCodeNum.setText(null);
+        bind.edReorderpoint.setText(null);
+        bind.edPurchasePrice.setText(null);
+        bind.edSalePrice.setText(null);
         bind.txtHeading.setVisibility(View.GONE);
     }
 
@@ -511,7 +511,9 @@ public class AddProduct extends AppCompatActivity {
                 sweetAlertDialog.cancel();
                 sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", "Product Added Successfully");
                 reset();
+                //startActivity(new Intent(AddProduct.this, ProductFragment.class));
             }
+
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
