@@ -511,6 +511,12 @@ public class AddProduct extends AppCompatActivity {
                 sweetAlertDialog.cancel();
                 sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", "Product Added Successfully");
                 reset();
+                sweetAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

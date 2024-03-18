@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Account extends AppCompatActivity {
+    private static final int REQUEST_IMAGE_GALLERY = 2;
     private ActivityAccountBinding bind; // view binding
     private Context context; // context
     private boolean isImageChanged = false; // to check if image is changed or not
@@ -131,9 +132,13 @@ public class Account extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // image from gallery
-        Uri selectedImageUri = data.getData();
-        bind.UserProfileImage.setImageURI(selectedImageUri);
-        isImageChanged = true; // image is changed
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
+            // image from gallery
+            Uri selectedImageUri = data.getData();
+            bind.UserProfileImage.setImageURI(selectedImageUri);
+            isImageChanged = true; // image is changed
+        }
     }
 
     // on click of update profile button

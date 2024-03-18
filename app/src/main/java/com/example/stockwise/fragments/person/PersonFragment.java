@@ -30,6 +30,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class PersonFragment extends Fragment implements AdapterView.OnItemSelectedListener{
     private Context context; // to store context
+    private Person person; // Object Of Person Class
     private FragmentPersonBinding bind; // bind view
     String[] ContactFilter = {"All Contacts", "Customers", "Vendors"};
     private AlertDialog alertDialog; // to store alert dialog
@@ -44,6 +45,7 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
                              Bundle savedInstanceState) {
         bind = FragmentPersonBinding.inflate(inflater, container, false); // initialing view binding
         context = bind.getRoot().getContext();
+        person = new Person(context, inflater); // initialing person object
 
         // Create the instance of ArrayAdapter
         // having the list of courses
@@ -62,8 +64,7 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
         bind.btnAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
-                AddPerson addPerson = new AddPerson(context,getLayoutInflater());
-                addPerson.displayAddPersonDialog();
+                person.addPerson();
             }
         });
 
@@ -76,47 +77,11 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
         bind.recyclerContacts.setAdapter(personAdapter); // setting adapter to the recycler view
         bind.recyclerContacts.setNestedScrollingEnabled(false);
 
-        // collecting all contacts from firebase
-        dbGetAllContacts();
+        // collecting all contacts from firebase and set in adapter
+        person.getAllPerson(arrAllPerson, arrAllVendors, arrAllCustomers, personAdapter);
 
         // Inflate the layout for this fragment
         return bind.getRoot();
-    }
-
-    // get all contacts from firebase and set in array list
-    private void dbGetAllContacts() {
-        DatabaseReference parentRef =  Params.getREFERENCE().child(Params.getPERSON());
-
-        // collecting all customers from firebase
-        parentRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrAllCustomers.clear();
-                arrAllVendors.clear();
-                arrAllPerson.clear();
-                if (snapshot.child(Params.getCUSTOMER()).exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.child(Params.getCUSTOMER()).getChildren()) {
-                        PersonModel personModel = dataSnapshot.getValue(PersonModel.class);
-                        arrAllCustomers.add(personModel);
-                    }
-                }
-                if (snapshot.child(Params.getVENDOR()).exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.child(Params.getVENDOR()).getChildren()) {
-                        PersonModel personModel = dataSnapshot.getValue(PersonModel.class);
-                        arrAllVendors.add(personModel);
-                    }
-                }
-                arrAllPerson.addAll(arrAllCustomers);
-                arrAllPerson.addAll(arrAllVendors);
-                personAdapter.setLocalDataset(arrAllPerson);
-                personAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
-            }
-        });
     }
 
     // Filter of contacts select listener

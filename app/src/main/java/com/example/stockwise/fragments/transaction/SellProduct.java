@@ -8,23 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.stockwise.MainActivity;
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivitySellProductBinding;
-import com.example.stockwise.fragments.person.AddPerson;
-import com.example.stockwise.fragments.person.PersonFragment;
+import com.example.stockwise.fragments.person.Person;
 import com.example.stockwise.model.PersonModel;
 import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
@@ -86,6 +82,7 @@ public class SellProduct extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
             }
         });
 
@@ -93,8 +90,8 @@ public class SellProduct extends AppCompatActivity {
         bind.btnAddPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddPerson addPerson = new AddPerson(context, getLayoutInflater());
-                addPerson.displayAddPersonDialog();
+                Person addPerson = new Person(context, getLayoutInflater());
+                addPerson.addPerson();
             }
         });
 

@@ -36,6 +36,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProductFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private Context context; // to store context
@@ -47,7 +48,8 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
 
-    String[] filter = {"All Products", "Unavailable Products", "Products at Reorder Point"};
+    ArrayList<String> filter = new ArrayList<>(Arrays.asList("All Products", "Unavailable Products", "Products at Reorder Point"));
+    private ArrayAdapter adapterProductCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,21 +65,21 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         productAdapter = new ProductAdapter(arrAllProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
-        bind.recyclerProduct.setNestedScrollingEnabled(false);
+        bind.recyclerProduct.setNestedScrollingEnabled(true);
         // setting spinner
         bind.FilterSpinner.setOnItemSelectedListener(this);
 
         // Create the instance of ArrayAdapter 
         // having the list of courses 
-        ArrayAdapter ad = new ArrayAdapter(context, android.R.layout.simple_spinner_item, filter);
+        adapterProductCategory = new ArrayAdapter(context, android.R.layout.simple_spinner_item, filter);
 
         // set simple layout resource file 
         // for each item of spinner 
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterProductCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Set the ArrayAdapter (ad) data on the
         // Spinner which binds data to spinner
-        bind.FilterSpinner.setAdapter(ad);
+        bind.FilterSpinner.setAdapter(adapterProductCategory);
 
         dbGetAllProducts();
         return bind.getRoot();
@@ -128,6 +130,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         MenuItem btnScan = menu.findItem(R.id.scanner);
         SearchView searchView = (SearchView) btnSearch.getActionView();
 
+        assert searchView != null;
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.white));
         searchEditText.setHintTextColor(getResources().getColor(R.color.white));
@@ -141,12 +144,10 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
-        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 MainToolbar.btnSearch(query.toLowerCase(), arrAllProduct, productAdapter);
-                Log.d("SuccessMsg", "onQueryTextSubmit: Text = " + query);
                 return true;
             }
 
@@ -154,7 +155,6 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 1) {
                     MainToolbar.btnSearch(newText.toLowerCase(), arrAllProduct, productAdapter);
-                    Log.d("SuccessMsg", "onQueryTextChange: Text = " + newText);
                 } else if (newText.length() == 0) {
                     productAdapter.setLocalDataSet(arrAllProduct);
                 }
@@ -181,6 +181,8 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
             MainToolbar.searchProduct_Barcode(arrAllProduct, productAdapter, barCodeId);
+            filter.add("Selected Product");
+            adapterProductCategory.notifyDataSetChanged();
             bind.FilterSpinner.setSelection(3);
 //            searchProduct_barcode();
         }
@@ -191,13 +193,17 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String currentSelection = filter[i];
+        String currentSelection = filter.get(i);
 
-        if (currentSelection.equals(filter[0])) {
+        if (currentSelection.equals(filter.get(0))) {
             productAdapter.setLocalDataSet(arrAllProduct);
-        } else if (currentSelection.equals(filter[1])) {
+            if(filter.size() == 4) {
+                filter.remove(3);
+                adapterProductCategory.notifyDataSetChanged();
+            }
+        } else if (currentSelection.equals(filter.get(1))) {
             productAdapter.setLocalDataSet(arrUnAvailableProduct);
-        } else if (currentSelection.equals(filter[2])) {
+        } else if (currentSelection.equals(filter.get(2))) {
             productAdapter.setLocalDataSet(arrAtReorderPointProduct);
         }
         productAdapter.notifyDataSetChanged();
