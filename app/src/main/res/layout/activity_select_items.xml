@@ -22,8 +22,6 @@
             app:subtitleTextAppearance="@font/lexend_bold"
             app:titleTextColor="@color/white" />
 
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSelectItems"
             android:layout_width="match_parent"
@@ -52,8 +50,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/white" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
