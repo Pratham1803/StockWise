@@ -2,6 +2,7 @@ package com.example.stockwise.fragments.profile;
 
 import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.databinding.ActivityAccountBinding;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -95,7 +96,7 @@ public class Account extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 reset(true);
-                if(bind.btnUpdateProfile.getVisibility()==View.GONE){
+                if (bind.btnUpdateProfile.getVisibility() == View.GONE) {
                     bind.btnUpdateProfile.setVisibility(View.VISIBLE);
                 }
                 return true;
@@ -121,8 +122,8 @@ public class Account extends AppCompatActivity {
             Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             pickImageIntent.setType("image/*");
             startActivityForResult(pickImageIntent, 2);
-        }catch (Exception e){
-            Log.d("ErrorMsg", "dispatchPickImageIntent: "+e.getMessage());
+        } catch (Exception e) {
+            Log.d("ErrorMsg", "dispatchPickImageIntent: " + e.getMessage());
             Toast.makeText(this, "Can't open gallery", Toast.LENGTH_SHORT).show();
         }
     }
@@ -153,7 +154,7 @@ public class Account extends AppCompatActivity {
         Params.getOwnerModel().setEmail_id(email);
         Params.getOwnerModel().setShop_name(shopName);
 
-        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Updating Profile...",""); // showing sweet alert dialog
+        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Updating Profile...", ""); // showing sweet alert dialog
         bind.btnUpdateProfile.setText("Please Wait...");
 
         if (isImageChanged) {
@@ -178,12 +179,12 @@ public class Account extends AppCompatActivity {
                     });
                 }
             });
-        }else
+        } else
             updateText();
     }
 
     // updating Text of profile
-    private void updateText(){
+    private void updateText() {
         // uploading owner model to firebase database
         Params.getREFERENCE().child(Params.getOwnerName()).setValue(Params.getOwnerModel().getOwner_name());
         Params.getREFERENCE().child(Params.getEmailId()).setValue(Params.getOwnerModel().getEmail_id());

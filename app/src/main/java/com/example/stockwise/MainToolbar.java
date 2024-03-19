@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.example.stockwise.Params;
 import com.example.stockwise.fragments.product.ProductAdapter;
 import com.example.stockwise.fragments.product.ScannerOrientation;
+import com.example.stockwise.fragments.transaction.SelectItem_Adapter;
 import com.example.stockwise.model.ProductModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +44,16 @@ public class MainToolbar {
         productAdapter.setLocalDataSet(arrProductSearch);
     }
 
+    public static void searchProduct_Transaction_Barcode(ArrayList<ProductModel> arrAllProduct, SelectItem_Adapter productAdapter, String barCodeId){
+        arrProductSearch = new ArrayList<ProductModel>();
+        for(ProductModel productModel: arrAllProduct){
+            if(productModel.getId().equals(barCodeId)){
+                arrProductSearch.add(productModel);
+            }
+        }
+        productAdapter.setLocalDataSet(arrProductSearch);
+    }
+
     public static void btnSearch(String query,ArrayList<ProductModel> arrAllProduct, ProductAdapter productAdapter){
         ArrayList<ProductModel> arrProductSearch = new ArrayList<ProductModel>();
 
@@ -53,7 +64,16 @@ public class MainToolbar {
         }
         productAdapter.setLocalDataSet(arrProductSearch);
     }
+    public static void btnSearch_Transaction(String query,ArrayList<ProductModel> arrAllProduct, SelectItem_Adapter productAdapter){
+        ArrayList<ProductModel> arrProductSearch = new ArrayList<ProductModel>();
 
+        for(ProductModel productModel: arrAllProduct){
+            if(productModel.getName().toLowerCase().contains(query.toLowerCase())){
+                arrProductSearch.add(productModel);
+            }
+        }
+        productAdapter.setLocalDataSet(arrProductSearch);
+    }
     public static boolean btnBack_clicked(MenuItem item,Context context){
         switch (item.getItemId()) {
             case android.R.id.home:

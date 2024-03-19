@@ -1,10 +1,8 @@
 package com.example.stockwise.fragments.transaction;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -23,12 +21,10 @@ import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivitySellProductBinding;
 import com.example.stockwise.fragments.person.Person;
 import com.example.stockwise.model.PersonModel;
-import com.example.stockwise.model.ProductModel;
+import com.example.stockwise.model.TransactionModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,13 +35,10 @@ public class SellProduct extends AppCompatActivity {
     private ActivitySellProductBinding bind; // declaring view binding
     private Context context; // to store context
     private Calendar selectedDate;
-    private ScanOptions scanner; // scanner
-    private String barCodeId; // to store barcode id
     private ArrayList<PersonModel> arrPerson; // to store person data
-    private ArrayList<ProductModel> arrProduct; // to store product data
-    private ArrayList<String> arrPersonName; // to store product data
-    private ProductSellAdapter productSellAdapter; // to store adapter
+    private ArrayList<String> arrPersonName; // to store product datar
     private ArrayAdapter adapterPersonName;
+    private TransactionModel transactionModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +46,7 @@ public class SellProduct extends AppCompatActivity {
 
         bind = ActivitySellProductBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
+        transactionModel = new TransactionModel(); // initializing transaction model
         setContentView(bind.getRoot());
 
         // setting action bar title
@@ -67,11 +61,10 @@ public class SellProduct extends AppCompatActivity {
         arrPersonName = new ArrayList<>();
         adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName);
         bind.spPerson.setAdapter(adapterPersonName);
-        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addValueEventListener(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrPersonName.clear();
-                arrProduct.clear();
                 arrPersonName.add("Select Customer Name");
                 for (DataSnapshot post : snapshot.getChildren()) {
                     PersonModel personModel = post.getValue(PersonModel.class);
@@ -103,24 +96,28 @@ public class SellProduct extends AppCompatActivity {
         bind.TransactionDate.setOnClickListener(v -> OpenDialog());
 
         // setup add item button
-        //bind.btnAddItem.setOnClickListener(v -> btnAddItem_click());
         bind.btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SellProduct.this, Select_Items.class));
-            }
-        });
+                if(bind.spPerson.getSelectedItem().toString().equals("Select Customer Name")) {
+                    bind.spPerson.requestFocus();
+                    Toast.makeText(context, "Please select customer", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        // setup recycler view
-        arrProduct = new ArrayList<>();
-        productSellAdapter = new ProductSellAdapter(arrProduct, context);
-        bind.recyclerViewSellProductList.setAdapter(productSellAdapter);
-        bind.recyclerViewSellProductList.setLayoutManager(new LinearLayoutManager(context));
+                transactionModel.setDate(bind.DateShow.getText().toString());
+                transactionModel.setPerson(arrPerson.get(bind.spPerson.getSelectedItemPosition()-1));
 
-        bind.btnProceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("SuccessMsg", "onClick: "+arrProduct.size());
+                if(transactionModel.getDate().equals("")){
+                    bind.TransactionDate.requestFocus();
+                    Toast.makeText(context, "Please select date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                transactionModel.setITEM_LIST(new ArrayList<>());
+                Intent intent = new Intent(context, Select_Items.class);
+                intent.putExtra("transactionObj", transactionModel);
+                startActivity(intent);
             }
         });
     }
@@ -149,46 +146,4 @@ public class SellProduct extends AppCompatActivity {
         );
         datePickerDialog.show();
     }
-
-    // add item Clicked
-    private void btnAddItem_click() {
-//        if (bind.spPerson.getSelectedItemPosition() == 0) {
-//            Toast.makeText(context, "Please select customer name", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (bind.DateShow.getText().toString().equals("Select Date")) {
-//            Toast.makeText(context, "Please select transaction date", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        scanner = MainToolbar.getScanner();
-        bar.launch(scanner);
-    }
-
-    // scanner result
-    ActivityResultLauncher<ScanOptions> bar = registerForActivityResult(new ScanContract(), result -> {
-        // if scanner has some result
-        if (result.getContents() != null) {
-            barCodeId = result.getContents(); // collect the barcode number and store it
-            Params.getREFERENCE().child(Params.getPRODUCT()).child(barCodeId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (!snapshot.exists()) {
-                        Toast.makeText(context, "Product not found", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    ProductModel productModel = snapshot.getValue(ProductModel.class);
-                    arrProduct.add(0,productModel);
-                    productSellAdapter.notifyItemInserted(0);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-        }
-        // scanner does not have any results
-        else
-            Toast.makeText(context, "Unable to Scan!!", Toast.LENGTH_LONG).show();
-    });
 }

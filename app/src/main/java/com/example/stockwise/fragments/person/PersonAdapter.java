@@ -66,6 +66,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
     public void setLocalDataset(ArrayList<PersonModel> dataSet) {
         this.localDataSet = dataSet;
+        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)

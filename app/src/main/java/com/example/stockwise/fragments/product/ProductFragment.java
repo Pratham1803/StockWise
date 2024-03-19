@@ -65,7 +65,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         productAdapter = new ProductAdapter(arrAllProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
-        bind.recyclerProduct.setNestedScrollingEnabled(true);
+        
         // setting spinner
         bind.FilterSpinner.setOnItemSelectedListener(this);
 
@@ -108,8 +108,8 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
                     if (newProduct.getIsReorderPointReached().equals("true")) {
                         arrAtReorderPointProduct.add(newProduct);
                     }
+                    productAdapter.notifyItemInserted(arrAllProduct.size()); // notifying adapter that new product is added
                 }
-                productAdapter.notifyDataSetChanged(); // notifying adapter that data has been changed
             }
 
             @Override

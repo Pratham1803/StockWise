@@ -4,103 +4,249 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
-import com.example.stockwise.databinding.ActivitySelectItemsBinding;
+import com.example.stockwise.databinding.ActivityProductListBinding;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.stockwise.R;
+import com.example.stockwise.fragments.product.AddProduct;
+import com.example.stockwise.model.DbTransactionModel;
 import com.example.stockwise.model.ProductModel;
+import com.example.stockwise.model.SelectItemModel;
+import com.example.stockwise.model.TransactionModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Select_Items extends AppCompatActivity {
-    private ActivitySelectItemsBinding bind; // declaring view binding
+    private ActivityProductListBinding bind; // declaring view binding
     private Context context; // to store context
     private ScanOptions scanner; // scanner
+    private boolean isProductScanned = false; // to store product scanned status
     private String barCodeId; // to store barcode id
-    private ArrayList<ProductModel> arrProduct; // to store product data
-    private ProductSellAdapter productSellAdapter; // to store adapter
+    private ArrayList<ProductModel> arrAllProduct; // to store product data
+    private SelectItem_Adapter selectItemAdapter; // to store adapter
+    private TransactionModel transactionModel; // to store transaction data
+    private SweetAlertDialog sweetAlertDialog; // to store sweet alert dialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_items);
-
-        bind = ActivitySelectItemsBinding.inflate(getLayoutInflater()); // initializing view binding
-        setContentView(bind.getRoot());
+        bind = ActivityProductListBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
+        setContentView(bind.getRoot());
+
+        Intent intent = getIntent();
+        transactionModel = (TransactionModel) intent.getSerializableExtra("transactionObj");
+        transactionModel.setDbTransactionModel(new DbTransactionModel());
+        transactionModel.getDbTransactionModel().setPerson_id(transactionModel.getPerson().getId());
+        transactionModel.getDbTransactionModel().setDate(transactionModel.getDate());
+
+        // setting visibilities
+        bind.linearLayoutCategory.setVisibility(View.GONE);
+        bind.btnProceed.setVisibility(View.VISIBLE);
 
         // setting action bar title
-        setSupportActionBar(bind.toolbarSelectItem);
+        setSupportActionBar(bind.toolbarCategory);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
+        actionBar.setTitle("Select Items"); // setting action bar title
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true); // setting back button in action bar
 
-        bind.btnScanItems.setOnClickListener(v -> ScanItem());
+        // setting recycler view
+        arrAllProduct = new ArrayList<>();
+        selectItemAdapter = new SelectItem_Adapter(arrAllProduct, context, transactionModel); // initializing adapter
+        bind.recyclerProductCategory.setAdapter(selectItemAdapter); // setting adapter to recycler view
+        bind.recyclerProductCategory.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager to recycler view
 
-        // setup recycler view
-        arrProduct = new ArrayList<>();
-        productSellAdapter = new ProductSellAdapter(arrProduct, context);
-        bind.recyclerViewSelectItems.setAdapter(productSellAdapter);
-        bind.recyclerViewSelectItems.setLayoutManager(new LinearLayoutManager(context));
+        dbGetAllProducts();
+
+        // process button clicked
+        bind.btnProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (transactionModel.getITEM_LIST().size() > 0) {
+                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Adding Transaction", "Please wait...");
+                    dbAddTransaction();
+                } else {
+                    Toast.makeText(context, "Please select at least one item", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }// End OnCreate
 
+    private void dbAddTransaction() {
+        DatabaseReference ref = Params.getREFERENCE().child(Params.getTRANSACTION()).child(transactionModel.getDate()).push();
+        transactionModel.getDbTransactionModel().setId(ref.getKey());
+
+        ref.setValue(transactionModel.getDbTransactionModel()).addOnSuccessListener(aVoid -> {
+            dbUpdateProduct();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(context, "Transaction Failed", Toast.LENGTH_LONG).show();
+            Log.d("ErrorMsg", "dbAddTransaction: " + e.getMessage());
+        });
+    }
+
+    private void dbUpdateProduct() {
+        DatabaseReference ref = Params.getREFERENCE().child(Params.getPRODUCT());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot post : snapshot.getChildren()) {
+                   for(ProductModel product: transactionModel.getITEM_LIST()) {
+                       if(post.getKey().equals(product.getId())) {
+                           ref.child(post.getKey()).child(Params.getCurrentStock()).setValue(product.getCurrent_stock());
+                       }
+                   }
+               }
+
+                sweetAlertDialog.dismissWithAnimation();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ErrorMsg", "onCancelled: " + error.getMessage());
+            }
+        });
+    }
+
+    //  back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item, context);
+        if (isProductScanned) {
+            isProductScanned = false;
+            selectItemAdapter.setLocalDataSet(arrAllProduct);
+        } else
+            MainToolbar.btnBack_clicked(item, context);
+        return true;
     }
 
-    private void ScanItem() {
-//        if (bind.spPerson.getSelectedItemPosition() == 0) {
-//            Toast.makeText(context, "Please select customer name", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (bind.DateShow.getText().toString().equals("Select Date")) {
-//            Toast.makeText(context, "Please select transaction date", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+    // collect all products
+    private void dbGetAllProducts() {
+        // collecting product list from firebase
+        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // in snapshot we have all the products list, so we are getting it one by one using for each loop
+                arrAllProduct.clear(); // deleting all products from the list
 
-        scanner = MainToolbar.getScanner();
-        bar.launch(scanner);
+                for (DataSnapshot post : snapshot.getChildren()) {
+                    ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
+                    assert newProduct != null;
+                    newProduct.setCategory_id(newProduct.getCategory());
+                    arrAllProduct.add(newProduct); // adding product in product's arraylist
+
+                    selectItemAdapter.notifyItemInserted(arrAllProduct.size()); // notifying adapter that new product is added
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ErrorMsg", "onCancelled: " + error.getMessage());
+            }
+        });
     }
 
+    // scanner result
     ActivityResultLauncher<ScanOptions> bar = registerForActivityResult(new ScanContract(), result -> {
         // if scanner has some result
         if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
-            Params.getREFERENCE().child(Params.getPRODUCT()).child(barCodeId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (!snapshot.exists()) {
-                        Toast.makeText(context, "Product not found", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    ProductModel productModel = snapshot.getValue(ProductModel.class);
-                    arrProduct.add(0,productModel);
-                    productSellAdapter.notifyItemInserted(0);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
+            MainToolbar.searchProduct_Transaction_Barcode(arrAllProduct, selectItemAdapter, barCodeId);
+            isProductScanned = true; // setting product scanned status to true
         }
         // scanner does not have any results
         else
             Toast.makeText(context, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
+    // setting listener to, create action bar
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        // getting addProduct button item from actionbar
+        MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
+        btnAddProduct.setVisible(false); // hiding add product button from action bar
+        MenuItem btnSearch = menu.findItem(R.id.search);
+        MenuItem btnScan = menu.findItem(R.id.scanner);
+        SearchView searchView = (SearchView) btnSearch.getActionView();
+
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
+        btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                scanner = MainToolbar.getScanner();
+                bar.launch(scanner); // launching the scanner
+                return true;
+            }
+        });
+
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                MainToolbar.btnSearch_Transaction(query.toLowerCase(), arrAllProduct, selectItemAdapter);
+                Log.d("SuccessMsg", "onQueryTextSubmit: Text = " + query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() > 1) {
+                    MainToolbar.btnSearch_Transaction(newText.toLowerCase(), arrAllProduct, selectItemAdapter);
+                    Log.d("SuccessMsg", "onQueryTextChange: Text = " + newText);
+                } else if (newText.length() == 0) {
+                    selectItemAdapter.setLocalDataSet(arrAllProduct);
+                }
+                return true;
+            }
+        });
+
+        // setting on click lister in add product item
+        btnAddProduct.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(@NonNull MenuItem item) {
+                // starting activity of add product screen
+                startActivity(new Intent(context, AddProduct.class));
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isProductScanned) {
+            isProductScanned = false;
+            selectItemAdapter.setLocalDataSet(arrAllProduct);
+        } else
+            super.onBackPressed();
+    }
 }
