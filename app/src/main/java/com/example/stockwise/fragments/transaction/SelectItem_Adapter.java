@@ -118,14 +118,12 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
                 btnAddToCart.setTag(R.drawable.addtocartvector);
 
                 transactionModel.getITEM_LIST().remove(localDataSet.get(position));
-                Toast.makeText(v.getContext(), "Product removed from cart", Toast.LENGTH_SHORT).show();
             }else {
                 btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.close_vector));
                 btnAddToCart.setTag(R.drawable.close_vector);
 
                 transactionModel.getITEM_LIST().add(localDataSet.get(position));
-                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(localDataSet.get(position).getId(),localDataSet.get(position).getName(),txtQuantityShow.getText().toString()));
-                Toast.makeText(v.getContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
+                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(localDataSet.get(position).getId(),localDataSet.get(position).getName(),txtQuantityShow.getText().toString(),localDataSet.get(position).getSale_price()));
             }
         }
     }

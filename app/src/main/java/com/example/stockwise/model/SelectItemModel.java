@@ -5,7 +5,7 @@ public class SelectItemModel {
     private String name;
     private String quantity;
 
-    public SelectItemModel(String id, String name, String quantity) {
+    public SelectItemModel(String id, String name, String quantity,String price) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -22,4 +22,5 @@ public class SelectItemModel {
     public String getQuantity() {
         return quantity;
     }
+
 }

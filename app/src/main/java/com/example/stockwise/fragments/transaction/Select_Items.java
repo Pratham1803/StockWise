@@ -36,6 +36,9 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -111,26 +114,31 @@ public class Select_Items extends AppCompatActivity {
 
     private void dbUpdateProduct() {
         DatabaseReference ref = Params.getREFERENCE().child(Params.getPRODUCT());
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for(DataSnapshot post : snapshot.getChildren()) {
-                   for(ProductModel product: transactionModel.getITEM_LIST()) {
-                       if(post.getKey().equals(product.getId())) {
-                           ref.child(post.getKey()).child(Params.getCurrentStock()).setValue(product.getCurrent_stock());
-                       }
-                   }
-               }
+        Map<String, Object> itemMap = new HashMap<>();
+        for(ProductModel item : transactionModel.getITEM_LIST()) {
+            itemMap.put(item.getId()+"/"+Params.getCurrentStock(), item.getCurrent_stock());
+            if(Objects.equals(item.getCurrent_stock(), "0"))
+                itemMap.put(item.getId()+"/isOutOfStock", "true");
+            else if (Integer.parseInt(item.getCurrent_stock()) < Integer.parseInt(item.getReorder_point()))
+                itemMap.put(item.getId()+"/isReorderPointReached", "true");
+        }
 
-                sweetAlertDialog.dismissWithAnimation();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: " + error.getMessage());
-            }
+        ref.updateChildren(itemMap).addOnSuccessListener(aVoid -> {
+            sweetAlertDialog.dismissWithAnimation();
+            sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Transaction Added", "Transaction has been added successfully");
+            sweetAlertDialog.setConfirmButton("OK", new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    sweetAlertDialog.dismissWithAnimation();
+                    finish();
+                }
+            });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(context, "Transaction Failed", Toast.LENGTH_LONG).show();
+            Log.d("ErrorMsg", "dbUpdateProduct: " + e.getMessage());
         });
+
     }
 
     //  back button
@@ -147,7 +155,7 @@ public class Select_Items extends AppCompatActivity {
     // collect all products
     private void dbGetAllProducts() {
         // collecting product list from firebase
-        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getPRODUCT()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop

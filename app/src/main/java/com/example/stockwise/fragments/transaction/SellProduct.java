@@ -61,10 +61,11 @@ public class SellProduct extends AppCompatActivity {
         arrPersonName = new ArrayList<>();
         adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName);
         bind.spPerson.setAdapter(adapterPersonName);
-        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addListenerForSingleValueEvent(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrPersonName.clear();
+                arrPerson.clear();
                 arrPersonName.add("Select Customer Name");
                 for (DataSnapshot post : snapshot.getChildren()) {
                     PersonModel personModel = post.getValue(PersonModel.class);
