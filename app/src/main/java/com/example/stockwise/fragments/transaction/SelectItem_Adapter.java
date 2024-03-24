@@ -41,7 +41,7 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
         private final TextView txtProductQuantity;
         private final ImageButton btnPlus;
         private final ImageButton btnMinus;
-        private final TextView txtQuantityShow;
+        private final TextView txtCurrentQuantity;
         private final ImageButton btnAddToCart;
         public ViewHolder(View view) {
             super(view);
@@ -50,20 +50,12 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
             txtProductQuantity = view.findViewById(R.id.txtQuantityShow);
             btnPlus = view.findViewById(R.id.btnQuantityPlus);
             btnMinus = view.findViewById(R.id.btnQuantityMinus);
-            txtQuantityShow = view.findViewById(R.id.txtCurrentQuantity);
+            txtCurrentQuantity = view.findViewById(R.id.txtCurrentQuantity);
             btnAddToCart = view.findViewById(R.id.btnAddToCart);
 
             btnPlus.setOnClickListener(this);
             btnMinus.setOnClickListener(this);
             btnAddToCart.setOnClickListener(this);
-        }
-
-        public ImageButton getBtnPlus() {
-            return btnPlus;
-        }
-
-        public ImageButton getBtnMinus() {
-            return btnMinus;
         }
 
         public ImageView getImgProductImage() {
@@ -82,31 +74,44 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
         public void onClick(View v) {
             int position = getAdapterPosition();
             ProductModel productModel = localDataSet.get(position);
+            int currentQuan = Integer.parseInt(txtCurrentQuantity.getText().toString()); // quantity from + or - button
+            int productQuan = Integer.parseInt(txtProductQuantity.getText().toString()); // total quantity of Product
+
             if (v.getId() == R.id.btnQuantityPlus) {
                 // Increase the quantity of product
-                int quantity = Integer.parseInt(txtQuantityShow.getText().toString());
-                if(quantity < Integer.parseInt(txtProductQuantity.getText().toString())) {
-                    quantity++;
-                    productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())-1));
-                    txtQuantityShow.setText(String.valueOf(quantity));
+
+                if(currentQuan < productQuan || transactionModel.isPurchase()) {
+                    currentQuan++;
+
+                    if(transactionModel.isPurchase())
+                        productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())+1));
+                    else
+                        productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())-1));
+
+                    txtCurrentQuantity.setText(String.valueOf(currentQuan));
                 }else
                     Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show();
+
             } else if (v.getId() == R.id.btnQuantityMinus) {
                 // Decrease the quantity of product
-                int quantity = Integer.parseInt(txtQuantityShow.getText().toString());
-                if (quantity > 0) {
-                    quantity--;
-                    productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())+1));
-                    txtQuantityShow.setText(String.valueOf(quantity));
+                if (currentQuan > 0) {
+                    currentQuan--;
+
+                    if(transactionModel.isPurchase())
+                        productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())-1));
+                    else
+                        productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())+1));
+                    txtCurrentQuantity.setText(String.valueOf(currentQuan));
                 }else
                     Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show();
+
             }else if (v.getId() == R.id.btnAddToCart) {
                 btnAddToCartClicked(position,v);
             }
         }
 
         private void btnAddToCartClicked(int position,View v) {
-            if(Integer.parseInt(txtQuantityShow.getText().toString()) == 0) {
+            if(Integer.parseInt(txtCurrentQuantity.getText().toString()) == 0) {
                 Toast.makeText(v.getContext(), "Please select at least one quantity", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -122,8 +127,13 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
                 btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.close_vector));
                 btnAddToCart.setTag(R.drawable.close_vector);
 
+                String id = localDataSet.get(position).getId();
+                String name = localDataSet.get(position).getName();
+                String currentQuan = txtCurrentQuantity.getText().toString(); // quantity selected from + or - button
+                String price = localDataSet.get(position).getSale_price();
+
                 transactionModel.getITEM_LIST().add(localDataSet.get(position));
-                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(localDataSet.get(position).getId(),localDataSet.get(position).getName(),txtQuantityShow.getText().toString(),localDataSet.get(position).getSale_price()));
+                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(id,name,currentQuan,price));
             }
         }
     }
@@ -178,11 +188,5 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
     @Override
     public int getItemCount() {
         return localDataSet.size();
-    }
-
-    // remove product from list
-    public void removeItem(int position) {
-        localDataSet.remove(position);
-        notifyItemRemoved(position);
     }
 }

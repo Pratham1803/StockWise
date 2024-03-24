@@ -9,6 +9,7 @@ public class TransactionModel implements Serializable {
     private List<ProductModel> ITEM_LIST;
     private String note;
     private DbTransactionModel dbTransactionModel;
+    private boolean isPurchase;
 
     // constructor
     public TransactionModel() {}
@@ -19,6 +20,14 @@ public class TransactionModel implements Serializable {
     }
 
     // getters
+
+    public boolean isPurchase() {
+        return isPurchase;
+    }
+
+    public void setPurchase(boolean purchase) {
+        isPurchase = purchase;
+    }
 
     public DbTransactionModel getDbTransactionModel() {
         return dbTransactionModel;

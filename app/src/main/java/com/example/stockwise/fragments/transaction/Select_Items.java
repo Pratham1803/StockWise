@@ -62,9 +62,11 @@ public class Select_Items extends AppCompatActivity {
 
         Intent intent = getIntent();
         transactionModel = (TransactionModel) intent.getSerializableExtra("transactionObj");
+        assert transactionModel != null;
         transactionModel.setDbTransactionModel(new DbTransactionModel());
         transactionModel.getDbTransactionModel().setPerson_id(transactionModel.getPerson().getId());
         transactionModel.getDbTransactionModel().setDate(transactionModel.getDate());
+        transactionModel.getDbTransactionModel().setIsPurchase(transactionModel.isPurchase() ? "true" : "false");
 
         // setting visibilities
         bind.linearLayoutCategory.setVisibility(View.GONE);
@@ -103,6 +105,13 @@ public class Select_Items extends AppCompatActivity {
     private void dbAddTransaction() {
         DatabaseReference ref = Params.getREFERENCE().child(Params.getTRANSACTION()).child(transactionModel.getDate()).push();
         transactionModel.getDbTransactionModel().setId(ref.getKey());
+
+        int totalPrice = 0;
+        for(SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
+            totalPrice += Integer.parseInt(item.getPrice())*Integer.parseInt(item.getQuantity());
+        }
+
+        transactionModel.getDbTransactionModel().setTotal_price(String.valueOf(totalPrice));
 
         ref.setValue(transactionModel.getDbTransactionModel()).addOnSuccessListener(aVoid -> {
             dbUpdateProduct();

@@ -29,7 +29,18 @@ public class transactionFragment extends Fragment {
         bind.btnSaleProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, SellProduct.class));
+                Intent intent = new Intent(context, SellProduct.class);
+                intent.putExtra("isPurchasing", false);
+                startActivity(intent);
+            }
+        });
+
+        bind.btnPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SellProduct.class);
+                intent.putExtra("isPurchasing", true);
+                startActivity(intent);
             }
         });
 

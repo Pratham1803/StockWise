@@ -24,6 +24,7 @@ import com.example.stockwise.model.PersonModel;
 import com.example.stockwise.model.TransactionModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +40,7 @@ public class SellProduct extends AppCompatActivity {
     private ArrayList<String> arrPersonName; // to store product datar
     private ArrayAdapter adapterPersonName;
     private TransactionModel transactionModel;
+    private boolean isPurchasing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +51,43 @@ public class SellProduct extends AppCompatActivity {
         transactionModel = new TransactionModel(); // initializing transaction model
         setContentView(bind.getRoot());
 
+        // collecting intent that it is a purchasing or selling process
+        isPurchasing = getIntent().getBooleanExtra("isPurchasing", false);
+
         // setting action bar title
         setSupportActionBar(bind.toolbarSellProduct);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
+        if(isPurchasing) {
+            actionBar.setTitle("Purchase Product");
+        }
 
         // Setup Spinner for Entering Person Name
         arrPerson = new ArrayList<>();
         arrPersonName = new ArrayList<>();
         adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName);
         bind.spPerson.setAdapter(adapterPersonName);
-        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).addValueEventListener(new ValueEventListener() {
+
+        // Fetching Person Data from Firebase
+        DatabaseReference dbRef = Params.getREFERENCE().child(Params.getPERSON());
+        if(isPurchasing){
+            dbRef = dbRef.child(Params.getVENDOR());
+        }else {
+            dbRef = dbRef.child(Params.getCUSTOMER());
+        }
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrPersonName.clear();
                 arrPerson.clear();
-                arrPersonName.add("Select Customer Name");
+
+                if(isPurchasing)
+                    arrPersonName.add("Select Vendor");
+                else
+                    arrPersonName.add("Select Customer");
+
                 for (DataSnapshot post : snapshot.getChildren()) {
                     PersonModel personModel = post.getValue(PersonModel.class);
                     arrPerson.add(personModel);
@@ -116,6 +137,7 @@ public class SellProduct extends AppCompatActivity {
                 }
 
                 transactionModel.setITEM_LIST(new ArrayList<>());
+                transactionModel.setPurchase(isPurchasing);
                 Intent intent = new Intent(context, Select_Items.class);
                 intent.putExtra("transactionObj", transactionModel);
                 startActivity(intent);
