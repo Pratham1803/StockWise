@@ -74,7 +74,7 @@ public class PersonFragment extends Fragment implements AdapterView.OnItemSelect
 
         // Inflate the layout for this fragment
         return bind.getRoot();
-    }
+    }// End OnCreate
 
     // Filter of contacts select listener
     @Override

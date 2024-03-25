@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_margin="40dp"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnSell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/lexend_bold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_signup"
+            android:backgroundTint="#1C7C40"
+            android:textColor="@color/white"
+            android:text="SELL PRODUCT" />
+
+        <Button
+            android:id="@+id/btnPurchase"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/lexend_bold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_signup"
+            android:backgroundTint="#9F232B"
+            android:textColor="@color/white"
+            android:text="PURCHASE PRODUCT" />
+    </LinearLayout>
+
+</LinearLayout>
