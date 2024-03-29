@@ -8,21 +8,20 @@ public class DbTransactionModel implements Serializable {
     private String id;
     private String  person_id;
     private String date;
-    private List<SelectItemModel> ITEM_LIST;
+    private List<SelectItemModel> item_LIST;
     private String note;
     private String total_price;
     private String isPurchase;
 
     public DbTransactionModel(){
-        ITEM_LIST = new ArrayList<>();
+        item_LIST = new ArrayList<>();
     }
 
-    public DbTransactionModel(String id, String person_id, String date, List<SelectItemModel> ITEM_LIST, String note, String total_price) {
+    public DbTransactionModel(String id, String person_id, String date, List<SelectItemModel> item_LIST, String total_price) {
         this.id = id;
         this.person_id = person_id;
         this.date = date;
-        this.ITEM_LIST = ITEM_LIST;
-        this.note = note;
+        this.item_LIST = item_LIST;
         this.total_price = total_price;
     }
 
@@ -68,11 +67,11 @@ public class DbTransactionModel implements Serializable {
     }
 
     public List<SelectItemModel> getITEM_LIST() {
-        return ITEM_LIST;
+        return item_LIST;
     }
 
     public void setITEM_LIST(List<SelectItemModel> ITEM_LIST) {
-        this.ITEM_LIST = ITEM_LIST;
+        this.item_LIST = ITEM_LIST;
     }
 
     public String getNote() {

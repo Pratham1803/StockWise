@@ -1,29 +1,36 @@
 package com.example.stockwise.fragments.transaction;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
+import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.Params;
 import com.example.stockwise.R;
-import com.example.stockwise.databinding.FragmentProductBinding;
 import com.example.stockwise.databinding.FragmentTransactionBinding;
-import com.example.stockwise.fragments.profile.Settings;
+import com.example.stockwise.model.DbTransactionModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -32,38 +39,24 @@ public class transactionFragment extends Fragment {
     private FragmentTransactionBinding bind; // bind view
     private Context context; // to store context
     private Calendar selectedDate;
+    private TransactionHistory_adapter transactionHistoryAdapter; // initializing adapter
+    private ArrayList<DbTransactionModel> arrTransactions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         bind = FragmentTransactionBinding.inflate(inflater, container, false); // initialing view binding
         context = bind.getRoot().getContext(); // initializing context
-        setHasOptionsMenu(true); // setting action bar
-        // Inflate the layout for this fragment
 
-//        bind.btnSaleProduct.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, SellProduct.class);
-//                intent.putExtra("isPurchasing", false);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        bind.btnPurchase.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, SellProduct.class);
-//                intent.putExtra("isPurchasing", true);
-//                startActivity(intent);
-//            }
-//        });
+        setHasOptionsMenu(true); // setting action bar
 
         bind.btnNewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Create an alert builder
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Create New Order");
+                AlertDialog.Builder builder = DialogBuilder.showDialog(context, "Create New Order", "");
+                builder.setMessage(null);
+                AlertDialog dialog = builder.create();
 
                 // set the custom layout
                 final View customLayout = getLayoutInflater().inflate(R.layout.new_order_dialog, null);
@@ -77,6 +70,7 @@ public class transactionFragment extends Fragment {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", false);
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
 
@@ -86,26 +80,72 @@ public class transactionFragment extends Fragment {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", true);
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
 
-                builder.setNegativeButton("Cancel", (dialog, which) -> {
-                    dialog.dismiss();
+                builder.setNegativeButton("Cancel", (dialogIn, which) -> {
+                    dialogIn.dismiss();
                 });
                 // create and show the alert dialog
-                AlertDialog dialog = builder.create();
+
                 dialog.show();
             }
-
         });
 
         selectedDate = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         bind.DateShow.setText(dateFormat.format(selectedDate.getTime()));
+        bind.DateShow.setText("All Records");
         bind.TransactionHistoryDate.setOnClickListener(v -> OpenDialog());
 
+        // set adapter
+        arrTransactions = new ArrayList<>();
+        transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions, context);
+        bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
+        bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
+
+        dbGetTransactions();
         return bind.getRoot();
     }// End OnCreate
+
+    // collect transactions history
+    private void dbGetTransactions() {
+        Params.getREFERENCE().child(Params.getTRANSACTION()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrTransactions.clear();
+                if (snapshot.hasChildren()) {
+                    if (bind.DateShow.getText().equals("All Records")) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            for (DataSnapshot post : dataSnapshot.getChildren()) {
+                                DbTransactionModel dbTransactionModel = post.getValue(DbTransactionModel.class);
+                                arrTransactions.add(dbTransactionModel);
+                                transactionHistoryAdapter.notifyItemInserted(arrTransactions.size());
+                            }
+                        }
+                    } else {
+                        String tempDate;
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            tempDate = dataSnapshot.getKey();
+                            if(bind.DateShow.getText().equals(tempDate)) {
+                                for (DataSnapshot post : dataSnapshot.getChildren()) {
+                                    DbTransactionModel dbTransactionModel = post.getValue(DbTransactionModel.class);
+                                    arrTransactions.add(dbTransactionModel);
+                                    transactionHistoryAdapter.notifyItemInserted(arrTransactions.size());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ErrorMsg", "Collecting Transactions : " + error.getMessage());
+            }
+        });
+    }
 
     private void OpenDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -116,12 +156,23 @@ public class transactionFragment extends Fragment {
                         selectedDate.set(year, month, dayOfMonth);
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                         bind.DateShow.setText(dateFormat.format(selectedDate.getTime()));
+                        dataSetChange();
                     }
                 },
                 selectedDate.get(Calendar.YEAR),
                 selectedDate.get(Calendar.MONTH),
                 selectedDate.get(Calendar.DAY_OF_MONTH)
         );
+        datePickerDialog.setButton2("All Record", (dialog, which) -> {
+            bind.DateShow.setText("All Records");
+            dataSetChange();
+        });
         datePickerDialog.show();
+    }
+
+    private void dataSetChange(){
+        arrTransactions.clear();
+        dbGetTransactions();
+        transactionHistoryAdapter.notifyDataSetChanged();
     }
 }

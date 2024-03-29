@@ -186,7 +186,6 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
             filter.add("Selected Product");
             adapterProductCategory.notifyDataSetChanged();
             bind.FilterSpinner.setSelection(3);
-//            searchProduct_barcode();
         }
         // scanner does not have any results
         else

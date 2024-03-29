@@ -3,10 +3,12 @@ package com.example.stockwise;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         bind = ActivityMainBinding.inflate(getLayoutInflater()); // initializing view binding
         setContentView(bind.getRoot());
+        //ActivityCompat.requestPermissions(this,new String[] { Manifest.permission.SEND_SMS}, 1);
 
         // setup toolbar
         setSupportActionBar(bind.toolbar);

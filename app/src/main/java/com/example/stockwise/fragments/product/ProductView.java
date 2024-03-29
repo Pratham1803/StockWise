@@ -106,9 +106,9 @@ public class ProductView extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 builder = DialogBuilder.showDialog(context, "Delete Product", "Are you sure you want to delete this product?");
-                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Deleting Product", "Please Wait...");
 
                 builder.setPositiveButton("Yes", (dialog, which) -> {
+                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Deleting Product", "Please Wait...");
                     // deleting the product from the database
                     Params.getREFERENCE().child(Params.getPRODUCT()).child(parentProduct.getId()).removeValue()
                             .addOnCompleteListener(new OnCompleteListener<Void>() {

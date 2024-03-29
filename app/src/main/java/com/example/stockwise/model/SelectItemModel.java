@@ -1,10 +1,12 @@
 package com.example.stockwise.model;
 
 public class SelectItemModel {
-    private final String id;
-    private final String name;
-    private final String quantity;
-    private final String price;
+    private String id;
+    private String name;
+    private String quantity;
+    private String price;
+
+    public SelectItemModel(){}
 
     public SelectItemModel(String id, String name, String quantity,String price) {
         this.id = id;

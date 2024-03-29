@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.stockwise.DialogBuilder;
@@ -12,9 +13,11 @@ import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.databinding.ActivityProductListBinding;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +44,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Select_Items extends AppCompatActivity {
     private ActivityProductListBinding bind; // declaring view binding
@@ -107,8 +115,8 @@ public class Select_Items extends AppCompatActivity {
         transactionModel.getDbTransactionModel().setId(ref.getKey());
 
         int totalPrice = 0;
-        for(SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
-            totalPrice += Integer.parseInt(item.getPrice())*Integer.parseInt(item.getQuantity());
+        for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
+            totalPrice += Integer.parseInt(item.getPrice()) * Integer.parseInt(item.getQuantity());
         }
 
         transactionModel.getDbTransactionModel().setTotal_price(String.valueOf(totalPrice));
@@ -125,12 +133,17 @@ public class Select_Items extends AppCompatActivity {
         DatabaseReference ref = Params.getREFERENCE().child(Params.getPRODUCT());
 
         Map<String, Object> itemMap = new HashMap<>();
-        for(ProductModel item : transactionModel.getITEM_LIST()) {
-            itemMap.put(item.getId()+"/"+Params.getCurrentStock(), item.getCurrent_stock());
-            if(Objects.equals(item.getCurrent_stock(), "0"))
-                itemMap.put(item.getId()+"/isOutOfStock", "true");
-            else if (Integer.parseInt(item.getCurrent_stock()) < Integer.parseInt(item.getReorder_point()))
-                itemMap.put(item.getId()+"/isReorderPointReached", "true");
+        for (ProductModel item : transactionModel.getITEM_LIST()) {
+            itemMap.put(item.getId() + "/" + Params.getCurrentStock(), item.getCurrent_stock());
+            if (Objects.equals(item.getCurrent_stock(), "0"))
+                itemMap.put(item.getId() + "/isOutOfStock", "true");
+            else if (Integer.parseInt(item.getCurrent_stock()) < Integer.parseInt(item.getReorder_point())) {
+                itemMap.put(item.getId() + "/isOutOfStock", "false");
+                itemMap.put(item.getId() + "/isReorderPointReached", "true");
+            }else{
+                itemMap.put(item.getId() + "/isOutOfStock", "false");
+                itemMap.put(item.getId() + "/isReorderPointReached", "false");
+            }
         }
 
         ref.updateChildren(itemMap).addOnSuccessListener(aVoid -> {
@@ -140,6 +153,7 @@ public class Select_Items extends AppCompatActivity {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                     sweetAlertDialog.dismissWithAnimation();
+                    sentSms();
                     finish();
                 }
             });
@@ -148,6 +162,32 @@ public class Select_Items extends AppCompatActivity {
             Log.d("ErrorMsg", "dbUpdateProduct: " + e.getMessage());
         });
 
+    }
+
+    private void sentSms() {
+        try {
+            // Get the default instance of SmsManager
+            SmsManager smsManager = SmsManager.getDefault();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
+
+            // Phone number to which SMS to be send
+            String phoneNumber = transactionModel.getPerson().getContact_num();
+
+            // SMS text to be sent
+            StringBuilder message = new StringBuilder("StockWise - Transaction Succeed!!\n");
+            message.append("Shop : ").append(Params.getOwnerModel().getShop_name());
+            message.append("\nDate: ").append(transactionModel.getDbTransactionModel().getDate()).append("\n\nItems: \n");
+
+            for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST())
+                message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getPrice()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getPrice())).append("\n");
+
+            message.append("\nTotal Price: ").append(transactionModel.getDbTransactionModel().getTotal_price());
+            message.append("\n\n").append("Thank you for your business!!");
+
+            smsManager.sendTextMessage(phoneNumber, null, message.toString(), null, null);
+        } catch (Exception e) {
+            Log.d("ErrorMsg", "sentSms: " + e.getMessage());
+        }
     }
 
     //  back button
