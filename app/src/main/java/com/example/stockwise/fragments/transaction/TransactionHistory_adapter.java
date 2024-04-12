@@ -1,5 +1,6 @@
 package com.example.stockwise.fragments.transaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 public class TransactionHistory_adapter extends RecyclerView.Adapter<TransactionHistory_adapter.ViewHolder>{
     private ArrayList<DbTransactionModel> localDataSet;
+    private ArrayList<String> lsName = new ArrayList<>();
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,9 +55,10 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
     }
 
     // constructor of adapter class
-    public TransactionHistory_adapter(ArrayList<DbTransactionModel> localDataSet, Context context){
+    public TransactionHistory_adapter(ArrayList<DbTransactionModel> localDataSet,ArrayList<String> lsName, Context context){
         this.localDataSet = localDataSet;
         this.context = context;
+        this.lsName = lsName;
     }
 
     @NonNull
@@ -68,26 +71,19 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
         return new TransactionHistory_adapter.ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TransactionHistory_adapter.ViewHolder holder, int position) {
         if (localDataSet.get(position).getIsPurchase().equals("true")) {
             holder.getTxtPersonType().setText("Vendor : ");
             holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.red));
-        }else
-            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
-
-        Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).child(localDataSet.get(position).getPerson_id()).child(Params.getNAME()).get()
-                .addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                    @Override
-                    public void onSuccess(DataSnapshot dataSnapshot) {
-                        holder.getTxtPersonName().setText(dataSnapshot.getValue(String.class));
-                    }
-                });
-
-        if (localDataSet.get(position).getIsPurchase().equals("true"))
             holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" -");
-        else
+        }else {
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
             holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" +");
+        }
+
+        holder.getTxtPersonName().setText(lsName.get(position));
 
         holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-");
     }

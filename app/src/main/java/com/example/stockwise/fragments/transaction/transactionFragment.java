@@ -25,8 +25,10 @@ import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentTransactionBinding;
 import com.example.stockwise.model.DbTransactionModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +43,7 @@ public class transactionFragment extends Fragment {
     private Calendar selectedDate;
     private TransactionHistory_adapter transactionHistoryAdapter; // initializing adapter
     private ArrayList<DbTransactionModel> arrTransactions;
+    private ArrayList<String> lsName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,10 +101,9 @@ public class transactionFragment extends Fragment {
 
         // set adapter
         arrTransactions = new ArrayList<>();
+        lsName = new ArrayList<>();
         arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
-        transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions, context);
-        bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
-        bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
+        dbCollectPersonNames();
 
         return bind.getRoot();
     }// End OnCreate
@@ -157,5 +159,29 @@ public class transactionFragment extends Fragment {
         });
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
+    }
+
+    private void dbCollectPersonNames(){
+        for(DbTransactionModel dbTransactionModel : arrTransactions){
+            DatabaseReference dbRef;
+
+            if(dbTransactionModel.getIsPurchase().equals("true"))
+                dbRef = Params.getREFERENCE().child(Params.getPERSON()).child(Params.getVENDOR());
+            else
+                dbRef = Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER());
+
+            dbRef.child(dbTransactionModel.getPerson_id()).child(Params.getNAME()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            lsName.add(dataSnapshot.getValue(String.class));
+                            if(lsName.size() == arrTransactions.size()) {
+                                transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions,lsName, context);
+                                bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
+                                bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
+                            }
+                        }
+                    });
+        }
     }
 }

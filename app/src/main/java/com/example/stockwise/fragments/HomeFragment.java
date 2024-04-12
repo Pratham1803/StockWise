@@ -165,7 +165,7 @@ public class HomeFragment extends Fragment {
                 int totalPrice = 0;
 
                 for(DbTransactionModel dbTransactionModel : arrTransaction){
-                    if(dbTransactionModel.getDate().equals(today_date))
+                    if(dbTransactionModel.getDate().equals(today_date) && dbTransactionModel.getIsPurchase().equals("false"))
                         totalPrice += Integer.parseInt(dbTransactionModel.getTotal_price());
                 }
                 bind.TotalProfitShow.setText("₹ " +totalPrice);
