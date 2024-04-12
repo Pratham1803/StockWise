@@ -10,10 +10,51 @@ public class OwnerModel {
     private String contact_num;
     private String fcm_token;
     private String picture;
-    private ArrayList<String> LS_CATEGORY;
-    private ArrayList<String> LS_ITEM;
-    private ArrayList<String> LS_PERSON;
-    private ArrayList<String> LS_TRANSACTION;
+    private ArrayList<ProductModel> arrAllProduct;
+    private ArrayList<ProductModel> arrUnAvailableProduct;
+    private ArrayList<ProductModel> arrAtReorderPointProduct;
+    private ArrayList<DbTransactionModel> arrTransactions;
+    private ArrayList<CategoryModel> arrCategory;
+
+    public ArrayList<DbTransactionModel> getArrTransactions() {
+        return arrTransactions;
+    }
+
+    public void setArrTransactions(ArrayList<DbTransactionModel> arrTransactions) {
+        this.arrTransactions = arrTransactions;
+    }
+
+    public ArrayList<CategoryModel> getArrCategory() {
+        return arrCategory;
+    }
+
+    public void setArrCategory(ArrayList<CategoryModel> arrCategory) {
+        this.arrCategory = arrCategory;
+    }
+
+    public ArrayList<ProductModel> getArrAllProduct() {
+        return arrAllProduct;
+    }
+
+    public void setArrAllProduct(ArrayList<ProductModel> arrAllProduct) {
+        this.arrAllProduct = arrAllProduct;
+    }
+
+    public ArrayList<ProductModel> getArrUnAvailableProduct() {
+        return arrUnAvailableProduct;
+    }
+
+    public void setArrUnAvailableProduct(ArrayList<ProductModel> arrUnAvailableProduct) {
+        this.arrUnAvailableProduct = arrUnAvailableProduct;
+    }
+
+    public ArrayList<ProductModel> getArrAtReorderPointProduct() {
+        return arrAtReorderPointProduct;
+    }
+
+    public void setArrAtReorderPointProduct(ArrayList<ProductModel> arrAtReorderPointProduct) {
+        this.arrAtReorderPointProduct = arrAtReorderPointProduct;
+    }
 
     // constructor
     public OwnerModel(){}
@@ -56,21 +97,6 @@ public class OwnerModel {
         this.picture = picture;
     }
 
-    public void setLS_CATEGORY(ArrayList<String> LS_CATEGORY) {
-        this.LS_CATEGORY = LS_CATEGORY;
-    }
-
-    public void setLS_ITEM(ArrayList<String> LS_ITEM) {
-        this.LS_ITEM = LS_ITEM;
-    }
-
-    public void setLS_PERSON(ArrayList<String> LS_PERSON) {
-        this.LS_PERSON = LS_PERSON;
-    }
-
-    public void setLS_TRANSACTION(ArrayList<String> LS_TRANSACTION) {
-        this.LS_TRANSACTION = LS_TRANSACTION;
-    }
 
     // getter
     public String getId() {
@@ -101,19 +127,4 @@ public class OwnerModel {
         return picture;
     }
 
-    public ArrayList<String> getLS_CATEGORY() {
-        return LS_CATEGORY;
-    }
-
-    public ArrayList<String> getLS_ITEM() {
-        return LS_ITEM;
-    }
-
-    public ArrayList<String> getLS_PERSON() {
-        return LS_PERSON;
-    }
-
-    public ArrayList<String> getLS_TRANSACTION() {
-        return LS_TRANSACTION;
-    }
 }

@@ -76,6 +76,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/layoutTotalProduct"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -145,6 +146,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/layoutTotalCategory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -283,6 +285,7 @@
                     android:layout_height="wrap_content">
 
                     <LinearLayout
+                        android:id="@+id/layoutTransactions"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -410,6 +413,7 @@
                             android:scaleType="fitCenter" />
 
                         <LinearLayout
+                            android:id="@+id/layoutOutOfStock"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -459,6 +463,7 @@
                             android:scaleType="fitCenter" />
 
                         <LinearLayout
+                            android:id="@+id/layoutReorderPoint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"

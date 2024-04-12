@@ -55,29 +55,10 @@ public class ManageCategory extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting recycler view
-        arrCategoryList = new ArrayList<CategoryModel>();
+        arrCategoryList = Params.getOwnerModel().getArrCategory();
         categoryAdapter = new CategoryAdapter(arrCategoryList, context);
         bind.recyclerCategory.setLayoutManager(new LinearLayoutManager(this));
         bind.recyclerCategory.setAdapter(categoryAdapter);
-
-
-        // collecting data from database for recyclerview of category
-        Params.getREFERENCE().child(Params.getCATEGORY()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrCategoryList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    CategoryModel newCategory = dataSnapshot.getValue(CategoryModel.class);
-                    arrCategoryList.add(newCategory);
-                }
-                categoryAdapter.notifyItemInserted(arrCategoryList.size());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: "+error.getMessage());
-            }
-        });
 
         // show the dialog box to add category
         bind.btnAddCategory.setOnClickListener(new View.OnClickListener() {

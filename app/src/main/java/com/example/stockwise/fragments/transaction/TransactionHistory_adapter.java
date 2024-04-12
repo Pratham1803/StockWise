@@ -70,8 +70,11 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
 
     @Override
     public void onBindViewHolder(@NonNull TransactionHistory_adapter.ViewHolder holder, int position) {
-        if (localDataSet.get(position).getIsPurchase().equals("true"))
+        if (localDataSet.get(position).getIsPurchase().equals("true")) {
             holder.getTxtPersonType().setText("Vendor : ");
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.red));
+        }else
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
 
         Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER()).child(localDataSet.get(position).getPerson_id()).child(Params.getNAME()).get()
                 .addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -80,9 +83,13 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
                         holder.getTxtPersonName().setText(dataSnapshot.getValue(String.class));
                     }
                 });
-        holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size()));
 
-        holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price());
+        if (localDataSet.get(position).getIsPurchase().equals("true"))
+            holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" -");
+        else
+            holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" +");
+
+        holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-");
     }
 
     @Override

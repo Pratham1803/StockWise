@@ -58,14 +58,16 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         context = bind.getRoot().getContext(); // initializing context
         setHasOptionsMenu(true); // setting action bar
 
+        // getting all products from firebase
+        arrAllProduct = Params.getOwnerModel().getArrAllProduct();
+        arrUnAvailableProduct = Params.getOwnerModel().getArrUnAvailableProduct();
+        arrAtReorderPointProduct = Params.getOwnerModel().getArrAtReorderPointProduct();
+
         // set recycler view
-        arrAllProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
-        arrUnAvailableProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
-        arrAtReorderPointProduct = new ArrayList<ProductModel>(); // initializing Array list of productModule
         productAdapter = new ProductAdapter(arrAllProduct, context); // initializing productAdapter
         bind.recyclerProduct.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager of recycler view
         bind.recyclerProduct.setAdapter(productAdapter); // setting adapter to the recycler view
-        
+
         // setting spinner
         bind.FilterSpinner.setOnItemSelectedListener(this);
 
@@ -81,44 +83,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
         // Spinner which binds data to spinner
         bind.FilterSpinner.setAdapter(adapterProductCategory);
 
-        dbGetAllProducts();
         return bind.getRoot();
-    }
-
-    // get all products from firebase
-    private void dbGetAllProducts() {
-        // collecting product list from firebase
-        Params.getREFERENCE().child(Params.getPRODUCT()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // in snapshot we have all the products list, so we are getting it one by one using for each loop
-                arrAllProduct.clear(); // deleting all products from the list
-                arrUnAvailableProduct.clear(); // deleting all products from the list
-                arrAtReorderPointProduct.clear(); // deleting all products from the list
-
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    if(post.exists()) {
-                        ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                        assert newProduct != null;
-                        newProduct.setCategory_id(newProduct.getCategory());
-                        arrAllProduct.add(newProduct); // adding product in product's arraylist
-
-                        if (newProduct.getIsOutOfStock().equals("true")) {
-                            arrUnAvailableProduct.add(newProduct);
-                        }
-                        if (newProduct.getIsReorderPointReached().equals("true")) {
-                            arrAtReorderPointProduct.add(newProduct);
-                        }
-                    }
-                }
-                productAdapter.notifyDataSetChanged(); // notifying adapter that data has been changed
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "onCancelled: " + error.getMessage());
-            }
-        });
     }
 
     // setting listener to, create action bar

@@ -56,13 +56,12 @@ public class transactionFragment extends Fragment {
                 // Create an alert builder
                 AlertDialog.Builder builder = DialogBuilder.showDialog(context, "Create New Order", "");
                 builder.setMessage(null);
-                AlertDialog dialog = builder.create();
 
                 // set the custom layout
                 final View customLayout = getLayoutInflater().inflate(R.layout.new_order_dialog, null);
                 builder.setView(customLayout);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button btnSell = customLayout.findViewById(R.id.btnSell);
-                @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button btnPurchase = customLayout.findViewById(R.id.btnPurchase);
+                Button btnSell = customLayout.findViewById(R.id.btnSell);
+                Button btnPurchase = customLayout.findViewById(R.id.btnPurchase);
 
                 btnSell.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -70,7 +69,6 @@ public class transactionFragment extends Fragment {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", false);
                         startActivity(intent);
-                        dialog.dismiss();
                     }
                 });
 
@@ -80,7 +78,6 @@ public class transactionFragment extends Fragment {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", true);
                         startActivity(intent);
-                        dialog.dismiss();
                     }
                 });
 
@@ -89,7 +86,7 @@ public class transactionFragment extends Fragment {
                 });
                 // create and show the alert dialog
 
-                dialog.show();
+                builder.create().show();
             }
         });
 
@@ -101,42 +98,32 @@ public class transactionFragment extends Fragment {
 
         // set adapter
         arrTransactions = new ArrayList<>();
+        arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
         transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions, context);
         bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
         bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
 
-        dbGetTransactions();
         return bind.getRoot();
     }// End OnCreate
 
     // collect transactions history
     private void dbGetTransactions() {
-        Params.getREFERENCE().child(Params.getTRANSACTION()).addValueEventListener(new ValueEventListener() {
+        Params.getREFERENCE().child(Params.getTRANSACTION()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrTransactions.clear();
                 if (snapshot.hasChildren()) {
-                    if (bind.DateShow.getText().equals("All Records")) {
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String tempDate;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        tempDate = dataSnapshot.getKey();
+                        if (bind.DateShow.getText().equals(tempDate)) {
                             for (DataSnapshot post : dataSnapshot.getChildren()) {
                                 DbTransactionModel dbTransactionModel = post.getValue(DbTransactionModel.class);
                                 arrTransactions.add(dbTransactionModel);
-                                transactionHistoryAdapter.notifyItemInserted(arrTransactions.size());
-                            }
-                        }
-                    } else {
-                        String tempDate;
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            tempDate = dataSnapshot.getKey();
-                            if(bind.DateShow.getText().equals(tempDate)) {
-                                for (DataSnapshot post : dataSnapshot.getChildren()) {
-                                    DbTransactionModel dbTransactionModel = post.getValue(DbTransactionModel.class);
-                                    arrTransactions.add(dbTransactionModel);
-                                    transactionHistoryAdapter.notifyItemInserted(arrTransactions.size());
-                                }
                             }
                         }
                     }
+                    transactionHistoryAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -156,7 +143,7 @@ public class transactionFragment extends Fragment {
                         selectedDate.set(year, month, dayOfMonth);
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                         bind.DateShow.setText(dateFormat.format(selectedDate.getTime()));
-                        dataSetChange();
+                        dbGetTransactions();
                     }
                 },
                 selectedDate.get(Calendar.YEAR),
@@ -165,14 +152,10 @@ public class transactionFragment extends Fragment {
         );
         datePickerDialog.setButton2("All Record", (dialog, which) -> {
             bind.DateShow.setText("All Records");
-            dataSetChange();
+            arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
+            transactionHistoryAdapter.notifyDataSetChanged();
         });
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
-    }
-
-    private void dataSetChange(){
-        arrTransactions.clear();
-        dbGetTransactions();
-        transactionHistoryAdapter.notifyDataSetChanged();
     }
 }
