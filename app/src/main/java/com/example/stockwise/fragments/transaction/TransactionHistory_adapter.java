@@ -28,6 +28,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
         private final TextView txtPersonType;
         private final TextView txtQuantity;
         private final TextView txtTotalPrice;
+        private final TextView txtDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -35,6 +36,11 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             this.txtPersonType = itemView.findViewById(R.id.txtPersonType);
             this.txtQuantity = itemView.findViewById(R.id.txtTotalProduct);
             this.txtTotalPrice = itemView.findViewById(R.id.txtTotalAmount);
+            this.txtDate = itemView.findViewById(R.id.txtDate);
+        }
+
+        public TextView getTxtDate() {
+            return txtDate;
         }
 
         public TextView getTxtPersonName() {
@@ -84,7 +90,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
         }
 
         holder.getTxtPersonName().setText(lsName.get(position));
-
+        holder.getTxtDate().setText(localDataSet.get(position).getDate());
         holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-");
     }
 

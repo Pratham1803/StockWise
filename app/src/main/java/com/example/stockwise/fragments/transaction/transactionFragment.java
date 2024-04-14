@@ -25,16 +25,22 @@ import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.FragmentTransactionBinding;
 import com.example.stockwise.model.DbTransactionModel;
+import com.example.stockwise.model.ProductModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.TreeMap;
 
 public class transactionFragment extends Fragment {
 
@@ -99,14 +105,14 @@ public class transactionFragment extends Fragment {
         bind.DateShow.setText("All Records");
         bind.TransactionHistoryDate.setOnClickListener(v -> OpenDialog());
 
-        // set adapter
         arrTransactions = new ArrayList<>();
-        lsName = new ArrayList<>();
         arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
+        lsName = new ArrayList<>();
         dbCollectPersonNames();
 
         return bind.getRoot();
     }// End OnCreate
+
 
     // collect transactions history
     private void dbGetTransactions() {
@@ -154,6 +160,7 @@ public class transactionFragment extends Fragment {
         );
         datePickerDialog.setButton2("All Record", (dialog, which) -> {
             bind.DateShow.setText("All Records");
+            arrTransactions.clear();
             arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
             transactionHistoryAdapter.notifyDataSetChanged();
         });
@@ -161,11 +168,11 @@ public class transactionFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void dbCollectPersonNames(){
-        for(DbTransactionModel dbTransactionModel : arrTransactions){
+    private void dbCollectPersonNames() {
+        for (DbTransactionModel dbTransactionModel : arrTransactions) {
             DatabaseReference dbRef;
 
-            if(dbTransactionModel.getIsPurchase().equals("true"))
+            if (dbTransactionModel.getIsPurchase().equals("true"))
                 dbRef = Params.getREFERENCE().child(Params.getPERSON()).child(Params.getVENDOR());
             else
                 dbRef = Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER());
@@ -175,8 +182,8 @@ public class transactionFragment extends Fragment {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             lsName.add(dataSnapshot.getValue(String.class));
-                            if(lsName.size() == arrTransactions.size()) {
-                                transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions,lsName, context);
+                            if (lsName.size() == arrTransactions.size()) {
+                                transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions, lsName, context);
                                 bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
                                 bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
                             }
