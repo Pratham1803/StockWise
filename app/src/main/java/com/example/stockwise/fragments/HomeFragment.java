@@ -22,6 +22,7 @@ import com.example.stockwise.databinding.FragmentHomeBinding;
 import com.example.stockwise.databinding.FragmentProfileBinding;
 import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
+import com.example.stockwise.fragments.transaction.GenerateBill;
 import com.example.stockwise.model.CategoryModel;
 import com.example.stockwise.model.DbTransactionModel;
 import com.example.stockwise.model.ProductModel;
@@ -75,10 +76,16 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        bind.imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, GenerateBill.class));
+            }
+        });
         // Inflate the layout for this fragment
         return root;
 
-    }
+    }// End OnCreate
 
     // get all products from firebase
     private void dbGetAllProducts() {
