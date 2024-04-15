@@ -122,25 +122,29 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         int totalProfit = 0;
 
         if (currentValue.equals(arrDates.get(0))) {
-            for (DbTransactionModel dbTransactionModel : mapTransaction.get(today_date)) {
-                if (dbTransactionModel.getIsPurchase().equals("true")) {
-                    purchaseQuantity += dbTransactionModel.getITEM_LIST().size();
-                    totalPurchase += Integer.parseInt(dbTransactionModel.getTotal_price());
-                } else {
-                    saleQuantity += dbTransactionModel.getITEM_LIST().size();
-                    totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
-                }
-            }
-        } else if (currentValue.equals(arrDates.get(1))) {
-            String yesterday_date = today.minusDays(1).format(dateTimeFormatter);
-            for (DbTransactionModel dbTransactionModel : mapTransaction.get(yesterday_date)) {
-                if (dbTransactionModel.getDate().equals(yesterday_date)) {
+            if(mapTransaction.containsKey(today_date)) {
+                for (DbTransactionModel dbTransactionModel : mapTransaction.get(today_date)) {
                     if (dbTransactionModel.getIsPurchase().equals("true")) {
                         purchaseQuantity += dbTransactionModel.getITEM_LIST().size();
                         totalPurchase += Integer.parseInt(dbTransactionModel.getTotal_price());
                     } else {
                         saleQuantity += dbTransactionModel.getITEM_LIST().size();
                         totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
+                    }
+                }
+            }
+        } else if (currentValue.equals(arrDates.get(1))) {
+            String yesterday_date = today.minusDays(1).format(dateTimeFormatter);
+            if(mapTransaction.containsKey(yesterday_date)) {
+                for (DbTransactionModel dbTransactionModel : mapTransaction.get(yesterday_date)) {
+                    if (dbTransactionModel.getDate().equals(yesterday_date)) {
+                        if (dbTransactionModel.getIsPurchase().equals("true")) {
+                            purchaseQuantity += dbTransactionModel.getITEM_LIST().size();
+                            totalPurchase += Integer.parseInt(dbTransactionModel.getTotal_price());
+                        } else {
+                            saleQuantity += dbTransactionModel.getITEM_LIST().size();
+                            totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
+                        }
                     }
                 }
             }
@@ -258,6 +262,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             arrTransaction.add(dbTransactionModel);
                         }
                     }
+                    int totalPrice = 0;
+
+                    for(DbTransactionModel dbTransactionModel : arrTransaction){
+                        if(dbTransactionModel.getDate().equals(today_date))
+                            totalPrice += Integer.parseInt(dbTransactionModel.getTotal_price());
+                    }
+                    bind.TotalProfitShow.setText("₹ " +totalPrice);
                     sortTransactions();
                 }
             }
@@ -302,12 +313,5 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
         Collections.reverse(arrTransaction);
         Params.getOwnerModel().setArrTransactions(arrTransaction);
-
-        int totalPrice = 0;
-        for (DbTransactionModel dbTransactionModel : mapTransaction.get(today_date)) {
-            if (dbTransactionModel.getIsPurchase().equals("false"))
-                totalPrice += Integer.parseInt(dbTransactionModel.getTotal_price());
-        }
-        bind.TotalProfitShow.setText("₹ " + totalPrice);
     }
 }

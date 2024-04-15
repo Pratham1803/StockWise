@@ -129,7 +129,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="@font/lexend_"
-                                android:text="10"
+                                android:text="0"
                                 android:textColor="@color/SuccessGreen"
                                 android:textSize="18dp" />
 
@@ -149,7 +149,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="@font/lexend_"
-                                android:text="Rs. 1000"
+                                android:text="Rs. 0"
                                 android:textColor="@color/black"
                                 android:textSize="18dp" />
                         </LinearLayout>
@@ -177,7 +177,7 @@
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="@font/lexend_"
                                 android:maxWidth="130sp"
-                                android:text="10"
+                                android:text="0"
                                 android:textColor="@color/red"
                                 android:textSize="18dp" />
 
@@ -197,7 +197,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="@font/lexend_"
-                                android:text="Rs. 500"
+                                android:text="Rs. 0"
                                 android:textColor="@color/black"
                                 android:textSize="18dp" />
                         </LinearLayout>
@@ -225,7 +225,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lexend_"
-                            android:text="Rs. 500"
+                            android:text="Rs. 0"
                             android:textColor="@color/SuccessGreen"
                             android:textSize="20dp" />
                     </LinearLayout>
