@@ -23,6 +23,7 @@ import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.ManageCategory;
 import com.example.stockwise.fragments.product.ProductFragment;
+import com.example.stockwise.fragments.profile.Manage_Shop;
 import com.example.stockwise.fragments.transaction.transactionFragment;
 import com.example.stockwise.fragments.person.PersonFragment;
 import com.example.stockwise.fragments.profile.ProfileFragment;
@@ -159,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             changeFragment(profileFragment,R.string.titleProfile); // change the screen to profile screen
             bind.meowBottom.show(navProfileId,true);  // displaying the profile item is selected in bottom nav
         }
+        else if (id == R.id.nav_shop) { // profile fragment selected
+            startActivity(new Intent(MainActivity.this, Manage_Shop.class));
+        }
         else if (id == R.id.nav_manageProducts) { // Products fragment selected
             changeFragment(productFragment,R.string.titleProduct); // change the screen to product screen
             bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
@@ -166,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // changing screen to category screen
             startActivity(new Intent(MainActivity.this, ManageCategory.class));
         }
-
-        // unused right now
         else if (id == R.id.nav_settings) // user click on settings
             startActivity(new Intent(MainActivity.this,Settings.class));
 

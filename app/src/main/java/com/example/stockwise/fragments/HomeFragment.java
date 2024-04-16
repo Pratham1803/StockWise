@@ -172,11 +172,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         totalProfit = totalEarning - totalPurchase;
         bind.txtProfit.setText("₹ " + totalProfit);
 
-        if(totalProfit < 0){
-            bind.txtProfit.setTextColor(getResources().getColor(R.color.red));
-        }else{
-            bind.txtProfit.setTextColor(getResources().getColor(R.color.SuccessGreen));
-        }
     }
 
     @Override

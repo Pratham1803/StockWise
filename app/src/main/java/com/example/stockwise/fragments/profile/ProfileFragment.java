@@ -38,6 +38,12 @@ public class ProfileFragment extends Fragment {
                 logOutUser(context);
             }
         });
+        bind.LayoutManageShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, Manage_Shop.class));
+            }
+        });
 
         bind.LayoutSettings.setOnClickListener(new View.OnClickListener() {
             @Override
