@@ -32,6 +32,9 @@ public class Params {
     private static String CUSTOMER;
     private static String TRANSACTION;
     private static String DATE;
+    private static String GST_NUM;
+    private static String CIN_NUM;
+    private static String ADDRESS;
     private static FirebaseDatabase DATABASE;
     private static DatabaseReference REFERENCE;
     private static FirebaseAuth AUTH;
@@ -59,6 +62,9 @@ public class Params {
         ARR_PRODUCTS = "arrProducts";
         TRANSACTION = "transaction";
         BAR_CODE = "barCodeNum";
+        GST_NUM = "gst_num";
+        CIN_NUM = "cin_num";
+        ADDRESS = "address";
 
         OWNER_MODEL = new OwnerModel();
         // database models
@@ -87,6 +93,18 @@ public class Params {
 
     public static String getBarCode() {
         return BAR_CODE;
+    }
+
+    public static String getGstNum() {
+        return GST_NUM;
+    }
+
+    public static String getCinNum() {
+        return CIN_NUM;
+    }
+
+    public static String getADDRESS() {
+        return ADDRESS;
     }
 
     public static String getNAME() {

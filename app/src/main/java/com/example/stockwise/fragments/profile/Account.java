@@ -36,6 +36,7 @@ public class Account extends AppCompatActivity {
     private ActivityAccountBinding bind; // view binding
     private Context context; // context
     private boolean isImageChanged = false; // to check if image is changed or not
+    private boolean isEditable = false; // to check if fields are editable or not
     private SweetAlertDialog sweetAlertDialog; // sweet alert dialog
 
     @Override
@@ -45,7 +46,7 @@ public class Account extends AppCompatActivity {
         bind = ActivityAccountBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // setting context
         setContentView(bind.getRoot());
-        reset(false); // setting all fields non-editable
+        reset(); // setting all fields non-editable
 
         // inserting values in fields according to user
         bind.EditUserName.setText(Params.getOwnerModel().getOwner_name());
@@ -78,11 +79,16 @@ public class Account extends AppCompatActivity {
     }
 
     // reset all fields
-    private void reset(boolean isEditable) {
+    private void reset() {
         isImageChanged = false; // image is not changed
         bind.EditUserName.setEnabled(isEditable);
         bind.EditEmail.setEnabled(isEditable);
         bind.EditShopName.setEnabled(isEditable);
+
+        if (isEditable)
+            bind.btnUpdateProfile.setVisibility(View.VISIBLE);
+        else
+            bind.btnUpdateProfile.setVisibility(View.GONE);
     }
 
     // popup menu for edit and settings
@@ -95,10 +101,9 @@ public class Account extends AppCompatActivity {
         btnEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                reset(true);
-                if (bind.btnUpdateProfile.getVisibility() == View.GONE) {
-                    bind.btnUpdateProfile.setVisibility(View.VISIBLE);
-                }
+                isEditable = !isEditable;
+                reset();
+
                 return true;
             }
         });
@@ -195,7 +200,8 @@ public class Account extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         sweetAlertDialog.dismiss();
                         sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Profile Updated", ""); // showing sweet alert dialog
-                        reset(false); // set all fields non-editable
+                        isEditable = false;
+                        reset(); // set all fields non-editable
                         bind.btnUpdateProfile.setText("UPDATE");
                     }
                 });

@@ -6,6 +6,9 @@ public class OwnerModel {
     private String id;
     private String shop_name;
     private String owner_name;
+    private String gstNum;
+    private String address;
+    private String CIN_num;
     private String email_id;
     private String contact_num;
     private String fcm_token;
@@ -50,6 +53,30 @@ public class OwnerModel {
 
     public ArrayList<ProductModel> getArrAtReorderPointProduct() {
         return arrAtReorderPointProduct;
+    }
+
+    public String getGstNum() {
+        return gstNum;
+    }
+
+    public void setGstNum(String gstNum) {
+        this.gstNum = gstNum;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCIN_num() {
+        return CIN_num;
+    }
+
+    public void setCIN_num(String CIN_num) {
+        this.CIN_num = CIN_num;
     }
 
     public void setArrAtReorderPointProduct(ArrayList<ProductModel> arrAtReorderPointProduct) {
