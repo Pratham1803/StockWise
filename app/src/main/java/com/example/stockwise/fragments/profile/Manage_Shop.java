@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.stockwise.DialogBuilder;
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityManageShopBinding;
@@ -105,6 +106,12 @@ public class Manage_Shop extends AppCompatActivity {
                 reset();
             }
         });
+    }
+
+    // back press event of actionbar back button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return MainToolbar.btnBack_clicked(item, context);
     }
 
     @Override

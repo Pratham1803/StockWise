@@ -1,14 +1,17 @@
 package com.example.stockwise.fragments.transaction;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivityGenerateBillBinding;
@@ -48,6 +51,13 @@ public class GenerateBill extends AppCompatActivity {
             quantity += Integer.parseInt(itemModel.getQuantity());
         }
 
+        setSupportActionBar(binding.toolbarBill);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(Params.getOwnerModel().getShop_name());
+        actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         String billNum = String.valueOf(lsProduct.get(0).getId().substring(4,6) + parentTransactionModel.getDate().replace("-",""));
         binding.txtBillNoShow.setText(billNum);
         binding.txtShopName.setText(Params.getOwnerModel().getShop_name());
@@ -59,9 +69,20 @@ public class GenerateBill extends AppCompatActivity {
         binding.txtPersonName.setText(getIntent().getStringExtra("Name"));
 
         // set adapter to the list view
-        ProductList_Adapter adapter = new ProductList_Adapter(lsProduct, context);
+        boolean isPurchase = parentTransactionModel.getIsPurchase().equals("true");
+        ProductList_Adapter adapter = new ProductList_Adapter(lsProduct, context,isPurchase);
         binding.lsProductView.setLayoutManager(new LinearLayoutManager(context));
         binding.lsProductView.setAdapter(adapter);
+
+        if (isPurchase) {
+            binding.txtBillType.setText("Purchase Bill");
+            binding.txtPersonType.setText("Vendor : ");
+            binding.txtTotalAmount.setTextColor(getResources().getColor(R.color.red));
+        }else {
+            binding.txtBillType.setText("Sale Bill");
+            binding.txtPersonType.setText("Customer : ");
+            binding.txtTotalAmount.setTextColor(getResources().getColor(R.color.SuccessGreen));
+        }
 
         Params.getREFERENCE().addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -83,5 +104,11 @@ public class GenerateBill extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    // back press event of actionbar back button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return MainToolbar.btnBack_clicked(item, context);
     }
 }

@@ -6,14 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".fragments.transaction.GenerateBill">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarBill"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="60dp"
+        android:elevation="4sp"
+        app:title="Bill Details"
+        android:background="@color/blue"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbarBill">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -156,7 +172,7 @@
                 android:background="@drawable/horizontal_dashed_line" />
 
             <TextView
-                android:id="@+id/txt4"
+                android:id="@+id/txtBillType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lexend_bold"
@@ -173,6 +189,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txtPersonType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
@@ -195,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
+                android:gravity="start"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -236,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lexend_bold"
-                        android:text="Bill Dt :"
+                        android:text="Date :"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 

@@ -20,8 +20,9 @@ import java.util.List;
 public class ProductList_Adapter extends RecyclerView.Adapter<ProductList_Adapter.ViewHolder> {
     private final Context context;
     private final List<SelectItemModel> lsProduct;
+    private final boolean isPurchase;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtHsnNum;
         private final TextView txtProductName;
         private final TextView txtQuantity;
@@ -59,9 +60,10 @@ public class ProductList_Adapter extends RecyclerView.Adapter<ProductList_Adapte
     }
 
     // constructor of adapter class
-    public ProductList_Adapter(List<SelectItemModel> lsProduct, Context context){
+    public ProductList_Adapter(List<SelectItemModel> lsProduct, Context context, boolean isPurchase) {
         this.lsProduct = lsProduct;
         this.context = context;
+        this.isPurchase = isPurchase;
     }
 
     @NonNull
@@ -76,12 +78,18 @@ public class ProductList_Adapter extends RecyclerView.Adapter<ProductList_Adapte
 
     @Override
     public void onBindViewHolder(@NonNull ProductList_Adapter.ViewHolder holder, int position) {
-        String hsnNum = lsProduct.get(position).getId().toString().substring(0,4);
-        holder.txtHsnNum.setText(hsnNum);
-        holder.txtProductName.setText(lsProduct.get(position).getName());
-        holder.txtQuantity.setText(lsProduct.get(position).getQuantity());
-        holder.txtRate.setText(lsProduct.get(position).getPrice());
-        holder.txtTotal.setText(String.valueOf(Integer.parseInt(lsProduct.get(position).getQuantity()) * Integer.parseInt(lsProduct.get(position).getPrice())));
+        String hsnNum = lsProduct.get(position).getId().toString().substring(0, 4);
+        holder.getTxtHsnNum().setText(hsnNum);
+        holder.getTxtProductName().setText(lsProduct.get(position).getName());
+        holder.getTxtQuantity().setText(lsProduct.get(position).getQuantity());
+
+        if (isPurchase) {
+            holder.getTxtRate().setText(lsProduct.get(position).getPurchase_price());
+            holder.getTxtTotal().setText(String.valueOf(Integer.parseInt(lsProduct.get(position).getQuantity()) * Integer.parseInt(lsProduct.get(position).getPurchase_price())));
+        } else {
+            holder.getTxtRate().setText(lsProduct.get(position).getSale_price());
+            holder.getTxtTotal().setText(String.valueOf(Integer.parseInt(lsProduct.get(position).getQuantity()) * Integer.parseInt(lsProduct.get(position).getSale_price())));
+        }
     }
 
     @Override

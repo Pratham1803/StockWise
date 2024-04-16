@@ -69,6 +69,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         arrTransaction = new ArrayList<>();
         arrDates = new ArrayList<>(Arrays.asList("Today", "Yesterday", "Last 7 days"));
         mapTransaction = new HashMap<>();
+
+        Params.getOwnerModel().setArrAllProduct(arrAllProduct);
+        Params.getOwnerModel().setArrUnAvailableProduct(arrUnAvailableProduct);
+        Params.getOwnerModel().setArrAtReorderPointProduct(arrAtReorderPointProduct);
+        Params.getOwnerModel().setArrCategory(arrCategory);
+        Params.getOwnerModel().setArrTransactions(arrTransaction);
     }
 
     @Override
@@ -170,6 +176,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bind.txtEarning.setText("₹ " + totalEarning);
         bind.txtSpent.setText("₹ " + totalPurchase);
         totalProfit = totalEarning - totalPurchase;
+
+        if (totalProfit < 0) {
+            bind.txtProfit.setTextColor(getResources().getColor(R.color.red));
+        } else {
+            bind.txtProfit.setTextColor(getResources().getColor(R.color.SuccessGreen));
+        }
         bind.txtProfit.setText("₹ " + totalProfit);
     }
 
@@ -259,7 +271,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     int totalPrice = 0;
 
                     for(DbTransactionModel dbTransactionModel : arrTransaction){
-                        if(dbTransactionModel.getDate().equals(today_date))
+                        if(dbTransactionModel.getDate().equals(today_date) && dbTransactionModel.getIsPurchase().equals("false"))
                             totalPrice += Integer.parseInt(dbTransactionModel.getTotal_price());
                     }
                     bind.TotalProfitShow.setText("₹ " +totalPrice);

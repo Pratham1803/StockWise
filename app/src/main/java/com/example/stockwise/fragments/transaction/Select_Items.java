@@ -116,7 +116,10 @@ public class Select_Items extends AppCompatActivity {
 
         int totalPrice = 0;
         for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
-            totalPrice += Integer.parseInt(item.getPrice()) * Integer.parseInt(item.getQuantity());
+            if (transactionModel.isPurchase())
+                totalPrice += Integer.parseInt(item.getPurchase_price()) * Integer.parseInt(item.getQuantity());
+            else
+                totalPrice += Integer.parseInt(item.getSale_price()) * Integer.parseInt(item.getQuantity());
         }
 
         transactionModel.getDbTransactionModel().setTotal_price(String.valueOf(totalPrice));
@@ -178,9 +181,12 @@ public class Select_Items extends AppCompatActivity {
             message.append("Shop : ").append(Params.getOwnerModel().getShop_name());
             message.append("\nDate: ").append(transactionModel.getDbTransactionModel().getDate()).append("\n\nItems: \n");
 
-            for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST())
-                message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getPrice()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getPrice())).append("\n");
-
+            for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
+                if (transactionModel.isPurchase())
+                    message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getPurchase_price()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getPurchase_price())).append("\n");
+                else
+                    message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getSale_price()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getSale_price())).append("\n");
+            }
             message.append("\nTotal Price: ").append(transactionModel.getDbTransactionModel().getTotal_price());
             message.append("\n\n").append("Thank you for your business!!");
 

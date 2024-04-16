@@ -130,10 +130,11 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
                 String id = localDataSet.get(position).getId();
                 String name = localDataSet.get(position).getName();
                 String currentQuan = txtCurrentQuantity.getText().toString(); // quantity selected from + or - button
-                String price = localDataSet.get(position).getSale_price();
+                String sale_price = localDataSet.get(position).getSale_price();
+                String purchase_price = localDataSet.get(position).getPurchase_price();
 
                 transactionModel.getITEM_LIST().add(localDataSet.get(position));
-                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(id,name,currentQuan,price));
+                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(id,name,currentQuan,sale_price,purchase_price));
             }
         }
     }

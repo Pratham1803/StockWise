@@ -162,7 +162,8 @@ public class transactionFragment extends Fragment {
             bind.DateShow.setText("All Records");
             arrTransactions.clear();
             arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
-            transactionHistoryAdapter.notifyDataSetChanged();
+            if(transactionHistoryAdapter != null)
+                transactionHistoryAdapter.notifyDataSetChanged();
         });
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
