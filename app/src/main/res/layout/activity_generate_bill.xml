@@ -6,26 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".fragments.transaction.GenerateBill">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="50dp"
+                android:gravity="center"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/txtShopName"
                     android:layout_width="wrap_content"
@@ -41,16 +42,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
+                    android:text="\u00AE"
                     android:textColor="@color/black"
-                    android:textSize="25dp"
-                    android:text="\u00AE" />
+                    android:textSize="25dp" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,17 +64,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="18sp"
+                    android:text="CIN : "
                     android:textColor="@color/black"
-                    android:text="CIN : " />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txtCinShow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
+                    android:text="L1NSD72FUYU78EV8S "
                     android:textColor="@color/black"
-                    android:text="L1NSD72FUYU78EV8S " />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -88,17 +90,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="18sp"
+                    android:text="GST : "
                     android:textColor="@color/black"
-                    android:text="GST : " />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txtGstShow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
+                    android:text="783UD78EV788EWYFS "
                     android:textColor="@color/black"
-                    android:text="783UD78EV788EWYFS " />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -106,18 +109,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <TextView
                 android:id="@+id/txtShopAddressShow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="50dp"
-                android:textAlignment="center"
                 android:fontFamily="@font/lexend_"
-                android:textSize="16sp"
+                android:text="CartRave , Hirabaug 395006, Opposite Park Avenue, Surat , Gujarat "
+                android:textAlignment="center"
                 android:textColor="@color/black"
-                android:text="CartRave , Hirabaug 395006, Opposite Park Avenue, Surat , Gujarat " />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,17 +133,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="18sp"
+                    android:text="Phone : "
                     android:textColor="@color/black"
-                    android:text="Phone : " />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txtPhoneNumberShow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
+                    android:text="9856231475"
                     android:textColor="@color/black"
-                    android:text="9856231475" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -148,158 +152,194 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <TextView
                 android:id="@+id/txt4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lexend_bold"
-                android:textSize="20sp"
+                android:text="TAX INVOICE"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:text="TAX INVOICE" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginHorizontal="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txt5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="18sp"
+                    android:text="Name : "
                     android:textColor="@color/black"
-                    android:text="Bill No : " />
+                    android:textSize="18sp" />
+
                 <TextView
-                    android:id="@+id/txtBillNoShow"
+                    android:id="@+id/txtPersonName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
+                    android:text="NAME OF PERSON"
                     android:textColor="@color/black"
-                    android:text="78451285-1002" />
-
+                    android:textSize="18sp" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/txt6"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"
-                    android:text="Bill Dt :" />
-                <TextView
-                    android:id="@+id/txtTodayDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"
-                    android:text="Today Date" />
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/txt5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lexend_bold"
+                        android:text="Bill No : "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/txtBillNoShow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lexend_"
+                        android:text="78451285-1002"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lexend_bold"
+                        android:text="Bill Dt :"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/txtTodayDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lexend_"
+                        android:text="Today Date"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginHorizontal="20dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txt7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/lexend_"
+                    android:text="HSN"
                     android:textColor="@color/black"
-                    android:text="HSN" />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txt8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/lexend_"
+                    android:text="Particulars"
                     android:textColor="@color/black"
-                    android:text="Particulars" />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txt9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
                     android:layout_weight=".5"
+                    android:fontFamily="@font/lexend_"
+                    android:text="Qty"
                     android:textColor="@color/black"
-                    android:text="Qty" />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txt10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
                     android:layout_weight=".5"
+                    android:fontFamily="@font/lexend_"
+                    android:text="N/Rate"
                     android:textColor="@color/black"
-                    android:text="N/Rate" />
+                    android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/txt11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_"
-                    android:textSize="18sp"
+                    android:text="Value"
                     android:textColor="@color/black"
-                    android:text="Value" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
 
-            <ListView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/Grey" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lsProductView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_height="wrap_content" />
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginHorizontal="20dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
@@ -307,88 +347,90 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
+                    android:text="Items : "
                     android:textColor="@color/black"
-                    android:text="Items : " />
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/txtTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
+                    android:text="40"
                     android:textColor="@color/black"
-                    android:text="40" />
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/txt112"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
-                    android:textAlignment="center"
                     android:layout_marginLeft="20dp"
+                    android:fontFamily="@font/lexend_bold"
+                    android:text="Qty: "
+                    android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:text="Qty: " />
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/txtTotalQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
+                    android:text="50"
                     android:textColor="@color/black"
-                    android:text="50" />
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/txt117"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
                     android:layout_marginLeft="20dp"
+                    android:fontFamily="@font/lexend_bold"
+                    android:text="Total : "
                     android:textColor="@color/black"
-                    android:text="Total : " />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/txtTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lexend_bold"
-                    android:textSize="20sp"
                     android:layout_weight=".2"
+                    android:fontFamily="@font/lexend_bold"
+                    android:text="3500"
                     android:textColor="@color/black"
-                    android:text="3500" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/horizontal_dashed_line"/>
+                android:background="@drawable/horizontal_dashed_line" />
 
             <TextView
                 android:id="@+id/txtvisit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/lexend_"
-                android:textSize="16sp"
-                android:textColor="@color/black"
+                android:text="\uFE64------------- Thank you for your visit -------------\u003E"
                 android:textAlignment="center"
-                android:text="\uFE64------------- Thank you for your visit -------------\u003E" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnProceedBill"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/btn_signup"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/btn_signup"
                 android:backgroundTint="#9C2028"
                 android:fontFamily="@font/lexend_bold"
-                android:textSize="20sp"
-                android:text="PROCEED" />
+                android:text="PROCEED"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </LinearLayout>
-
-    </ScrollView>
-
-
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,7 +61,6 @@ public class DbTransactionModel implements Serializable {
         return date;
     }
 
-
     public void setDate(String date) {
         this.date = date;
     }

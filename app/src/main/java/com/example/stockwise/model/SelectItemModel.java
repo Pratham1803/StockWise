@@ -1,6 +1,8 @@
 package com.example.stockwise.model;
 
-public class SelectItemModel {
+import java.io.Serializable;
+
+public class SelectItemModel implements Serializable {
     private String id;
     private String name;
     private String quantity;

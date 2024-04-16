@@ -171,7 +171,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bind.txtSpent.setText("₹ " + totalPurchase);
         totalProfit = totalEarning - totalPurchase;
         bind.txtProfit.setText("₹ " + totalProfit);
-
     }
 
     @Override

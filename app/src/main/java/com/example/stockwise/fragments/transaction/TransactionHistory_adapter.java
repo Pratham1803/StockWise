@@ -2,6 +2,7 @@ package com.example.stockwise.fragments.transaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
     private ArrayList<String> lsName = new ArrayList<>();
     private Context context;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView txtPersonName;
         private final TextView txtPersonType;
         private final TextView txtQuantity;
@@ -37,6 +38,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             this.txtQuantity = itemView.findViewById(R.id.txtTotalProduct);
             this.txtTotalPrice = itemView.findViewById(R.id.txtTotalAmount);
             this.txtDate = itemView.findViewById(R.id.txtDate);
+            itemView.setOnClickListener(this);
         }
 
         public TextView getTxtDate() {
@@ -57,6 +59,17 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
 
         public TextView getTxtTotalPrice() {
             return txtTotalPrice;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            DbTransactionModel dbTransactionModel = localDataSet.get(position);
+            Intent intent = new Intent(context, GenerateBill.class);
+            intent.putExtra("transactionObj", dbTransactionModel);
+            intent.putExtra("CallFrom","History");
+            intent.putExtra("Name",lsName.get(position));
+            context.startActivity(intent);
         }
     }
 
