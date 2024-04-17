@@ -78,7 +78,9 @@ public class ProductList_Adapter extends RecyclerView.Adapter<ProductList_Adapte
 
     @Override
     public void onBindViewHolder(@NonNull ProductList_Adapter.ViewHolder holder, int position) {
-        String hsnNum = lsProduct.get(position).getId().toString().substring(0, 4);
+        String hsnNum = lsProduct.get(position).getId().toString();
+        hsnNum = hsnNum.substring(hsnNum.length() - 4);
+
         holder.getTxtHsnNum().setText(hsnNum);
         holder.getTxtProductName().setText(lsProduct.get(position).getName());
         holder.getTxtQuantity().setText(lsProduct.get(position).getQuantity());

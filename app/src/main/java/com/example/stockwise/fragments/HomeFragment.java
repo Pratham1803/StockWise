@@ -27,6 +27,7 @@ import com.example.stockwise.fragments.product.ProductFragment;
 import com.example.stockwise.model.CategoryModel;
 import com.example.stockwise.model.DbTransactionModel;
 import com.example.stockwise.model.ProductModel;
+import com.example.stockwise.model.SelectItemModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -42,6 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.TreeMap;
 
@@ -136,6 +138,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     } else {
                         saleQuantity += dbTransactionModel.getITEM_LIST().size();
                         totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
+                        totalProfit += calculateProfit(dbTransactionModel.getITEM_LIST());
                     }
                 }
             }
@@ -150,6 +153,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         } else {
                             saleQuantity += dbTransactionModel.getITEM_LIST().size();
                             totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
+                            totalProfit += calculateProfit(dbTransactionModel.getITEM_LIST());
                         }
                     }
                 }
@@ -166,6 +170,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         } else {
                             saleQuantity += dbTransactionModel.getITEM_LIST().size();
                             totalEarning += Integer.parseInt(dbTransactionModel.getTotal_price());
+                            totalProfit += calculateProfit(dbTransactionModel.getITEM_LIST());
                         }
                     }
                 }
@@ -175,7 +180,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bind.txtQuanPurchased.setText(String.valueOf(purchaseQuantity));
         bind.txtEarning.setText("₹ " + totalEarning);
         bind.txtSpent.setText("₹ " + totalPurchase);
-        totalProfit = totalEarning - totalPurchase;
 
         if (totalProfit < 0) {
             bind.txtProfit.setTextColor(getResources().getColor(R.color.red));
@@ -187,6 +191,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    // calculate profit
+    private int calculateProfit(List<SelectItemModel> arrProducts) {
+        int totalProfit = 0;
+        for (SelectItemModel product : arrProducts) {
+            totalProfit += (Integer.parseInt(product.getSale_price()) - Integer.parseInt(product.getPurchase_price()));
+        }
+        return totalProfit;
     }
 
     // get all products from firebase
