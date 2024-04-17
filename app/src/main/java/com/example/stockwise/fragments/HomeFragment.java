@@ -110,6 +110,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        bind.layoutSales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SalesAnalysis.class);
+                intent.putExtra("mapTransaction", mapTransaction);
+                startActivity(intent);
+            }
+        });
+
         // Inflate the layout for this fragment
         return root;
     }
