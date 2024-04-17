@@ -72,6 +72,7 @@ public class AddProduct extends AppCompatActivity {
     private AlertDialog.Builder builder; // alert dialog box builder
     private boolean isReorderPointReached = false; // to check the reorder point reached or not
     private boolean isOutOfStock = false; // to check the product is out of stock or not
+    private boolean isUpdating = false; // to check the product is updating or not
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,27 +94,17 @@ public class AddProduct extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting spinner for category
-        Params.getREFERENCE().child(Params.getCATEGORY()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                arrCategory = new ArrayList<>();
-                arrCategory.add(new CategoryModel("1", "Select Category", null));
-                ArrayList<String> arrCategoryName = new ArrayList<>();
-                arrCategoryName.add(arrCategory.get(0).getName());
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    CategoryModel categoryModel = post.getValue(CategoryModel.class);
-                    arrCategoryName.add(categoryModel.getName());
-                    arrCategory.add(categoryModel);
-                }
-                ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategoryName);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                bind.spCategory.setAdapter(adapter);
-            }
+        arrCategory = new ArrayList<>();
+        arrCategory.add(new CategoryModel("1", "Select Category", null));
+        arrCategory.addAll(Params.getOwnerModel().getArrCategory());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        ArrayList<String> arrCategoryName = new ArrayList<>();
+        for (CategoryModel categoryModel : arrCategory)
+            arrCategoryName.add(categoryModel.getName());
+
+        ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategoryName);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        bind.spCategory.setAdapter(adapter);
 
         // onclick listener on imageview to change the image using camera or from gallery
         bind.imgAddProductMain.setOnClickListener(new View.OnClickListener() {
@@ -174,12 +165,47 @@ public class AddProduct extends AppCompatActivity {
                 }
             }
         });
+
+        if (getIntent().getSerializableExtra("productObj") != null) {
+            isUpdating = true;
+            productModel = (ProductModel) getIntent().getSerializableExtra("productObj");
+            setUpdateScreen();
+        }
     }
 
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return MainToolbar.btnBack_clicked(item, AddProduct.this);
+    }
+
+    private void setUpdateScreen() {
+        bind.edCurrentStock.setText(productModel.getCurrent_stock());
+        bind.edBarCodeNum.setText(productModel.getId());
+        bind.edProductName.setText(productModel.getName());
+        bind.edPurchasePrice.setText(productModel.getPurchase_price());
+        bind.edReorderpoint.setText(productModel.getReorder_point());
+        bind.edSalePrice.setText(productModel.getSale_price());
+
+        bind.btnAddProduct.setText("Update Product");
+        Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain);
+
+        bind.edCurrentStock.setEnabled(false);
+        bind.edBarCodeNum.setEnabled(false);
+        bind.edPurchasePrice.setEnabled(false);
+        bind.edSalePrice.setEnabled(false);
+
+        for (int i = 0; i < arrCategory.size(); i++) {
+            if (arrCategory.get(i).getName().equals(productModel.getCategory())) {
+                bind.spCategory.setSelection(i);
+                break;
+            }
+        }
+
+        bind.edCurrentStock.setTextColor(getColor(R.color.TextGrey));
+        bind.edBarCodeNum.setTextColor(getColor(R.color.TextGrey));
+        bind.edPurchasePrice.setTextColor(getColor(R.color.TextGrey));
+        bind.edSalePrice.setTextColor(getColor(R.color.TextGrey));
     }
 
     // menu bar item selection listener
@@ -200,6 +226,10 @@ public class AddProduct extends AppCompatActivity {
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
+                if (isUpdating) {
+                    Toast.makeText(AddProduct.this, "Can't Scan in Update Mode", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 reset();
                 scanner = MainToolbar.getScanner(); // getting scanner options
                 bar.launch(scanner); // launching the scanner
@@ -435,25 +465,21 @@ public class AddProduct extends AppCompatActivity {
     // is not then add the product in database
     private void isProductAvailable() {
         // checking that product is available or not
-        Params.getREFERENCE().child(Params.getPRODUCT()).child(productModel.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isAvailable = false;
-                // if the name match of product in the database, that means product is already there in database
-                if (snapshot.exists())
-                    // product is available, so just display the message
-                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
-                else {
-                    // product is not available, so visible progress bar and upload data to the database
-                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
-                    uploadData();
-                }
+        if (isUpdating) {
+            sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Updating Product", "Please Wait...");
+            uploadData();
+            return;
+        }
+
+        for (ProductModel productModel : Params.getOwnerModel().getArrAllProduct())
+            if (productModel.getId().equals(bind.edBarCodeNum.getText().toString())) {
+                Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        // product is not available, so visible progress bar and upload data to the database
+        sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
+        uploadData();
     }
 
     // uploading product details in firebase
@@ -509,7 +535,8 @@ public class AddProduct extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 sweetAlertDialog.cancel();
-                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", "Product Added Successfully");
+                String msg = isUpdating ? "Product Updated Successfully" : "Product Added Successfully";
+                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", msg);
                 reset();
                 sweetAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override

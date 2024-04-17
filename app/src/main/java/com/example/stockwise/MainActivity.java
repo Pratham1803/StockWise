@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding bind; // declaring view binding
 
     // declaring fragments object
-    ProductFragment productFragment;
-    PersonFragment personFragment;
-    ProfileFragment profileFragment;
-    HomeFragment homeFragment;
-    transactionFragment transactionFragment;
+    ProductFragment productFragment = new ProductFragment();
+    PersonFragment personFragment = new PersonFragment();
+    ProfileFragment profileFragment = new ProfileFragment();
+    HomeFragment homeFragment = new HomeFragment();
+    transactionFragment transactionFragment = new transactionFragment();
 
     // Bottom Navigation Objects
     protected final int navHomeId = 1;
@@ -92,12 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // setup of drawer navigation
-        // initializing Fragments object
-        productFragment = new ProductFragment();
-        personFragment = new PersonFragment();
-        profileFragment = new ProfileFragment();
-        homeFragment = new HomeFragment();
-        transactionFragment = new transactionFragment();
 
         // setting drawer and custom toolbar
         setSupportActionBar(bind.toolbar); // toolbar setup

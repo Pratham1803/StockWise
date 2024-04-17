@@ -96,9 +96,13 @@ public class ProductView extends AppCompatActivity {
         btnEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
+                Intent intent = new Intent(context, AddProduct.class);
+                intent.putExtra("productObj", parentProduct);
+                startActivity(intent);
                 return true;
             }
         });
+
 
         // popup menu for settings
         MenuItem btnDelete = menu.findItem(R.id.PopUpDeleteProduct);
