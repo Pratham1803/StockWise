@@ -66,7 +66,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             int position = getAdapterPosition();
             DbTransactionModel dbTransactionModel = localDataSet.get(position);
             Intent intent = new Intent(context, GenerateBill.class);
-            intent.putExtra("transactionObj", dbTransactionModel);
+            intent.putExtra("dbTransactionObj", dbTransactionModel);
             intent.putExtra("CallFrom","History");
             intent.putExtra("Name",lsName.get(position));
             context.startActivity(intent);
@@ -100,6 +100,7 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
         }
 
+        holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size()));
         holder.getTxtPersonName().setText(lsName.get(position));
         holder.getTxtDate().setText(localDataSet.get(position).getDate());
         holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-");

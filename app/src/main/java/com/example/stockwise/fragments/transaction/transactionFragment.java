@@ -63,6 +63,7 @@ public class transactionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // Create an alert builder
+
                 AlertDialog.Builder builder = DialogBuilder.showDialog(context, "Create New Order", "");
                 builder.setMessage(null);
 
@@ -72,12 +73,15 @@ public class transactionFragment extends Fragment {
                 Button btnSell = customLayout.findViewById(R.id.btnSell);
                 Button btnPurchase = customLayout.findViewById(R.id.btnPurchase);
 
+                AlertDialog dialog = builder.create();
+
                 btnSell.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", false);
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
 
@@ -87,6 +91,7 @@ public class transactionFragment extends Fragment {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", true);
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
 
@@ -95,7 +100,7 @@ public class transactionFragment extends Fragment {
                 });
                 // create and show the alert dialog
 
-                builder.create().show();
+                dialog.show();
             }
         });
 

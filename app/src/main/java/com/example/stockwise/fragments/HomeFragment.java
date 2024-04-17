@@ -197,7 +197,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private int calculateProfit(List<SelectItemModel> arrProducts) {
         int totalProfit = 0;
         for (SelectItemModel product : arrProducts) {
-            totalProfit += (Integer.parseInt(product.getSale_price()) - Integer.parseInt(product.getPurchase_price()));
+            totalProfit += (Integer.parseInt(product.getSale_price()) - Integer.parseInt(product.getPurchase_price()))* Integer.parseInt(product.getQuantity());
         }
         return totalProfit;
     }

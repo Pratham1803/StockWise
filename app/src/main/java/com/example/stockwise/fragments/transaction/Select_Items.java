@@ -101,8 +101,13 @@ public class Select_Items extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (transactionModel.getITEM_LIST().size() > 0) {
-                    sweetAlertDialog = DialogBuilder.showSweetDialogProcess(context, "Adding Transaction", "Please wait...");
-                    dbAddTransaction();
+                    Intent intent = new Intent(context, GenerateBill.class);
+                    intent.putExtra("CallFrom", "Transaction");
+                    intent.putExtra("Name", transactionModel.getPerson().getName());
+                    intent.putExtra("transactionObj", transactionModel);
+                    startActivity(intent);
+                    finish();
+                    //dbAddTransaction();
                 } else {
                     Toast.makeText(context, "Please select at least one item", Toast.LENGTH_LONG).show();
                 }
@@ -110,91 +115,6 @@ public class Select_Items extends AppCompatActivity {
         });
     }// End OnCreate
 
-    private void dbAddTransaction() {
-        DatabaseReference ref = Params.getREFERENCE().child(Params.getTRANSACTION()).child(transactionModel.getDate()).push();
-        transactionModel.getDbTransactionModel().setId(ref.getKey());
-
-        int totalPrice = 0;
-        for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
-            if (transactionModel.isPurchase())
-                totalPrice += Integer.parseInt(item.getPurchase_price()) * Integer.parseInt(item.getQuantity());
-            else
-                totalPrice += Integer.parseInt(item.getSale_price()) * Integer.parseInt(item.getQuantity());
-        }
-
-        transactionModel.getDbTransactionModel().setTotal_price(String.valueOf(totalPrice));
-
-        ref.setValue(transactionModel.getDbTransactionModel()).addOnSuccessListener(aVoid -> {
-            dbUpdateProduct();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(context, "Transaction Failed", Toast.LENGTH_LONG).show();
-            Log.d("ErrorMsg", "dbAddTransaction: " + e.getMessage());
-        });
-    }
-
-    private void dbUpdateProduct() {
-        DatabaseReference ref = Params.getREFERENCE().child(Params.getPRODUCT());
-
-        Map<String, Object> itemMap = new HashMap<>();
-        for (ProductModel item : transactionModel.getITEM_LIST()) {
-            itemMap.put(item.getId() + "/" + Params.getCurrentStock(), item.getCurrent_stock());
-            if (Objects.equals(item.getCurrent_stock(), "0"))
-                itemMap.put(item.getId() + "/isOutOfStock", "true");
-            else if (Integer.parseInt(item.getCurrent_stock()) < Integer.parseInt(item.getReorder_point())) {
-                itemMap.put(item.getId() + "/isOutOfStock", "false");
-                itemMap.put(item.getId() + "/isReorderPointReached", "true");
-            }else{
-                itemMap.put(item.getId() + "/isOutOfStock", "false");
-                itemMap.put(item.getId() + "/isReorderPointReached", "false");
-            }
-        }
-
-        ref.updateChildren(itemMap).addOnSuccessListener(aVoid -> {
-            sweetAlertDialog.dismissWithAnimation();
-            sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(context, "Transaction Added", "Transaction has been added successfully");
-            sweetAlertDialog.setConfirmButton("OK", new SweetAlertDialog.OnSweetClickListener() {
-                @Override
-                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    sweetAlertDialog.dismissWithAnimation();
-                    sentSms();
-                    finish();
-                }
-            });
-        }).addOnFailureListener(e -> {
-            Toast.makeText(context, "Transaction Failed", Toast.LENGTH_LONG).show();
-            Log.d("ErrorMsg", "dbUpdateProduct: " + e.getMessage());
-        });
-
-    }
-
-    private void sentSms() {
-        try {
-            // Get the default instance of SmsManager
-            SmsManager smsManager = SmsManager.getDefault();
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
-
-            // Phone number to which SMS to be send
-            String phoneNumber = transactionModel.getPerson().getContact_num();
-
-            // SMS text to be sent
-            StringBuilder message = new StringBuilder("StockWise - Transaction Succeed!!\n");
-            message.append("Shop : ").append(Params.getOwnerModel().getShop_name());
-            message.append("\nDate: ").append(transactionModel.getDbTransactionModel().getDate()).append("\n\nItems: \n");
-
-            for (SelectItemModel item : transactionModel.getDbTransactionModel().getITEM_LIST()) {
-                if (transactionModel.isPurchase())
-                    message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getPurchase_price()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getPurchase_price())).append("\n");
-                else
-                    message.append(item.getName()).append(" : ").append(item.getQuantity()).append(" x Rs.").append(item.getSale_price()).append(" = Rs.").append(Integer.parseInt(item.getQuantity()) * Integer.parseInt(item.getSale_price())).append("\n");
-            }
-            message.append("\nTotal Price: ").append(transactionModel.getDbTransactionModel().getTotal_price());
-            message.append("\n\n").append("Thank you for your business!!");
-
-            smsManager.sendTextMessage(phoneNumber, null, message.toString(), null, null);
-        } catch (Exception e) {
-            Log.d("ErrorMsg", "sentSms: " + e.getMessage());
-        }
-    }
 
     //  back button
     @Override
