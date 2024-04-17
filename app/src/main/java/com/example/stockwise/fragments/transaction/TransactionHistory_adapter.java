@@ -96,10 +96,8 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
         if (localDataSet.get(position).getIsPurchase().equals("true")) {
             holder.getTxtPersonType().setText("Vendor : ");
             holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.red));
-            holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" -");
         }else {
             holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
-            holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())+" +");
         }
 
         holder.getTxtPersonName().setText(lsName.get(position));

@@ -58,7 +58,7 @@ public class GenerateBill extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String billNum = String.valueOf(lsProduct.get(0).getId().substring(4,6) + parentTransactionModel.getDate().replace("-",""));
+        String billNum = String.valueOf(lsProduct.get(0).getId().substring(0,2) + parentTransactionModel.getDate().replace("-",""));
         binding.txtBillNoShow.setText(billNum);
         binding.txtShopName.setText(Params.getOwnerModel().getShop_name());
         binding.txtPhoneNumberShow.setText(Params.getOwnerModel().getContact_num());
