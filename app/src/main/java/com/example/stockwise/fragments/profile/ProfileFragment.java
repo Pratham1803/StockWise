@@ -45,6 +45,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        bind.LayoutNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context,Notifications.class));
+            }
+        });
+
         bind.LayoutSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

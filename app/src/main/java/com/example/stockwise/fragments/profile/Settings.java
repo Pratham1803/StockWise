@@ -22,6 +22,7 @@ import com.example.stockwise.R;
 import com.example.stockwise.databinding.ActivitySettingsBinding;
 
 import com.example.stockwise.fragments.profile.SettingsNavigation.PrivacyPolicy;
+import com.example.stockwise.fragments.profile.SettingsNavigation.about;
 
 public class Settings extends AppCompatActivity {
     private ActivitySettingsBinding bind; // declaring view binding
@@ -72,6 +73,13 @@ public class Settings extends AppCompatActivity {
                 dialog.show();
             }
 
+        });
+
+        bind.LayoutAboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.this, about.class));
+            }
         });
 
         bind.LayoutHelp.setOnClickListener(new View.OnClickListener() {

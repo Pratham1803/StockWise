@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.profile.SettingsNavigation.about">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarAboutUs"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:background="@color/blue"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:subtitleTextAppearance="@font/lexend_bold"
+        app:title="About Us"
+        app:titleTextColor="@color/white" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarAboutUs"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView42"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="@font/lexend_bold"
+                android:text="\u25BA Introducing StockWise" />
+
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/lexend_"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="At [Your Application Name], we understand the challenges small shopkeepers face in managing inventory effectively. That's why we've developed 'Stock Wise'—your ultimate companion in inventory management." />
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="@font/lexend_bold"
+                android:layout_marginTop="20dp"
+                android:text="\u25BA Revolutionizing Inventory Management with 'Stock Wise'" />
+
+            <TextView
+                android:id="@+id/textView45"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/lexend_"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="'Stock Wise' streamlines the entire process, from tracking inventory levels to managing purchases, sales, and deliveries. With real-time visibility into your stock, you can optimize levels, minimize carrying costs, and avoid stockouts or overstock situations." />
+
+            <TextView
+                android:id="@+id/textView46"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="@font/lexend_bold"
+                android:layout_marginTop="20dp"
+                android:text="\u25BA Key Features for Seamless Operations" />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/lexend_"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="Key features include lightning-fast barcode scanning, automated reorder points that keep your shelves stocked, and powerful analytics to uncover insights and opportunities. 'Stock Wise' seamlessly integrates with other business systems like point-of-sale (POS) and accounting software, ensuring smooth operations."/>
+
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="@font/lexend_bold"
+                android:layout_marginTop="20dp"
+                android:text="\u25BA Say Goodbye to Inventory Headaches" />
+
+            <TextView
+                android:id="@+id/textView49"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:justificationMode="inter_word"
+                android:fontFamily="@font/lexend_"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="With 'Stock Wise' at your fingertips, say goodbye to inventory headaches. Experience efficiency, accuracy, and smarter decision-making in your supply chain operations. Join the league of businesses that have embraced 'Stock Wise' and revolutionize the way you manage inventory today."/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
