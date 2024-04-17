@@ -54,7 +54,7 @@
                 android:fontFamily="@font/lexend_"
                 android:textSize="16sp"
                 android:textColor="@color/black"
-                android:text="At [Your Application Name], we understand the challenges small shopkeepers face in managing inventory effectively. That's why we've developed 'Stock Wise'—your ultimate companion in inventory management." />
+                android:text="At Stock Wise, we understand the challenges small shopkeepers face in managing inventory effectively. That's why we've developed 'Stock Wise' — your ultimate companion in inventory management." />
 
             <TextView
                 android:id="@+id/textView44"
