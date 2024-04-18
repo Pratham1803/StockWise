@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -181,6 +182,7 @@ public class GenerateBill extends AppCompatActivity {
                     sweetAlertDialog.dismissWithAnimation();
                     sentSms();
                     Intent intent = new Intent(context, SellProduct.class);
+                    setResult(Activity.RESULT_OK, intent);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 }

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,7 @@ public class transactionFragment extends Fragment {
     private TransactionHistory_adapter transactionHistoryAdapter; // initializing adapter
     private ArrayList<DbTransactionModel> arrTransactions;
     private ArrayList<String> lsName;
+    private int REQUEST_CODE_ADD_PRODUCT = 1; // request code for add product
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +82,7 @@ public class transactionFragment extends Fragment {
                     public void onClick(View view) {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", false);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE_ADD_PRODUCT);
                         dialog.dismiss();
                     }
                 });
@@ -90,7 +92,7 @@ public class transactionFragment extends Fragment {
                     public void onClick(View view) {
                         Intent intent = new Intent(context, SellProduct.class);
                         intent.putExtra("isPurchasing", true);
-                        startActivity(intent);
+                        startActivityForResult(intent, REQUEST_CODE_ADD_PRODUCT);
                         dialog.dismiss();
                     }
                 });
@@ -118,33 +120,17 @@ public class transactionFragment extends Fragment {
         return bind.getRoot();
     }// End OnCreate
 
-
-    // collect transactions history
-    private void dbGetTransactions() {
-        Params.getREFERENCE().child(Params.getTRANSACTION()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_PRODUCT && resultCode == Activity.RESULT_OK) {
+            // Refresh your product list here
+            if(arrTransactions.size() != Params.getOwnerModel().getArrTransactions().size()) {
                 arrTransactions.clear();
-                if (snapshot.hasChildren()) {
-                    String tempDate;
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        tempDate = dataSnapshot.getKey();
-                        if (bind.DateShow.getText().equals(tempDate)) {
-                            for (DataSnapshot post : dataSnapshot.getChildren()) {
-                                DbTransactionModel dbTransactionModel = post.getValue(DbTransactionModel.class);
-                                arrTransactions.add(dbTransactionModel);
-                            }
-                        }
-                    }
-                    transactionHistoryAdapter.notifyDataSetChanged();
-                }
+                arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
+                dbCollectPersonNames();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("ErrorMsg", "Collecting Transactions : " + error.getMessage());
-            }
-        });
+        }
     }
 
     private void OpenDialog() {
@@ -155,8 +141,14 @@ public class transactionFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         selectedDate.set(year, month, dayOfMonth);
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                        bind.DateShow.setText(dateFormat.format(selectedDate.getTime()));
-                        dbGetTransactions();
+                        String date = dateFormat.format(selectedDate.getTime());
+                        bind.DateShow.setText(date);
+                        arrTransactions.clear();
+                        for(DbTransactionModel dbTransactionModel : Params.getOwnerModel().getArrTransactions()){
+                            if(dbTransactionModel.getDate().equals(date))
+                                arrTransactions.add(dbTransactionModel);
+                        }
+                        transactionHistoryAdapter.notifyDataSetChanged();
                     }
                 },
                 selectedDate.get(Calendar.YEAR),
@@ -167,7 +159,7 @@ public class transactionFragment extends Fragment {
             bind.DateShow.setText("All Records");
             arrTransactions.clear();
             arrTransactions.addAll(Params.getOwnerModel().getArrTransactions());
-            if(transactionHistoryAdapter != null)
+            if (transactionHistoryAdapter != null)
                 transactionHistoryAdapter.notifyDataSetChanged();
         });
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -175,6 +167,7 @@ public class transactionFragment extends Fragment {
     }
 
     private void dbCollectPersonNames() {
+        lsName.clear();
         for (DbTransactionModel dbTransactionModel : arrTransactions) {
             DatabaseReference dbRef;
 
@@ -183,16 +176,21 @@ public class transactionFragment extends Fragment {
             else
                 dbRef = Params.getREFERENCE().child(Params.getPERSON()).child(Params.getCUSTOMER());
 
-            dbRef.child(dbTransactionModel.getPerson_id()).child(Params.getNAME()).get()
-                    .addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            dbRef.child(dbTransactionModel.getPerson_id()).child(Params.getNAME()).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
                         @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            lsName.add(dataSnapshot.getValue(String.class));
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            lsName.add(snapshot.getValue(String.class));
                             if (lsName.size() == arrTransactions.size()) {
                                 transactionHistoryAdapter = new TransactionHistory_adapter(arrTransactions, lsName, context);
                                 bind.TransactionRecycler.setLayoutManager(new LinearLayoutManager(context));
                                 bind.TransactionRecycler.setAdapter(transactionHistoryAdapter);
                             }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("ErrorMsg", "Collecting Person Name : " + error.getMessage());
                         }
                     });
         }

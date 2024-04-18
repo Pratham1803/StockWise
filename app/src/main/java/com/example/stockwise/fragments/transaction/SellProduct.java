@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -148,7 +149,20 @@ public class SellProduct extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item, context);
+        Intent resultIntent = new Intent();
+        // You can put extra data in the intent if needed
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent resultIntent = new Intent();
+        // You can put extra data in the intent if needed
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+        super.onBackPressed();
     }
 
     // open date picker dialog

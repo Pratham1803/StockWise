@@ -1,5 +1,6 @@
 package com.example.stockwise.fragments.product;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -464,18 +465,22 @@ public class AddProduct extends AppCompatActivity {
     // check that is product already available or not in database
     // is not then add the product in database
     private void isProductAvailable() {
-        // checking that product is available or not
-        if (isUpdating) {
-            sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Updating Product", "Please Wait...");
-            uploadData();
-            return;
-        }
 
-        for (ProductModel productModel : Params.getOwnerModel().getArrAllProduct())
-            if (productModel.getId().equals(bind.edBarCodeNum.getText().toString())) {
-                Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
-                return;
+        // check that product is already available or not
+        if (!isUpdating) {
+            for (ProductModel productModel : Params.getOwnerModel().getArrAllProduct())
+                if (productModel.getId().equals(bind.edBarCodeNum.getText().toString())) {
+                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+        } else {
+            if (Integer.parseInt(productModel.getCurrent_stock()) < 1) {
+                isOutOfStock = true;
             }
+            if(Integer.parseInt(productModel.getCurrent_stock()) < Integer.parseInt(productModel.getReorder_point())) {
+                isReorderPointReached = true;
+            }
+        }
 
         // product is not available, so visible progress bar and upload data to the database
         sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
@@ -541,6 +546,9 @@ public class AddProduct extends AppCompatActivity {
                 sweetAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
+                        Intent resultIntent = new Intent();
+                        // You can put extra data in the intent if needed
+                        setResult(Activity.RESULT_OK, resultIntent);
                         finish();
                     }
                 });

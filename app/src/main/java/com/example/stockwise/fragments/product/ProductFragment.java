@@ -1,5 +1,6 @@
 package com.example.stockwise.fragments.product;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<ProductModel> arrUnAvailableProduct; // List of productModule class to store the details of multiple product
     private ArrayList<ProductModel> arrAtReorderPointProduct; // List of productModule class to store the details of multiple product
     private ProductAdapter productAdapter; // object of product adapter
+    private int REQUEST_CODE_ADD_PRODUCT = 1; // request code for add product
 
     ArrayList<String> filter = new ArrayList<>(Arrays.asList("All Products", "Unavailable Products", "Products at Reorder Point"));
     private ArrayAdapter adapterProductCategory;
@@ -134,12 +136,22 @@ public class ProductFragment extends Fragment implements AdapterView.OnItemSelec
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 // starting activity of add product screen
-                startActivity(new Intent(context, AddProduct.class));
+                Intent intent = new Intent(context, AddProduct.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_PRODUCT);
                 return true;
             }
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_PRODUCT && resultCode == Activity.RESULT_OK) {
+            // Refresh your product list here
+            productAdapter.notifyDataSetChanged();
+        }
     }
 
     // scanner result
