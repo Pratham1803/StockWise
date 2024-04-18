@@ -62,7 +62,9 @@ public class SalesAnalysis extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mapTransaction = (HashMap<String, ArrayList<DbTransactionModel>>) getIntent().getSerializableExtra("mapTransaction");
+//        mapTransaction = (HashMap<String, ArrayList<DbTransactionModel>>) getIntent().getSerializableExtra("mapTransaction");
+        mapTransaction = new HashMap<>();
+        mapTransaction.putAll(Params.getOwnerModel().getMapTransaction());
         products = new HashMap<>();
         arrEarning = new ArrayList<>();
         arrSpending = new ArrayList<>();

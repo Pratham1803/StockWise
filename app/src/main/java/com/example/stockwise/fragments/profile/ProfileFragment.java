@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.stockwise.LandingPage;
 import com.example.stockwise.Params;
 import com.example.stockwise.databinding.FragmentProfileBinding;
+import com.example.stockwise.fragments.SalesAnalysis;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -56,6 +57,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 context.startActivity(new Intent(context, Settings.class)); // redirecting user to settings activity
+            }
+        });
+
+        bind.layoutSalesAnalysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SalesAnalysis.class);
+                startActivity(intent);
             }
         });
 

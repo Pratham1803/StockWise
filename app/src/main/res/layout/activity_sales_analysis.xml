@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/account_edit_popup"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Account"
+        app:title="Sales Analysis"
         app:titleTextColor="@color/white" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

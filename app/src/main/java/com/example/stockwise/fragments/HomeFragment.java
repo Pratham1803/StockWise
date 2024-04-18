@@ -340,6 +340,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             arrTransaction.addAll(sortedMap.get(key));
         }
         Collections.reverse(arrTransaction);
-        Params.getOwnerModel().setArrTransactions(arrTransaction);
+        Params.getOwnerModel().setArrTransactions(new ArrayList<>());
+        Params.getOwnerModel().getArrTransactions().addAll(arrTransaction);
+        Params.getOwnerModel().setMapTransaction(new HashMap<>());
+        Params.getOwnerModel().getMapTransaction().putAll(mapTransaction);
     }
 }

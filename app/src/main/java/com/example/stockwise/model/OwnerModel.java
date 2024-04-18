@@ -1,6 +1,7 @@
 package com.example.stockwise.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OwnerModel {
     private String id;
@@ -18,6 +19,7 @@ public class OwnerModel {
     private ArrayList<ProductModel> arrAtReorderPointProduct;
     private ArrayList<DbTransactionModel> arrTransactions;
     private ArrayList<CategoryModel> arrCategory;
+    private HashMap<String, ArrayList<DbTransactionModel>> mapTransaction;
 
     public ArrayList<DbTransactionModel> getArrTransactions() {
         return arrTransactions;
@@ -69,6 +71,14 @@ public class OwnerModel {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setMapTransaction(HashMap<String, ArrayList<DbTransactionModel>> mapTransaction) {
+        this.mapTransaction = mapTransaction;
+    }
+
+    public HashMap<String, ArrayList<DbTransactionModel>> getMapTransaction() {
+        return mapTransaction;
     }
 
     public String getCIN_num() {
