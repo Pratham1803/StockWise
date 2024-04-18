@@ -416,7 +416,7 @@
                     android:fontFamily="@font/lexend_bold"
                     android:text="3500"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="22sp" />
 
             </LinearLayout>
 

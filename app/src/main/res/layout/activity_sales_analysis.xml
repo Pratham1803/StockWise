@@ -120,15 +120,18 @@
                     android:layout_gravity="center_vertical">
 
                     <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/SuccessGreen" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="#008000" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Total Earning" />
+                        android:fontFamily="@font/lexend_"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="Revenue" />
 
                 </LinearLayout>
 
@@ -141,16 +144,19 @@
 
                     <!--View to display the green color icon-->
                     <View
-                        android:layout_width="15dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/main_orange_color" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@color/red" />
 
                     <!--Text view to display python text -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Total Spending" />
+                        android:fontFamily="@font/lexend_"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:text="Expenses" />
 
                 </LinearLayout>
 
@@ -184,7 +190,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="20dp"
-                android:text="Sales Analysis :"
+                android:fontFamily="@font/lexend_bold"
+                android:text="Overview"
+                android:textColor="@color/black"
                 android:textSize="23sp" />
 
             <View
@@ -206,8 +214,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Total Earning"
+                    android:fontFamily="@font/lexend_"
+                    android:textColor="@color/black"
+                    android:text="Total Revenue"
                     android:textSize="18sp" />
 
                 <TextView
@@ -215,11 +224,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="@font/lexend_"
                     android:text="0"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/SuccessGreen"
-                    android:textSize="18sp" />
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
             </RelativeLayout>
 
             <View
@@ -240,8 +249,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Total Spending"
+                    android:fontFamily="@font/lexend_"
+                    android:textColor="@color/black"
+                    android:text="Total Expenses "
                     android:textSize="18sp" />
 
                 <TextView
@@ -249,11 +259,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="@font/lexend_"
                     android:text="0"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/main_orange_color"
-                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -276,9 +286,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="@font/lexend_"
                     android:text="Profit"
-                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -286,10 +297,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="@font/lexend_"
                     android:text="0"
+                    android:textColor="@color/black"
                     android:textAlignment="textEnd"
-                    android:textSize="18sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>

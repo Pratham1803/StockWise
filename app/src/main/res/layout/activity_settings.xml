@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:id="@+id/LayoutAccount"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -67,7 +68,7 @@
                 <TextView
                     android:id="@+id/textView13"
                     style="@style/TxtSub_Settings"
-                    android:text="Security notifications, change email" />
+                    android:text="Personal information" />
 
             </LinearLayout>
         </LinearLayout>

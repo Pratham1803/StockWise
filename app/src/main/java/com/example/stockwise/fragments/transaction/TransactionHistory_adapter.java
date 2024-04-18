@@ -95,9 +95,9 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
     public void onBindViewHolder(@NonNull TransactionHistory_adapter.ViewHolder holder, int position) {
         if (localDataSet.get(position).getIsPurchase().equals("true")) {
             holder.getTxtPersonType().setText("Vendor : ");
-            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.red));
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black));
         }else {
-            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.SuccessGreen));
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black));
         }
 
         holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size()));

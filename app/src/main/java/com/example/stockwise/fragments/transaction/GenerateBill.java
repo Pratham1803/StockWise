@@ -107,13 +107,11 @@ public class GenerateBill extends AppCompatActivity {
         binding.lsProductView.setAdapter(adapter);
 
         if (isPurchase) {
-            binding.txtBillType.setText("Purchase Bill");
+            binding.txtBillType.setText("Vendor Invoice");
             binding.txtPersonType.setText("Vendor : ");
-            binding.txtTotalAmount.setTextColor(getResources().getColor(R.color.red));
         }else {
-            binding.txtBillType.setText("Sale Bill");
+            binding.txtBillType.setText("Customer Invoice");
             binding.txtPersonType.setText("Customer : ");
-            binding.txtTotalAmount.setTextColor(getResources().getColor(R.color.SuccessGreen));
         }
 
         Params.getREFERENCE().addListenerForSingleValueEvent(

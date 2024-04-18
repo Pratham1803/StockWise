@@ -165,14 +165,14 @@ public class SalesAnalysis extends AppCompatActivity {
         // Set the data and color to the pie chart
         binding.pieChart.addPieSlice(
                 new PieModel(
-                        "Total Earning",
+                        "Total Revenue",
                         totalEaring,
-                        Color.parseColor("#66BB6A")));
+                        Color.parseColor("#008000")));
         binding.pieChart.addPieSlice(
                 new PieModel(
-                        "Total Spending",
+                        "Total Expenses",
                         totalSpending,
-                        Color.parseColor("#FFA726")));
+                        Color.parseColor("#E01C29")));
 
         // To animate the pie chart
         binding.pieChart.startAnimation();

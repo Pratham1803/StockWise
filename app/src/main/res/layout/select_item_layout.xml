@@ -126,7 +126,7 @@
                     android:layout_height="40dp"
                     android:tag= "0"
                     android:background="@drawable/addtocartvector"
-                    android:backgroundTint="#1F8E00"
+                    android:backgroundTint="@color/black"
                     android:padding="3dp"
                     android:scaleType="fitCenter" />
 

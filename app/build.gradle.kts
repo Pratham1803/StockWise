@@ -77,6 +77,9 @@ dependencies {
     implementation ("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation ("com.nineoldandroids:library:2.4.0")
 
+    // Pie Chart
+    implementation ("com.github.blackfizz:eazegraph:1.2.5l@aar")
+    implementation ("com.nineoldandroids:library:2.4.0")
     // Searchable spinner
     implementation("com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1")
 }

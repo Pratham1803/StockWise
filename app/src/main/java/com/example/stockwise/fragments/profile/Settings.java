@@ -82,6 +82,12 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        bind.LayoutAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Settings.this, Account.class));
+            }
+        });
         bind.LayoutHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (totalProfit < 0) {
             bind.txtProfit.setTextColor(getResources().getColor(R.color.red));
         } else {
-            bind.txtProfit.setTextColor(getResources().getColor(R.color.SuccessGreen));
+            bind.txtProfit.setTextColor(getResources().getColor(R.color.profit));
         }
         bind.txtProfit.setText("₹ " + totalProfit);
     }
