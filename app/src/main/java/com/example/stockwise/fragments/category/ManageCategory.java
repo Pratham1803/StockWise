@@ -37,6 +37,7 @@ public class ManageCategory extends AppCompatActivity {
     private ActivityManageCategoryBinding bind;
     private CategoryModel categoryModel;
     private CategoryAdapter categoryAdapter;
+    private boolean isSearched;
     private ArrayList<CategoryModel> arrCategoryList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +56,57 @@ public class ManageCategory extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // setting recycler view
-        arrCategoryList = Params.getOwnerModel().getArrCategory();
+        arrCategoryList = new ArrayList<>();
+        arrCategoryList.addAll(Params.getOwnerModel().getArrCategory());
         categoryAdapter = new CategoryAdapter(arrCategoryList, context);
         bind.recyclerCategory.setLayoutManager(new LinearLayoutManager(this));
         bind.recyclerCategory.setAdapter(categoryAdapter);
+
+        bind.searchCategory.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(query.isEmpty()){
+                    arrCategoryList.clear();
+                    arrCategoryList.addAll(Params.getOwnerModel().getArrCategory());
+                    categoryAdapter.notifyDataSetChanged();
+                    isSearched = false;
+                    return false;
+                }
+                ArrayList<CategoryModel> tempList = new ArrayList<>();
+                tempList.addAll(arrCategoryList);
+                arrCategoryList.clear();
+                for(CategoryModel categoryModel : tempList){
+                    if(categoryModel.getName().toLowerCase().contains(query.toLowerCase())){
+                        arrCategoryList.add(categoryModel);
+                        isSearched = true;
+                    }
+                }
+                categoryAdapter.notifyDataSetChanged();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.isEmpty()){
+                    arrCategoryList.clear();
+                    arrCategoryList.addAll(Params.getOwnerModel().getArrCategory());
+                    categoryAdapter.notifyDataSetChanged();
+                    isSearched = false;
+                    return false;
+                }
+                ArrayList<CategoryModel> tempList = new ArrayList<>();
+                tempList.addAll(arrCategoryList);
+                arrCategoryList.clear();
+                for(CategoryModel categoryModel : tempList){
+                    if(categoryModel.getName().toLowerCase().contains(newText.toLowerCase())){
+                        arrCategoryList.add(categoryModel);
+                        isSearched = true;
+                    }
+                }
+                categoryAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
         // show the dialog box to add category
         bind.btnAddCategory.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +149,14 @@ public class ManageCategory extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item,context);
+        if(isSearched){
+            arrCategoryList.clear();
+            arrCategoryList.addAll(Params.getOwnerModel().getArrCategory());
+            categoryAdapter.notifyDataSetChanged();
+            isSearched = false;
+            return false;
+        }else
+            return MainToolbar.btnBack_clicked(item,context);
     }
 
     // adding category to database
@@ -130,5 +185,17 @@ public class ManageCategory extends AppCompatActivity {
                                 .show();
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isSearched){
+            arrCategoryList.clear();
+            arrCategoryList.addAll(Params.getOwnerModel().getArrCategory());
+            categoryAdapter.notifyDataSetChanged();
+            isSearched = false;
+        }
+        else
+            super.onBackPressed();
     }
 }

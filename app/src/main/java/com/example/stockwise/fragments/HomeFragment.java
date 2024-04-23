@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
+import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.MainActivity;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
@@ -46,6 +47,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.TreeMap;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private View root;
@@ -113,6 +116,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         bind.layoutSales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mapTransaction.isEmpty()){
+                    SweetAlertDialog alertDialog = DialogBuilder.showSweetDialogError(context, "StockWise","No Transaction Found");
+                    alertDialog.setConfirmButton("OK", sweetAlertDialog -> {
+                        alertDialog.dismissWithAnimation();
+                    });
+                    return;
+                }
                 Intent intent = new Intent(context, SalesAnalysis.class);
                 intent.putExtra("mapTransaction", mapTransaction);
                 startActivity(intent);

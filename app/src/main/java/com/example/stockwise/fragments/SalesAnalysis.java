@@ -2,6 +2,7 @@ package com.example.stockwise.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 
+import com.example.stockwise.DialogBuilder;
 import com.example.stockwise.MainToolbar;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
@@ -32,15 +34,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class SalesAnalysis extends AppCompatActivity {
     private ActivitySalesAnalysisBinding binding;
     private Context context;
     // variable for our bar chart
     private HashMap<String, ArrayList<DbTransactionModel>> mapTransaction;
-    private HashMap<String, String> products;
-    private ArrayList<Integer> arrEarning;
-    private ArrayList<Integer> arrSpending;
-    private ArrayList name;
+//    private HashMap<String, String> products;
+//    private ArrayList<Integer> arrEarning;
+//    private ArrayList<Integer> arrSpending;
+//    private ArrayList name;
 
     int totalEaring = 0;
     int totalSpending = 0;
@@ -64,10 +68,11 @@ public class SalesAnalysis extends AppCompatActivity {
 
 //        mapTransaction = (HashMap<String, ArrayList<DbTransactionModel>>) getIntent().getSerializableExtra("mapTransaction");
         mapTransaction = new HashMap<>();
-        mapTransaction.putAll(Params.getOwnerModel().getMapTransaction());
-        products = new HashMap<>();
-        arrEarning = new ArrayList<>();
-        arrSpending = new ArrayList<>();
+        if(Params.getOwnerModel().getMapTransaction() != null)
+            mapTransaction.putAll(Params.getOwnerModel().getMapTransaction());
+//        products = new HashMap<>();
+//        arrEarning = new ArrayList<>();
+//        arrSpending = new ArrayList<>();
 
 //        for (String date : mapTransaction.keySet()) {
 //            for (DbTransactionModel transaction : mapTransaction.get(date)) {

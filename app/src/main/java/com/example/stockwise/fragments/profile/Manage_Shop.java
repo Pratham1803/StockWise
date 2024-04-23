@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -52,6 +55,51 @@ public class Manage_Shop extends AppCompatActivity {
         // setting all fields non-editable
         reset();
 
+        // set conditions
+        binding.EditGst.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.EditGst.getText().toString().length() < 15) {
+                    binding.EditGst.setError("GST number should be 15 characters");
+                }
+                if (binding.EditGst.getText().toString().length() > 15) {
+                    binding.EditGst.setError("GST number should be 15 characters");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.EditCin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.EditCin.getText().toString().length() < 21) {
+                    binding.EditCin.setError("CIN number should be 21 characters");
+                }
+                if (binding.EditCin.getText().toString().length() > 21) {
+                    binding.EditCin.setError("CIN number should be 21 characters");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         // inserting values in fields according to user
         binding.EdShopName.setText(Params.getOwnerModel().getShop_name());
         Params.getREFERENCE().addListenerForSingleValueEvent(
@@ -77,6 +125,19 @@ public class Manage_Shop extends AppCompatActivity {
         binding.btnUpdateShopDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (binding.EditShopAddress.getText().toString().isEmpty() || binding.EditGst.getText().toString().isEmpty() || binding.EditCin.getText().toString().isEmpty() || binding.EdShopName.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(binding.EditGst.getText().toString().length() != 15){
+                    binding.EditGst.setError("GST number should be 15 characters");
+                    return;
+                }
+                if(binding.EditCin.getText().toString().length() != 21){
+                    binding.EditCin.setError("CIN number should be 21 characters");
+                    return;
+                }
+
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(Params.getADDRESS(), binding.EditShopAddress.getText().toString());
                 map.put(Params.getGstNum(), binding.EditGst.getText().toString());
