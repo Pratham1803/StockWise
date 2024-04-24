@@ -125,17 +125,8 @@ public class AddProduct extends AppCompatActivity {
                     // check that current stock is less than 1 or not
                     try {
                         int stock = Integer.parseInt(bind.edCurrentStock.getText().toString()); // getting current stock
-                        if (stock < 1) { // if stock is less than 1
-                            bind.txtHeading.setText("Product is Out of Stock!!"); // setting heading
-                            bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
-                            bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
-                            Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
-                            isOutOfStock = true; // setting out of stock status
-                        } else { // if stock is greater than 1
-                            bind.txtHeading.setVisibility(View.GONE); // making heading invisible
-                            bind.edCurrentStock.setTextColor(getColor(R.color.black)); // changing text color to black
-                            isOutOfStock = false; // setting out of stock status
-                        }
+                        int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString()); // getting reorder point
+                        checkForProductQuantity(stock, reorder);
                     } catch (Exception e) { // if any error rise
                         Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
@@ -152,18 +143,7 @@ public class AddProduct extends AppCompatActivity {
                     try {
                         int stock = Integer.parseInt(bind.edCurrentStock.getText().toString()); // getting current stock
                         int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString()); // getting reorder point
-                        // if stock is less than reorder point
-                        if (stock < reorder) {
-                            bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
-                            Toast.makeText(AddProduct.this, "Insufficient Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
-                            bind.txtHeading.setText("Insufficient Stock!! less Than Reorder Point"); // setting heading
-                            bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
-                            isReorderPointReached = true; // setting reorder point status
-                        } else { // if stock is greater than reorder point
-                            bind.txtHeading.setVisibility(View.GONE); // making heading invisible
-                            bind.edCurrentStock.setTextColor(getColor(R.color.black)); // changing text color to black
-                            isReorderPointReached = false; // setting reorder point status
-                        }
+                        checkForProductQuantity(stock, reorder);
                     } catch (Exception e) { // if any error rise
                         Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
@@ -177,6 +157,36 @@ public class AddProduct extends AppCompatActivity {
             productModel = (ProductModel) getIntent().getSerializableExtra("productObj"); // getting product object
             setUpdateScreen(); // setting screen for update
         }
+    }
+
+    private void checkForProductQuantity(int currentStock, int reorderPoint) {
+        if (currentStock < 1) { // if stock is less than 1
+            bind.txtHeading.setText("Product is Out of Stock!!"); // setting heading
+            bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
+            bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
+            Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
+            isOutOfStock = true; // setting out of stock status
+            isReorderPointReached = false; // setting reorder point status
+        } else {
+            if (currentStock < reorderPoint) { // if stock is less than reorder point
+                bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
+                Toast.makeText(AddProduct.this, "Insufficient Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
+                bind.txtHeading.setText("Insufficient Stock!! less Than Reorder Point"); // setting heading
+                bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
+                isReorderPointReached = true; // setting reorder point status
+                isOutOfStock = false; // setting out of stock status
+            }
+        }
+
+        if (currentStock >= reorderPoint) { // if stock is greater than reorder point
+            bind.txtHeading.setVisibility(View.GONE); // making heading invisible
+            bind.edCurrentStock.setTextColor(getColor(R.color.black)); // changing text color to black
+            isReorderPointReached = false; // setting reorder point status
+            isOutOfStock = false; // setting out of stock status
+        }
+
+        Log.d("SuccessMsg", "checkForProductQuantity: isOutOfStock : "+ isOutOfStock);
+        Log.d("SuccessMsg", "checkForProductQuantity: isReorderPointReached : "+ isReorderPointReached);
     }
 
     // back press event of actionbar back button
@@ -494,7 +504,8 @@ public class AddProduct extends AppCompatActivity {
             if (Integer.parseInt(productModel.getCurrent_stock()) < 1) { // if current stock is less than 1
                 isOutOfStock = true; // setting out of stock status
             }
-            if(Integer.parseInt(productModel.getCurrent_stock()) < Integer.parseInt(productModel.getReorder_point())) { // if current stock is less than reorder point
+            if (Integer.parseInt(productModel.getCurrent_stock()) < Integer.parseInt(productModel.getReorder_point())
+                    && Integer.parseInt(productModel.getCurrent_stock()) > 0) { // if current stock is less than reorder point
                 isReorderPointReached = true; // setting reorder point status
             }
         }
