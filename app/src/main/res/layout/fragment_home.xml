@@ -437,7 +437,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="20dp"
                                 android:fontFamily="@font/lexend_"
-                                android:text="Total Earning"
+                                android:text="Total Revenue"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
@@ -497,7 +497,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="20dp"
                                 android:fontFamily="@font/lexend_"
-                                android:text="Total Spending"
+                                android:text="Total Expenses"
                                 android:textColor="@color/black"
                                 android:textSize="16sp" />
 
