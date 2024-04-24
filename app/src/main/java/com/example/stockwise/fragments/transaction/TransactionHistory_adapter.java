@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.stockwise.Params;
 import com.example.stockwise.R;
 import com.example.stockwise.model.DbTransactionModel;
+import com.example.stockwise.model.SelectItemModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 
@@ -103,7 +104,13 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black)); // set the color of the total price
         }
 
-        holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())); // set the quantity of the product
+        // calculate the quantity
+        int quantity = 0;
+        for (SelectItemModel itemModel: localDataSet.get(position).getITEM_LIST()) { // loop through the item list
+            quantity += Integer.parseInt(itemModel.getQuantity()); // calculate the quantity
+        }
+
+        holder.getTxtQuantity().setText(String.valueOf(quantity)); // set the quantity of the product
         holder.getTxtPersonName().setText(lsName.get(position)); // set the name of the person
         holder.getTxtDate().setText(localDataSet.get(position).getDate()); // set the date of the transaction
         holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-"); // set the total price of the product

@@ -65,7 +65,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private DateTimeFormatter dateTimeFormatter; // date time formatter
     private HashMap<String, ArrayList<DbTransactionModel>> mapTransaction; // transaction map
 
-    //
     public HomeFragment() {
         //initializing arraylist
         arrAllProduct = new ArrayList<>(); // all product list
