@@ -20,27 +20,28 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 
 public class TransactionHistory_adapter extends RecyclerView.Adapter<TransactionHistory_adapter.ViewHolder>{
-    private ArrayList<DbTransactionModel> localDataSet;
-    private ArrayList<String> lsName = new ArrayList<>();
-    private Context context;
+    private ArrayList<DbTransactionModel> localDataSet; // list to store data
+    private ArrayList<String> lsName = new ArrayList<>(); // list to store name
+    private Context context; // context of the activity
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView txtPersonName;
-        private final TextView txtPersonType;
-        private final TextView txtQuantity;
-        private final TextView txtTotalPrice;
-        private final TextView txtDate;
+        private final TextView txtPersonName; // name of the person
+        private final TextView txtPersonType; // type of the person
+        private final TextView txtQuantity; // quantity of the product
+        private final TextView txtTotalPrice; // total price of the product
+        private final TextView txtDate; // date of the transaction
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.txtPersonName = itemView.findViewById(R.id.txtPersonName);
-            this.txtPersonType = itemView.findViewById(R.id.txtPersonType);
-            this.txtQuantity = itemView.findViewById(R.id.txtTotalProduct);
-            this.txtTotalPrice = itemView.findViewById(R.id.txtTotalAmount);
-            this.txtDate = itemView.findViewById(R.id.txtDate);
-            itemView.setOnClickListener(this);
+            this.txtPersonName = itemView.findViewById(R.id.txtPersonName); // initialize the name of the person
+            this.txtPersonType = itemView.findViewById(R.id.txtPersonType); // initialize the type of the person
+            this.txtQuantity = itemView.findViewById(R.id.txtTotalProduct); // initialize the quantity of the product
+            this.txtTotalPrice = itemView.findViewById(R.id.txtTotalAmount); // initialize the total price of the product
+            this.txtDate = itemView.findViewById(R.id.txtDate); // initialize the date of the transaction
+            itemView.setOnClickListener(this); // set the click listener
         }
 
+        // getter methods
         public TextView getTxtDate() {
             return txtDate;
         }
@@ -61,23 +62,24 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
             return txtTotalPrice;
         }
 
+        // on click listener
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            DbTransactionModel dbTransactionModel = localDataSet.get(position);
-            Intent intent = new Intent(context, GenerateBill.class);
-            intent.putExtra("dbTransactionObj", dbTransactionModel);
-            intent.putExtra("CallFrom","History");
-            intent.putExtra("Name",lsName.get(position));
-            context.startActivity(intent);
+            int position = getAdapterPosition(); // get the position of the item clicked
+            DbTransactionModel dbTransactionModel = localDataSet.get(position); // get the transaction model
+            Intent intent = new Intent(context, GenerateBill.class); // create an intent to move to the next activity
+            intent.putExtra("dbTransactionObj", dbTransactionModel); // put the transaction model in the intent
+            intent.putExtra("CallFrom","History"); // put the call from in the intent
+            intent.putExtra("Name",lsName.get(position)); // put the name in the intent
+            context.startActivity(intent); // start the activity
         }
     }
 
     // constructor of adapter class
     public TransactionHistory_adapter(ArrayList<DbTransactionModel> localDataSet,ArrayList<String> lsName, Context context){
-        this.localDataSet = localDataSet;
-        this.context = context;
-        this.lsName = lsName;
+        this.localDataSet = localDataSet; // set the data
+        this.context = context; // set the context
+        this.lsName = lsName; // set the name
     }
 
     @NonNull
@@ -93,17 +95,18 @@ public class TransactionHistory_adapter extends RecyclerView.Adapter<Transaction
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TransactionHistory_adapter.ViewHolder holder, int position) {
-        if (localDataSet.get(position).getIsPurchase().equals("true")) {
-            holder.getTxtPersonType().setText("Vendor : ");
-            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black));
-        }else {
-            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black));
+        // set the data in the view
+        if (localDataSet.get(position).getIsPurchase().equals("true")) { // check if the transaction is purchase
+            holder.getTxtPersonType().setText("Vendor : "); // set the type of the person
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black)); // set the color of the total price
+        }else { // if the transaction is sale
+            holder.getTxtTotalPrice().setTextColor(context.getResources().getColor(R.color.black)); // set the color of the total price
         }
 
-        holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size()));
-        holder.getTxtPersonName().setText(lsName.get(position));
-        holder.getTxtDate().setText(localDataSet.get(position).getDate());
-        holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-");
+        holder.getTxtQuantity().setText(String.valueOf(localDataSet.get(position).getITEM_LIST().size())); // set the quantity of the product
+        holder.getTxtPersonName().setText(lsName.get(position)); // set the name of the person
+        holder.getTxtDate().setText(localDataSet.get(position).getDate()); // set the date of the transaction
+        holder.getTxtTotalPrice().setText(localDataSet.get(position).getTotal_price()+" /-"); // set the total price of the product
     }
 
     @Override

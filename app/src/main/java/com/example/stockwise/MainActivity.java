@@ -40,29 +40,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding bind; // declaring view binding
 
     // declaring fragments object
-    ProductFragment productFragment = new ProductFragment();
-    PersonFragment personFragment = new PersonFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
-    HomeFragment homeFragment = new HomeFragment();
-    transactionFragment transactionFragment = new transactionFragment();
+    ProductFragment productFragment = new ProductFragment(); // product fragment object
+    PersonFragment personFragment = new PersonFragment(); // person fragment object
+    ProfileFragment profileFragment = new ProfileFragment(); // profile fragment object
+    HomeFragment homeFragment = new HomeFragment(); // home fragment object
+    transactionFragment transactionFragment = new transactionFragment(); // transaction fragment object
 
     // Bottom Navigation Objects
-    protected final int navHomeId = 1;
-    protected final int navCustomerId = 2;
-    protected final int navTransactionId = 3;
-    protected final int navProductId = 4;
-    protected final int navProfileId = 5;
+    protected final int navHomeId = 1; // home menu id
+    protected final int navCustomerId = 2; // customer menu id
+    protected final int navTransactionId = 3; // transaction menu id
+    protected final int navProductId = 4; // product menu id
+    protected final int navProfileId = 5; // profile menu id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bind = ActivityMainBinding.inflate(getLayoutInflater()); // initializing view binding
-        setContentView(bind.getRoot());
-        //ActivityCompat.requestPermissions(this,new String[] { Manifest.permission.SEND_SMS}, 1);
+        setContentView(bind.getRoot()); // setting view binding root view
 
         // setup toolbar
-        setSupportActionBar(bind.toolbar);
+        setSupportActionBar(bind.toolbar); // setting toolbar as action bar
 
         // Adding Menu items in Bottom Navigation
         bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector)); // home menu
@@ -94,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // setup of drawer navigation
-
         // setting drawer and custom toolbar
         setSupportActionBar(bind.toolbar); // toolbar setup
         bind.navDrawerView.setNavigationItemSelectedListener(this); // drawer navigation item select listener setup
@@ -111,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bind.meowBottom.setVisibility(View.GONE); // setting visibility gone to bottom nav
 
                 // setting values to name, number and image of view
-                TextView txtName = findViewById(R.id.txtDrawerName);
-                txtName.setText(Params.getOwnerModel().getOwner_name());
+                TextView txtName = findViewById(R.id.txtDrawerName); // getting name text view
+                txtName.setText(Params.getOwnerModel().getOwner_name()); // setting name of owner
 
-                TextView txtNum = findViewById(R.id.txtDrawerNum);
-                txtNum.setText(Params.getOwnerModel().getContact_num());
+                TextView txtNum = findViewById(R.id.txtDrawerNum); // getting number text view
+                txtNum.setText(Params.getOwnerModel().getContact_num()); // setting number of owner
 
-                ImageView imgProfile = findViewById(R.id.imgDrawerProfile);
-                Glide.with(MainActivity.this).load(Params.getOwnerModel().getPicture()).into(imgProfile);
+                ImageView imgProfile = findViewById(R.id.imgDrawerProfile); // getting image view
+                Glide.with(MainActivity.this).load(Params.getOwnerModel().getPicture()).into(imgProfile); // setting image of owner
             }
 
             @Override
@@ -138,29 +135,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         bind.mainDrawerLayout.addDrawerListener(toggle); // adding listener to drawer
-        toggle.syncState();
+        toggle.syncState(); // syncing the drawer
 
         // setting home screen as default screen when app is open
         changeFragment(homeFragment,R.string.titleHome);
 
+        // checking permission for sending sms
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
                 == PackageManager.PERMISSION_GRANTED){
-
         }
-        else {
+        else { // if permission is not granted then ask for permission
+            // asking for permission
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SEND_SMS},100);
         }
     }
 
+    // activity result of sms permission
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode==100 && grantResults.length>0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+        // checking if permission is granted or not
+        if(requestCode==100 && grantResults.length>0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED) { // if permission is granted
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show(); // show toast message
         }
-        else {
-            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        else { // if permission is denied
+            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show(); // show toast message
         }
     }
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId(); // storing currently selected id
 
-        if(id == R.id.nav_home) {
+        if(id == R.id.nav_home) { // home fragment selected
             changeFragment(homeFragment,R.string.titleHome); // change the screen to home screen
             bind.meowBottom.show(navHomeId,true); // displaying the home item is selected in bottom nav
         }
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit(); // changing the fragment that is given in argument
             bind.toolbar.setTitle(title); // setting title of the screen in action bar
 
-            if (title == R.string.titleHome) {
+            if (title == R.string.titleHome) { // if title is home then set the shop name as title
                 bind.toolbar.setTitle(Params.getOwnerModel().getShop_name()); // setting title of the screen in action bar
             }
         }catch (Exception e){

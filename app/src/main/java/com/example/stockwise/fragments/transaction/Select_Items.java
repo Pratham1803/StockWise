@@ -66,50 +66,50 @@ public class Select_Items extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         bind = ActivityProductListBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
-        setContentView(bind.getRoot());
+        setContentView(bind.getRoot()); // setting view
 
-        Intent intent = getIntent();
-        transactionModel = (TransactionModel) intent.getSerializableExtra("transactionObj");
-        assert transactionModel != null;
-        transactionModel.setDbTransactionModel(new DbTransactionModel());
-        transactionModel.getDbTransactionModel().setPerson_id(transactionModel.getPerson().getId());
-        transactionModel.getDbTransactionModel().setDate(transactionModel.getDate());
-        transactionModel.getDbTransactionModel().setIsPurchase(transactionModel.isPurchase() ? "true" : "false");
+        Intent intent = getIntent(); // getting intent
+        transactionModel = (TransactionModel) intent.getSerializableExtra("transactionObj"); // getting transaction object from intent
+        assert transactionModel != null; // checking transaction object is not null
+        transactionModel.setDbTransactionModel(new DbTransactionModel()); // initializing db transaction model
+        transactionModel.getDbTransactionModel().setPerson_id(transactionModel.getPerson().getId()); // setting person id
+        transactionModel.getDbTransactionModel().setDate(transactionModel.getDate()); // setting date
+        transactionModel.getDbTransactionModel().setIsPurchase(transactionModel.isPurchase() ? "true" : "false"); // setting is purchase
 
         // setting visibilities
-        bind.linearLayoutCategory.setVisibility(View.GONE);
-        bind.btnProceed.setVisibility(View.VISIBLE);
+        bind.linearLayoutCategory.setVisibility(View.GONE); // hiding category layout
+        bind.btnProceed.setVisibility(View.VISIBLE); // showing proceed button
 
         // setting action bar title
-        setSupportActionBar(bind.toolbarCategory);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
+        setSupportActionBar(bind.toolbarCategory); // setting action bar
+        ActionBar actionBar = getSupportActionBar(); // getting action bar
+        assert actionBar != null; // checking action bar is not null
         actionBar.setTitle("Select Items"); // setting action bar title
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
         actionBar.setDisplayHomeAsUpEnabled(true); // setting back button in action bar
 
         // setting recycler view
-        arrAllProduct = new ArrayList<>();
+        arrAllProduct = new ArrayList<>(); // initializing product arraylist
         selectItemAdapter = new SelectItem_Adapter(arrAllProduct, context, transactionModel); // initializing adapter
         bind.recyclerProductCategory.setAdapter(selectItemAdapter); // setting adapter to recycler view
         bind.recyclerProductCategory.setLayoutManager(new LinearLayoutManager(context)); // setting layout manager to recycler view
 
-        dbGetAllProducts();
+        dbGetAllProducts(); // getting all products from firebase
 
         // process button clicked
         bind.btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (transactionModel.getITEM_LIST().size() > 0) {
-                    Intent intent = new Intent(context, GenerateBill.class);
-                    intent.putExtra("CallFrom", "Transaction");
-                    intent.putExtra("Name", transactionModel.getPerson().getName());
-                    intent.putExtra("transactionObj", transactionModel);
-                    startActivity(intent);
-                    finish();
-                    //dbAddTransaction();
-                } else {
-                    Toast.makeText(context, "Please select at least one item", Toast.LENGTH_LONG).show();
+                // checking if any product is selected or not
+                if (transactionModel.getITEM_LIST().size() > 0) { // if product is selected
+                    Intent intent = new Intent(context, GenerateBill.class); // starting generate bill activity
+                    intent.putExtra("CallFrom", "Transaction"); // passing call from
+                    intent.putExtra("Name", transactionModel.getPerson().getName()); // passing person name
+                    intent.putExtra("transactionObj", transactionModel); // passing transaction object
+                    startActivity(intent); // starting activity
+                    finish(); // finishing current activity
+                } else { // if no product is selected
+                    Toast.makeText(context, "Please select at least one item", Toast.LENGTH_LONG).show(); // showing toast message
                 }
             }
         });
@@ -119,11 +119,11 @@ public class Select_Items extends AppCompatActivity {
     //  back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (isProductScanned) {
-            isProductScanned = false;
-            selectItemAdapter.setLocalDataSet(arrAllProduct);
-        } else
-            MainToolbar.btnBack_clicked(item, context);
+        if (isProductScanned) { // if product is scanned
+            isProductScanned = false; // setting product scanned status to false
+            selectItemAdapter.setLocalDataSet(arrAllProduct); // setting product list to adapter
+        } else // if product is not scanned
+            MainToolbar.btnBack_clicked(item, context); // calling back button clicked method
         return true;
     }
 
@@ -136,10 +136,10 @@ public class Select_Items extends AppCompatActivity {
                 // in snapshot we have all the products list, so we are getting it one by one using for each loop
                 arrAllProduct.clear(); // deleting all products from the list
 
-                for (DataSnapshot post : snapshot.getChildren()) {
+                for (DataSnapshot post : snapshot.getChildren()) { // getting product one by one
                     ProductModel newProduct = post.getValue(ProductModel.class); // storing product details in productModule class object
-                    assert newProduct != null;
-                    newProduct.setCategory_id(newProduct.getCategory());
+                    assert newProduct != null; // checking product is not null
+                    newProduct.setCategory_id(newProduct.getCategory()); // setting category id
                     arrAllProduct.add(newProduct); // adding product in product's arraylist
 
                     selectItemAdapter.notifyItemInserted(arrAllProduct.size()); // notifying adapter that new product is added
@@ -156,9 +156,9 @@ public class Select_Items extends AppCompatActivity {
     // scanner result
     ActivityResultLauncher<ScanOptions> bar = registerForActivityResult(new ScanContract(), result -> {
         // if scanner has some result
-        if (result.getContents() != null) {
+        if (result.getContents() != null) { // if scanner has some result
             barCodeId = result.getContents(); // collect the barcode number and store it
-            MainToolbar.searchProduct_Transaction_Barcode(arrAllProduct, selectItemAdapter, barCodeId);
+            MainToolbar.searchProduct_Transaction_Barcode(arrAllProduct, selectItemAdapter, barCodeId); // search product by barcode
             isProductScanned = true; // setting product scanned status to true
         }
         // scanner does not have any results
@@ -169,43 +169,48 @@ public class Select_Items extends AppCompatActivity {
     // setting listener to, create action bar
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu); // inflating toolbar menu
         // getting addProduct button item from actionbar
-        MenuItem btnAddProduct = menu.findItem(R.id.addProduct);
+        MenuItem btnAddProduct = menu.findItem(R.id.addProduct); // getting add product button from action bar
         btnAddProduct.setVisible(false); // hiding add product button from action bar
-        MenuItem btnSearch = menu.findItem(R.id.search);
-        MenuItem btnScan = menu.findItem(R.id.scanner);
-        SearchView searchView = (SearchView) btnSearch.getActionView();
+        MenuItem btnSearch = menu.findItem(R.id.search); // getting search button from action bar
+        MenuItem btnScan = menu.findItem(R.id.scanner); // getting scanner button from action bar
+        SearchView searchView = (SearchView) btnSearch.getActionView(); // getting search view from search button
 
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
-        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text); // getting search edit text
+        searchEditText.setTextColor(getResources().getColor(R.color.white)); // setting text color
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white)); // setting hint text color
 
+        // setting on click listener in scanner button
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                scanner = MainToolbar.getScanner();
+                scanner = MainToolbar.getScanner(); // getting scanner
                 bar.launch(scanner); // launching the scanner
                 return true;
             }
         });
 
-        assert searchView != null;
+        assert searchView != null; // checking search view is not null
+
+        // setting on query text listener in search view
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                MainToolbar.btnSearch_Transaction(query.toLowerCase(), arrAllProduct, selectItemAdapter);
-                Log.d("SuccessMsg", "onQueryTextSubmit: Text = " + query);
+                // searching product by name
+                MainToolbar.btnSearch_Transaction(query.toLowerCase(), arrAllProduct, selectItemAdapter); // searching product by name
+                Log.d("SuccessMsg", "onQueryTextSubmit: Text = " + query); // showing log message
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 1) {
-                    MainToolbar.btnSearch_Transaction(newText.toLowerCase(), arrAllProduct, selectItemAdapter);
-                    Log.d("SuccessMsg", "onQueryTextChange: Text = " + newText);
-                } else if (newText.length() == 0) {
-                    selectItemAdapter.setLocalDataSet(arrAllProduct);
+                // searching product by name
+                if (newText.length() > 1) { // if text length is greater than 1
+                    MainToolbar.btnSearch_Transaction(newText.toLowerCase(), arrAllProduct, selectItemAdapter); // searching product by name
+                    Log.d("SuccessMsg", "onQueryTextChange: Text = " + newText); // showing log message
+                } else if (newText.length() == 0) { // if text length is 0
+                    selectItemAdapter.setLocalDataSet(arrAllProduct); // setting product list to adapter
                 }
                 return true;
             }
@@ -216,7 +221,7 @@ public class Select_Items extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
                 // starting activity of add product screen
-                startActivity(new Intent(context, AddProduct.class));
+                startActivity(new Intent(context, AddProduct.class)); // starting add product activity
                 return true;
             }
         });
@@ -226,10 +231,11 @@ public class Select_Items extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isProductScanned) {
-            isProductScanned = false;
-            selectItemAdapter.setLocalDataSet(arrAllProduct);
-        } else
-            super.onBackPressed();
+        // if product is scanned
+        if (isProductScanned) { // if product is scanned
+            isProductScanned = false; // setting product scanned status to false
+            selectItemAdapter.setLocalDataSet(arrAllProduct); // setting product list to adapter
+        } else // if product is not scanned
+            super.onBackPressed(); // calling super method
     }
 }

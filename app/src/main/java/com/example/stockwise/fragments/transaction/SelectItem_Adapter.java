@@ -28,37 +28,38 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.ViewHolder> {
-    private ArrayList<ProductModel> localDataSet;
-    private final Context context;
-    private TransactionModel transactionModel;
+    private ArrayList<ProductModel> localDataSet; // arraylist of product model
+    private final Context context; // context
+    private TransactionModel transactionModel; // transaction model
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private final ImageView imgProductImage;
-        private final TextView txtProductName;
-        private final TextView txtProductQuantity;
-        private final ImageButton btnPlus;
-        private final ImageButton btnMinus;
-        private final TextView txtCurrentQuantity;
-        private final ImageButton btnAddToCart;
+        private final ImageView imgProductImage; // product image
+        private final TextView txtProductName; // product name
+        private final TextView txtProductQuantity; // product quantity
+        private final ImageButton btnPlus; // plus button
+        private final ImageButton btnMinus; // minus button
+        private final TextView txtCurrentQuantity; // current quantity
+        private final ImageButton btnAddToCart; // add to cart button
         public ViewHolder(View view) {
             super(view);
-            imgProductImage = view.findViewById(R.id.imgProductSell);
-            txtProductName = view.findViewById(R.id.txtProductNameSell);
-            txtProductQuantity = view.findViewById(R.id.txtQuantityShow);
-            btnPlus = view.findViewById(R.id.btnQuantityPlus);
-            btnMinus = view.findViewById(R.id.btnQuantityMinus);
-            txtCurrentQuantity = view.findViewById(R.id.txtCurrentQuantity);
-            btnAddToCart = view.findViewById(R.id.btnAddToCart);
+            imgProductImage = view.findViewById(R.id.imgProductSell); // getting product image
+            txtProductName = view.findViewById(R.id.txtProductNameSell); // getting product name
+            txtProductQuantity = view.findViewById(R.id.txtQuantityShow); // getting product quantity
+            btnPlus = view.findViewById(R.id.btnQuantityPlus); // getting plus button
+            btnMinus = view.findViewById(R.id.btnQuantityMinus); // getting minus button
+            txtCurrentQuantity = view.findViewById(R.id.txtCurrentQuantity); // getting current quantity
+            btnAddToCart = view.findViewById(R.id.btnAddToCart); // getting add to cart button
 
-            btnPlus.setOnClickListener(this);
-            btnMinus.setOnClickListener(this);
-            btnAddToCart.setOnClickListener(this);
+            btnPlus.setOnClickListener(this); // setting click listener on plus button
+            btnMinus.setOnClickListener(this); // setting click listener on minus button
+            btnAddToCart.setOnClickListener(this); // setting click listener on add to cart button
         }
 
+        // getter methods
         public ImageView getImgProductImage() {
             return imgProductImage;
         }
@@ -71,71 +72,80 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
             return txtProductQuantity;
         }
 
+        // onClick method
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            ProductModel productModel = localDataSet.get(position);
+            int position = getAdapterPosition(); // getting position of product
+            ProductModel productModel = localDataSet.get(position); // getting product model
             int currentQuan = Integer.parseInt(txtCurrentQuantity.getText().toString()); // quantity from + or - button
             int productQuan = Integer.parseInt(txtProductQuantity.getText().toString()); // total quantity of Product
 
-            if (v.getId() == R.id.btnQuantityPlus) {
+            // checking which button is clicked
+            if (v.getId() == R.id.btnQuantityPlus) { // if plus button is clicked
                 // Increase the quantity of product
+                if(currentQuan < productQuan || transactionModel.isPurchase()) { // checking if quantity is available or not
+                    currentQuan++; // increasing quantity
 
-                if(currentQuan < productQuan || transactionModel.isPurchase()) {
-                    currentQuan++;
-
-                    if(transactionModel.isPurchase())
+                    // updating current stock of product
+                    if(transactionModel.isPurchase()) // if purchase transaction
+                        // increase the stock
                         productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())+1));
-                    else
+                    else // if sale transaction
+                        // decrease the stock
                         productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())-1));
 
-                    txtCurrentQuantity.setText(String.valueOf(currentQuan));
-                }else
-                    Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show();
+                    txtCurrentQuantity.setText(String.valueOf(currentQuan)); // setting current quantity
+                }else // if quantity is not available
+                    Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show(); // showing toast message
 
-            } else if (v.getId() == R.id.btnQuantityMinus) {
+            } else if (v.getId() == R.id.btnQuantityMinus) { // if minus button is clicked
                 // Decrease the quantity of product
-                if (currentQuan > 0) {
-                    currentQuan--;
+                if (currentQuan > 0) { // checking if quantity is greater than 0
+                    currentQuan--; // decreasing quantity
 
-                    if(transactionModel.isPurchase())
+                    if(transactionModel.isPurchase()) // if purchase transaction
+                        // decrease the stock
                         productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())-1));
-                    else
+                    else // if sale transaction
+                        // increase the stock
                         productModel.setCurrent_stock(String.valueOf(Integer.parseInt(productModel.getCurrent_stock())+1));
-                    txtCurrentQuantity.setText(String.valueOf(currentQuan));
-                }else
-                    Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show();
+                    txtCurrentQuantity.setText(String.valueOf(currentQuan)); // setting current quantity
+                }else // if quantity is not available
+                    Toast.makeText(v.getContext(), "Quantity is not available", Toast.LENGTH_SHORT).show(); // showing toast message
 
-            }else if (v.getId() == R.id.btnAddToCart) {
-                btnAddToCartClicked(position,v);
+            }else if (v.getId() == R.id.btnAddToCart) { // if add to cart button is clicked
+                btnAddToCartClicked(position,v); // calling add to cart method
             }
         }
 
+        // add to cart method
         private void btnAddToCartClicked(int position,View v) {
-            if(Integer.parseInt(txtCurrentQuantity.getText().toString()) == 0) {
+            // checking if quantity is 0
+            if(Integer.parseInt(txtCurrentQuantity.getText().toString()) == 0) { // if quantity is 0
+                // showing toast message
                 Toast.makeText(v.getContext(), "Please select at least one quantity", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            int res = Integer.parseInt(btnAddToCart.getTag().toString());
+            int res = Integer.parseInt(btnAddToCart.getTag().toString()); // getting tag of add to cart button
 
-            if(res == R.drawable.close_vector){
-                btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.addtocartvector));
-                btnAddToCart.setTag(R.drawable.addtocartvector);
+            if(res == R.drawable.close_vector){ // if tag is close vector
+                btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.addtocartvector)); // setting background of add to cart button
+                btnAddToCart.setTag(R.drawable.addtocartvector); // setting tag of add to cart button
 
-                transactionModel.getITEM_LIST().remove(localDataSet.get(position));
-            }else {
-                btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.close_vector));
-                btnAddToCart.setTag(R.drawable.close_vector);
+                transactionModel.getITEM_LIST().remove(localDataSet.get(position)); // removing product from item list
+            }else { // if tag is not close vector
+                btnAddToCart.setBackground(v.getResources().getDrawable(R.drawable.close_vector)); // setting background of add to cart button
+                btnAddToCart.setTag(R.drawable.close_vector); // setting tag of add to cart button
 
-                String id = localDataSet.get(position).getId();
-                String name = localDataSet.get(position).getName();
+                String id = localDataSet.get(position).getId(); // getting product id
+                String name = localDataSet.get(position).getName(); // getting product name
                 String currentQuan = txtCurrentQuantity.getText().toString(); // quantity selected from + or - button
-                String sale_price = localDataSet.get(position).getSale_price();
-                String purchase_price = localDataSet.get(position).getPurchase_price();
+                String sale_price = localDataSet.get(position).getSale_price(); // getting sale price of product
+                String purchase_price = localDataSet.get(position).getPurchase_price(); // getting purchase price of product
 
-                transactionModel.getITEM_LIST().add(localDataSet.get(position));
-                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(id,name,currentQuan,sale_price,purchase_price));
+                transactionModel.getITEM_LIST().add(localDataSet.get(position)); // adding product to item list
+                transactionModel.getDbTransactionModel().getITEM_LIST().add(new SelectItemModel(id,name,currentQuan,sale_price,purchase_price)); // adding product to db item list
             }
         }
     }
@@ -153,9 +163,10 @@ public class SelectItem_Adapter extends RecyclerView.Adapter<SelectItem_Adapter.
         this.transactionModel = transactionModel; // initialing transaction model
     }
 
+    // setting local dataset
     public void setLocalDataSet(ArrayList<ProductModel> localDataSet) {
-        this.localDataSet = localDataSet;
-        notifyDataSetChanged();
+        this.localDataSet = localDataSet; // setting local dataset
+        notifyDataSetChanged(); // notifying data set changed
     }
 
 

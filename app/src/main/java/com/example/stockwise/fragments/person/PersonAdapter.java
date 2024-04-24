@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
-    private ArrayList<PersonModel> localDataSet;
-    private final Context context;
-    private Random random = new Random();
+    private ArrayList<PersonModel> localDataSet; // creating arraylist of ProductModel class
+    private final Context context; // creating context
+    private Random random = new Random(); // creating random object
+
+    // creating array of images for Male and female person
     private int[] arrMaleImg = {R.drawable.male1, R.drawable.male2, R.drawable.male3, R.drawable.male4, R.drawable.male5, R.drawable.male6};
     private int[] arrFemaleImg = {R.drawable.female1, R.drawable.female2, R.drawable.female3, R.drawable.female4, R.drawable.female5, R.drawable.female6};
 
@@ -29,16 +31,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
      * (custom ViewHolder)
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView txtPersonName;
-        private final TextView txtPersonContact;
-        private final ImageView imgPerson;
+        private final TextView txtPersonName; // creating textview for person name
+        private final TextView txtPersonContact; // creating textview for person contact
+        private final ImageView imgPerson; // creating imageview for person image
         public ViewHolder(View view) {
             super(view);
-            txtPersonName = (TextView) view.findViewById(R.id.txtContactName);
-            txtPersonContact = (TextView) view.findViewById(R.id.txtContactDetails);
-            imgPerson = (ImageView) view.findViewById(R.id.ContactImage);
+            txtPersonName = (TextView) view.findViewById(R.id.txtContactName); // initialing textview of person name
+            txtPersonContact = (TextView) view.findViewById(R.id.txtContactDetails); // initialing textview of person contact
+            imgPerson = (ImageView) view.findViewById(R.id.ContactImage); // initialing imageview of person image
         }
 
+        // getter methods for getting person name, contact and image
         public ImageView getImgPerson() {
             return imgPerson;
         }
@@ -64,9 +67,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         this.context = context; // initialing context
     }
 
+    // method for setting local dataset
     public void setLocalDataset(ArrayList<PersonModel> dataSet) {
-        this.localDataSet = dataSet;
-        notifyDataSetChanged();
+        this.localDataSet = dataSet; // setting local dataset
+        notifyDataSetChanged(); // notifying adapter that data has been changed
     }
 
     // Create new views (invoked by the layout manager)
@@ -75,7 +79,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     public PersonAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.contacts_layout, viewGroup, false);
+                .inflate(R.layout.contacts_layout, viewGroup, false); // inflating layout of contacts_layout
 
         return new PersonAdapter.ViewHolder(view);
     }
@@ -90,10 +94,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         // setting Contact Number
         viewHolder.getTxtPersonContact().setText(localDataSet.get(position).getContact_num());
         // setting person image
-        if(localDataSet.get(position).getGender().equals("Male")){
-            viewHolder.getImgPerson().setImageResource(arrMaleImg[random.nextInt(arrMaleImg.length)]);
-        } else if (localDataSet.get(position).getGender().equals("Female")) {
-            viewHolder.getImgPerson().setImageResource(arrFemaleImg[random.nextInt(arrFemaleImg.length)]);
+        if(localDataSet.get(position).getGender().equals("Male")){ // checking gender is male
+            viewHolder.getImgPerson().setImageResource(arrMaleImg[random.nextInt(arrMaleImg.length)]); // setting image randomly of male person
+        } else if (localDataSet.get(position).getGender().equals("Female")) { // checking gender is female
+            viewHolder.getImgPerson().setImageResource(arrFemaleImg[random.nextInt(arrFemaleImg.length)]); // setting image randomly of female person
         }
     }
 

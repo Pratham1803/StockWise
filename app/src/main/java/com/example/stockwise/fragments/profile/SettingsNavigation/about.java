@@ -15,27 +15,27 @@ import com.example.stockwise.databinding.ActivityPrivacyPolicyBinding;
 
 public class about extends AppCompatActivity {
     private ActivityAboutBinding bind; // declaring view binding
-    private Context context;
+    private Context context; // declaring context
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
 
         bind = ActivityAboutBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
 
-        setContentView(bind.getRoot());
+        setContentView(bind.getRoot()); // setting view binding
         // setting action bar title
-        setSupportActionBar(bind.toolbarAboutUs);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
+        setSupportActionBar(bind.toolbarAboutUs); // setting toolbar
+        ActionBar actionBar = getSupportActionBar(); // getting action bar
+        assert actionBar != null; // checking if action bar is not null
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
+        actionBar.setDisplayHomeAsUpEnabled(true); // setting back button
     }
+
+    // back button function
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item,context);
+        return MainToolbar.btnBack_clicked(item,context); // calling back button function
     }
 }

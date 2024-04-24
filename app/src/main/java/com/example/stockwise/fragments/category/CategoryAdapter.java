@@ -17,24 +17,21 @@ import com.example.stockwise.model.CategoryModel;
 import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-    private final ArrayList<CategoryModel> localDataSet;
-    private final Context context;
+    private final ArrayList<CategoryModel> localDataSet; // creating arraylist of CategoryModel
+    private final Context context; // creating context
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView txtCategoryName;
-        private final TextView txtAvailableProducts;
+        private final TextView txtCategoryName; // creating textview for category name
+        private final TextView txtAvailableProducts; // creating textview for available products
 
         public ViewHolder(View view) {
             super(view);
-            view.setOnClickListener(this);
-            txtCategoryName = (TextView) view.findViewById(R.id.txtCategoryName);
-            txtAvailableProducts = (TextView) view.findViewById(R.id.txtAvailableProduct);
+            view.setOnClickListener(this); // setting onclick listener on view
+            txtCategoryName = (TextView) view.findViewById(R.id.txtCategoryName); // initialing category name
+            txtAvailableProducts = (TextView) view.findViewById(R.id.txtAvailableProduct); // initialing available products
         }
 
+        // getter methods for category name and available products
         public TextView getTxtCategoryName() {
             return txtCategoryName;
         }
@@ -43,16 +40,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             return txtAvailableProducts;
         }
 
+        // onclick listener for view
         @Override
         public void onClick(View v) {
-            int pos = this.getAbsoluteAdapterPosition();
-            String category_id = localDataSet.get(pos).getId();
-            String category_name = localDataSet.get(pos).getName();
+            int pos = this.getAbsoluteAdapterPosition(); // getting position of clicked item
+            String category_id = localDataSet.get(pos).getId(); // getting category id
+            String category_name = localDataSet.get(pos).getName(); // getting category name
 
-            Intent intent = new Intent(context, ProductList.class);
-            intent.putExtra("category_id", category_id);
-            intent.putExtra("category_name", category_name);
-            context.startActivity(intent);
+            Intent intent = new Intent(context, ProductList.class); // creating intent for ProductList class
+            intent.putExtra("category_id", category_id); // putting category id in intent
+            intent.putExtra("category_name", category_name); // putting category name in intent
+            context.startActivity(intent); // starting activity
         }
     }
 
@@ -82,18 +80,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder viewHolder, final int position) {
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
+        viewHolder.getTxtCategoryName().setText(localDataSet.get(position).getName()); // setting category name
 
-        viewHolder.getTxtCategoryName().setText(localDataSet.get(position).getName());
-        // setting available products
-        String availableProducts;
-        if (localDataSet.get(position).getArrProducts() == null)
-            availableProducts = "Total Products : 0";
+        String availableProducts; // creating string for available products
+        if (localDataSet.get(position).getArrProducts() == null) // checking if products are available or not
+            availableProducts = "Total Products : 0"; // setting available products as 0
         else
-            // setting available products (total products in the category
+            // setting total products in the category
             availableProducts = "Total Products : " + localDataSet.get(position).getArrProducts().size();
-        viewHolder.getTxtAvailableProducts().setText(availableProducts);
+        viewHolder.getTxtAvailableProducts().setText(availableProducts); // setting available products
     }
 
     // Return the size of your dataset (invoked by the layout manager)

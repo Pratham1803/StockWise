@@ -15,153 +15,142 @@ import com.example.stockwise.databinding.ActivityPrivacyPolicyBinding;
 
 public class PrivacyPolicy extends AppCompatActivity {
     private ActivityPrivacyPolicyBinding bind; // declaring view binding
-    private Context context;
+    private Context context; // declaring context
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         bind = ActivityPrivacyPolicyBinding.inflate(getLayoutInflater()); // initializing view binding
         context = bind.getRoot().getContext(); // initializing context
+        setContentView(bind.getRoot()); // setting view binding
 
-        setContentView(bind.getRoot());
         // setting action bar title
-        setSupportActionBar(bind.toolbarPrivacyPolicy);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
+        setSupportActionBar(bind.toolbarPrivacyPolicy); // setting toolbar
+        ActionBar actionBar = getSupportActionBar();  // getting action bar
+        assert actionBar != null; // checking action bar is not null
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true); // setting back button
 
-        bind.scrollView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        bind.scrollView.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // setting layer type
 
-
+        // setting on click listener on buttons
         bind.btnIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(bind.ShowIntroduction.getVisibility()==View.GONE){
-
-                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
-                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                if(bind.ShowIntroduction.getVisibility()==View.GONE){ // checking visibility of view
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE) // checking visibility of view
                     {
-
-                        bind.ShowSecurity.setVisibility(View.GONE);
-                        bind.ShowInformation.setVisibility(View.GONE);
-                        bind.ShowUseInformation.setVisibility(View.GONE);
-                        bind.ShowUpdates.setVisibility(View.GONE);
+                        bind.ShowSecurity.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUseInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUpdates.setVisibility(View.GONE); // setting visibility of view
                     }
                 }
 
-                if(bind.ShowIntroduction.getVisibility() == View.GONE) {
-                    bind.ShowIntroduction.setVisibility(View.VISIBLE);
-                } else {
-                    bind.ShowIntroduction.setVisibility(View.GONE);
+                if(bind.ShowIntroduction.getVisibility() == View.GONE) { // checking visibility of view
+                    bind.ShowIntroduction.setVisibility(View.VISIBLE); // setting visibility of view
+                } else { // if view is visible
+                    bind.ShowIntroduction.setVisibility(View.GONE); // setting visibility of view
                 }
-
             }
         });
 
+        // setting on click listener on buttons
         bind.btnInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(bind.ShowInformation.getVisibility()==View.GONE){
-
-                    if(bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
-                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
-                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                if(bind.ShowInformation.getVisibility()==View.GONE){ // checking visibility of view
+                    if(bind.ShowIntroduction.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE) // checking visibility of view
                     {
-
-                        bind.ShowSecurity.setVisibility(View.GONE);
-                        bind.ShowIntroduction.setVisibility(View.GONE);
-                        bind.ShowUseInformation.setVisibility(View.GONE);
-                        bind.ShowUpdates.setVisibility(View.GONE);
+                        bind.ShowSecurity.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowIntroduction.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUseInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUpdates.setVisibility(View.GONE); // setting visibility of view
                     }
                 }
 
-                if(bind.ShowInformation.getVisibility() == View.GONE) {
-                    bind.ShowInformation.setVisibility(View.VISIBLE);
-                } else {
-                    bind.ShowInformation.setVisibility(View.GONE);
+                if(bind.ShowInformation.getVisibility() == View.GONE) { // checking visibility of view
+                    bind.ShowInformation.setVisibility(View.VISIBLE); // setting visibility of view
+                } else { // if view is visible
+                    bind.ShowInformation.setVisibility(View.GONE); // setting visibility of view
                 }
             }
         });
 
+        // setting on click listener on buttons
         bind.btnUseInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(bind.ShowUseInformation.getVisibility()==View.GONE){
-
-                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
-                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
-                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                if(bind.ShowUseInformation.getVisibility()==View.GONE){ // checking visibility of view
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||    // checking visibility of view
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE) // checking visibility of view
                     {
-
-                        bind.ShowSecurity.setVisibility(View.GONE);
-                        bind.ShowInformation.setVisibility(View.GONE);
-                        bind.ShowIntroduction.setVisibility(View.GONE);
-                        bind.ShowUpdates.setVisibility(View.GONE);
+                        bind.ShowSecurity.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowIntroduction.setVisibility(View.GONE);     // setting visibility of view
+                        bind.ShowUpdates.setVisibility(View.GONE); // setting visibility of view
                     }
                 }
-                if(bind.ShowUseInformation.getVisibility() == View.GONE) {
-                    bind.ShowUseInformation.setVisibility(View.VISIBLE);
-                } else {
-                    bind.ShowUseInformation.setVisibility(View.GONE);
+                if(bind.ShowUseInformation.getVisibility() == View.GONE) { // checking visibility of view
+                    bind.ShowUseInformation.setVisibility(View.VISIBLE); // setting visibility of view
+                } else { // if view is visible
+                    bind.ShowUseInformation.setVisibility(View.GONE); // setting visibility of view
                 }
             }
         });
 
+        // setting on click listener on buttons
         bind.btnSecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(bind.ShowSecurity.getVisibility()==View.GONE){
-
-                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUpdates.getVisibility()==View.VISIBLE ||
-                            bind.ShowIntroduction.getVisibility()==View.VISIBLE)
+                if(bind.ShowSecurity.getVisibility()==View.GONE){ // checking visibility of view
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUpdates.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE) // checking visibility of view
                     {
-
-                        bind.ShowUpdates.setVisibility(View.GONE);
-                        bind.ShowInformation.setVisibility(View.GONE);
-                        bind.ShowUseInformation.setVisibility(View.GONE);
-                        bind.ShowIntroduction.setVisibility(View.GONE);
+                        bind.ShowUpdates.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUseInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowIntroduction.setVisibility(View.GONE); // setting visibility of view
                     }
                 }
-                if(bind.ShowSecurity.getVisibility() == View.GONE) {
-                    bind.ShowSecurity.setVisibility(View.VISIBLE);
-                } else {
-                    bind.ShowSecurity.setVisibility(View.GONE);
+                if(bind.ShowSecurity.getVisibility() == View.GONE) { // checking visibility of view
+                    bind.ShowSecurity.setVisibility(View.VISIBLE); // setting visibility of view
+                } else { // if view is visible
+                    bind.ShowSecurity.setVisibility(View.GONE); // setting visibility of view
                 }
             }
         });
 
+        // setting on click listener on buttons
         bind.btnUpdatees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(bind.ShowUpdates.getVisibility()==View.GONE){
-
-                    if(bind.ShowInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowUseInformation.getVisibility()==View.VISIBLE ||
-                            bind.ShowIntroduction.getVisibility()==View.VISIBLE ||
-                            bind.ShowSecurity.getVisibility()==View.VISIBLE)
+                if(bind.ShowUpdates.getVisibility()==View.GONE){ // checking visibility of view
+                    if(bind.ShowInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowUseInformation.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowIntroduction.getVisibility()==View.VISIBLE || // checking visibility of view
+                            bind.ShowSecurity.getVisibility()==View.VISIBLE) // checking visibility of view
                     {
-
-                        bind.ShowIntroduction.setVisibility(View.GONE);
-                        bind.ShowInformation.setVisibility(View.GONE);
-                        bind.ShowUseInformation.setVisibility(View.GONE);
-                        bind.ShowSecurity.setVisibility(View.GONE);
+                        bind.ShowIntroduction.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowUseInformation.setVisibility(View.GONE); // setting visibility of view
+                        bind.ShowSecurity.setVisibility(View.GONE); // setting visibility of view
                     }
                 }
-                if(bind.ShowUpdates.getVisibility() == View.GONE) {
-                    bind.ShowUpdates.setVisibility(View.VISIBLE);
-                } else {
-                    bind.ShowUpdates.setVisibility(View.GONE);
+                if(bind.ShowUpdates.getVisibility() == View.GONE) { // checking visibility of view
+                    bind.ShowUpdates.setVisibility(View.VISIBLE); // setting visibility of view
+                } else { // if view is visible
+                    bind.ShowUpdates.setVisibility(View.GONE); // setting visibility of view
                 }
             }
         });
@@ -171,6 +160,6 @@ public class PrivacyPolicy extends AppCompatActivity {
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item,context);
+        return MainToolbar.btnBack_clicked(item,context); // calling back button click event
     }
 }

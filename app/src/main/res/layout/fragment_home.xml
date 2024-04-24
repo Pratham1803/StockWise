@@ -243,7 +243,7 @@
                                 android:fontFamily="@font/lexend_"
                                 android:text="0"
                                 android:textColor="@color/black"
-                                android:textSize="22sp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:id="@+id/txtSales"

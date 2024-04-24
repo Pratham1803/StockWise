@@ -57,19 +57,6 @@ public class SplashActivity extends AppCompatActivity {
             );
     }
 
-    // setting FCM token for firebase messaging
-    private void getFCM_TOKEN() {
-        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(
-                new OnSuccessListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        Params.getOwnerModel().setFcm_token(s); // setting fcm token to the current user model
-                        Params.getREFERENCE().child(Params.getOwnerModel().getId()).child(Params.getFcmToken()).setValue(s); // storing token in firebase database
-                    }
-                }
-        );
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,29 +66,30 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                boolean isConnected = true;
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                if (connectivityManager != null) {
-                    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-                    if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                boolean isConnected = true; // check if internet is connected or not
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE); // get connectivity manager
+                if (connectivityManager != null) { // if connectivity manager is not null
+                    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo(); // get active network info
+                    if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) { // if network is connected
                         // is the user is not logged in, open login screen (LoginModule)
-                        if(Params.getAUTH().getCurrentUser() == null){
-                            startActivity(new Intent(SplashActivity.this, LandingPage.class));
-                            finish();
+                        if(Params.getAUTH().getCurrentUser() == null){ // if user is not logged in
+                            startActivity(new Intent(SplashActivity.this, LandingPage.class)); // open login screen
+                            finish(); // finish this activity
                         }else{ // else open main activity with all data of user
-                            openMainActivity(SplashActivity.this);
+                            openMainActivity(SplashActivity.this); // open main activity
                         }
                     } else
-                        isConnected = false;
+                        isConnected = false; // if network is not connected
                 } else
-                    isConnected = false;
+                    isConnected = false; // if connectivity manager is null
 
-                if(!isConnected) {
+                if(!isConnected) { // if network is not connected
+                    // show dialog box
                     AlertDialog.Builder builder = DialogBuilder.showDialog(SplashActivity.this, "No Internet Connection", "Please check your internet connection and try again");
                     builder.setPositiveButton("OK", (dialog, which) -> {
-                        finish();
+                        finish(); // finish this activity
                     });
-                    builder.show();
+                    builder.show(); // show dialog box
                 }
             }
         }, 10);

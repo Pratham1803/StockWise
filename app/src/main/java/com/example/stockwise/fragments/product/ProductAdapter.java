@@ -19,9 +19,8 @@ import com.example.stockwise.model.ProductModel;
 import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
-
-    private ArrayList<ProductModel> localDataSet;
-    private final Context context;
+    private ArrayList<ProductModel> localDataSet; // dataset of product
+    private final Context context; // context of the activity
 
     /**
      * Provide a reference to the type of views that you are using
@@ -45,7 +44,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
 
         // defining getters to return the views of all four views
-
         public TextView getTxtSKU_num() {
             return txtSKU_num;
         }
@@ -67,12 +65,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
 
         @Override
-        public void onClick(View v) {
-            int pos = getAbsoluteAdapterPosition();
-            ProductModel product = localDataSet.get(pos);
-            Intent intent = new Intent(context, ProductView.class);
-            intent.putExtra("productObj", product);
-            context.startActivity(intent);
+        public void onClick(View v) { // on click of any item
+            int pos = getAbsoluteAdapterPosition(); // getting the position of the clicked item
+            ProductModel product = localDataSet.get(pos); // getting the product object of the clicked item
+            Intent intent = new Intent(context, ProductView.class); // creating intent to open ProductView activity
+            intent.putExtra("productObj", product); // passing the product object to the ProductView activity
+            context.startActivity(intent); // starting the ProductView activity
         }
     }
 
@@ -88,9 +86,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.context = context; // initialing context
     }
 
+    // setting the localDataSet
     public void setLocalDataSet(ArrayList<ProductModel> localDataSet){
-        this.localDataSet = localDataSet;
-        this.notifyDataSetChanged();
+        this.localDataSet = localDataSet; // setting the localDataSet
+        this.notifyDataSetChanged(); // notifying the adapter that the data has been changed
     }
 
     // Create new views (invoked by the layout manager)
@@ -113,17 +112,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.getTxtProductName().setText(localDataSet.get(position).getName());
 
         // setting current stock
-        String currentStock = "Current Stock : " + localDataSet.get(position).getCurrent_stock();
-        viewHolder.getTxtCurrentStock().setText(currentStock);
+        String currentStock = "Current Stock : " + localDataSet.get(position).getCurrent_stock(); // getting current stock of the product
+        viewHolder.getTxtCurrentStock().setText(currentStock); // setting current stock of the product
 
         // setting product price
-        String price = "Price : " + localDataSet.get(position).getSale_price();
-        viewHolder.getTxtPrice().setText(price);
-        Glide.with(context).load(localDataSet.get(position).getPicture()).into(viewHolder.getImgProduct());
+        String price = "Price : " + localDataSet.get(position).getSale_price(); // getting price of the product
+        viewHolder.getTxtPrice().setText(price); // setting price of the product
+        Glide.with(context).load(localDataSet.get(position).getPicture()).into(viewHolder.getImgProduct()); // setting image of the product
 
         // setting barcode SKU Num
-        String sku_num = "SKU : " + localDataSet.get(position).getId();
-        viewHolder.getTxtSKU_num().setText(sku_num);
+        String sku_num = "SKU : " + localDataSet.get(position).getId(); // getting barcode SKU Num of the product
+        viewHolder.getTxtSKU_num().setText(sku_num); // setting barcode SKU Num of the product
     }
 
     // Return the size of your dataset (invoked by the layout manager)

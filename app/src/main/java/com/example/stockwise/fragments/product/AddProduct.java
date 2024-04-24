@@ -83,35 +83,36 @@ public class AddProduct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // initializing view binding
-        bind = ActivityAddProductBinding.inflate(getLayoutInflater());
-        setContentView(bind.getRoot());
+        bind = ActivityAddProductBinding.inflate(getLayoutInflater()); // initializing view binding
+        setContentView(bind.getRoot()); // setting view binding
         productModel = new ProductModel(); // initializing object of product model
 
         // setup actionbar and adding back press button
-        setSupportActionBar(bind.toolbarProduct);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
+        setSupportActionBar(bind.toolbarProduct); // setting toolbar
+        ActionBar actionBar = getSupportActionBar(); // getting action bar
+        assert actionBar != null; // checking action bar is not null
         actionBar.setHomeAsUpIndicator(R.drawable.leftarrowvector); // changing customize back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true); // setting back button
 
         // setting spinner for category
-        arrCategory = new ArrayList<>();
-        arrCategory.add(new CategoryModel("1", "Select Category", null));
-        arrCategory.addAll(Params.getOwnerModel().getArrCategory());
+        arrCategory = new ArrayList<>(); // initializing category list
+        arrCategory.add(new CategoryModel("1", "Select Category", null)); // adding default category
+        arrCategory.addAll(Params.getOwnerModel().getArrCategory()); // adding all the category in the list
 
-        ArrayList<String> arrCategoryName = new ArrayList<>();
-        for (CategoryModel categoryModel : arrCategory)
+        ArrayList<String> arrCategoryName = new ArrayList<>(); // initializing category name list
+        for (CategoryModel categoryModel : arrCategory) // adding category name in the list
             arrCategoryName.add(categoryModel.getName());
 
+        // setting adapter for spinner of category
         ArrayAdapter adapter = new ArrayAdapter(AddProduct.this, android.R.layout.simple_spinner_dropdown_item, arrCategoryName);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        bind.spCategory.setAdapter(adapter);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line); // setting dropdown view
+        bind.spCategory.setAdapter(adapter); // setting adapter in spinner
 
         // onclick listener on imageview to change the image using camera or from gallery
         bind.imgAddProductMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showImageSelectionDialog();
+                showImageSelectionDialog(); // method call for user option of camera or gallery
             }
         });
 
@@ -119,21 +120,23 @@ public class AddProduct extends AppCompatActivity {
         bind.edCurrentStock.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // if focus is lost
                 if (!hasFocus) {
+                    // check that current stock is less than 1 or not
                     try {
-                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
-                        if (stock < 1) {
-                            bind.txtHeading.setText("Product is Out of Stock!!");
-                            bind.txtHeading.setVisibility(View.VISIBLE);
-                            bind.edCurrentStock.setTextColor(getColor(R.color.red));
-                            Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show();
-                            isOutOfStock = true;
-                        } else {
-                            bind.txtHeading.setVisibility(View.GONE);
-                            bind.edCurrentStock.setTextColor(getColor(R.color.black));
-                            isOutOfStock = false;
+                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString()); // getting current stock
+                        if (stock < 1) { // if stock is less than 1
+                            bind.txtHeading.setText("Product is Out of Stock!!"); // setting heading
+                            bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
+                            bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
+                            Toast.makeText(AddProduct.this, "Out of Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
+                            isOutOfStock = true; // setting out of stock status
+                        } else { // if stock is greater than 1
+                            bind.txtHeading.setVisibility(View.GONE); // making heading invisible
+                            bind.edCurrentStock.setTextColor(getColor(R.color.black)); // changing text color to black
+                            isOutOfStock = false; // setting out of stock status
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e) { // if any error rise
                         Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
                 }
@@ -144,94 +147,101 @@ public class AddProduct extends AppCompatActivity {
         bind.edReorderpoint.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // if focus is lost
                 if (!hasFocus) {
                     try {
-                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString());
-                        int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString());
-
+                        int stock = Integer.parseInt(bind.edCurrentStock.getText().toString()); // getting current stock
+                        int reorder = Integer.parseInt(bind.edReorderpoint.getText().toString()); // getting reorder point
+                        // if stock is less than reorder point
                         if (stock < reorder) {
-                            bind.edCurrentStock.setTextColor(getColor(R.color.red));
-                            Toast.makeText(AddProduct.this, "Insufficient Stock", Toast.LENGTH_SHORT).show();
-                            bind.txtHeading.setText("Insufficient Stock!! less Than Reorder Point");
-                            bind.txtHeading.setVisibility(View.VISIBLE);
-                            isReorderPointReached = true;
-                        } else {
-                            bind.txtHeading.setVisibility(View.GONE);
-                            bind.edCurrentStock.setTextColor(getColor(R.color.black));
-                            isReorderPointReached = false;
+                            bind.edCurrentStock.setTextColor(getColor(R.color.red)); // changing text color to red
+                            Toast.makeText(AddProduct.this, "Insufficient Stock", Toast.LENGTH_SHORT).show(); // displaying toast message
+                            bind.txtHeading.setText("Insufficient Stock!! less Than Reorder Point"); // setting heading
+                            bind.txtHeading.setVisibility(View.VISIBLE); // making heading visible
+                            isReorderPointReached = true; // setting reorder point status
+                        } else { // if stock is greater than reorder point
+                            bind.txtHeading.setVisibility(View.GONE); // making heading invisible
+                            bind.edCurrentStock.setTextColor(getColor(R.color.black)); // changing text color to black
+                            isReorderPointReached = false; // setting reorder point status
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e) { // if any error rise
                         Log.d("ErrorMsg", "onFocusChange: " + e.getMessage());
                     }
                 }
             }
         });
 
+        // if product is updating then set the screen for update
         if (getIntent().getSerializableExtra("productObj") != null) {
-            isUpdating = true;
-            productModel = (ProductModel) getIntent().getSerializableExtra("productObj");
-            setUpdateScreen();
+            isUpdating = true; // setting updating status
+            productModel = (ProductModel) getIntent().getSerializableExtra("productObj"); // getting product object
+            setUpdateScreen(); // setting screen for update
         }
     }
 
     // back press event of actionbar back button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainToolbar.btnBack_clicked(item, AddProduct.this);
+        return MainToolbar.btnBack_clicked(item, AddProduct.this); // back press event
     }
 
+    // setting screen for update
     private void setUpdateScreen() {
-        bind.edCurrentStock.setText(productModel.getCurrent_stock());
-        bind.edBarCodeNum.setText(productModel.getId());
-        bind.edProductName.setText(productModel.getName());
-        bind.edPurchasePrice.setText(productModel.getPurchase_price());
-        bind.edReorderpoint.setText(productModel.getReorder_point());
-        bind.edSalePrice.setText(productModel.getSale_price());
+        bind.edCurrentStock.setText(productModel.getCurrent_stock()); // setting current stock
+        bind.edBarCodeNum.setText(productModel.getId()); // setting barcode number
+        bind.edProductName.setText(productModel.getName()); // setting product name
+        bind.edPurchasePrice.setText(productModel.getPurchase_price()); // setting purchase price
+        bind.edReorderpoint.setText(productModel.getReorder_point()); // setting reorder point
+        bind.edSalePrice.setText(productModel.getSale_price()); // setting sale price
 
-        bind.btnAddProduct.setText("Update Product");
-        Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain);
+        bind.btnAddProduct.setText("Update Product"); // changing button text
+        Glide.with(AddProduct.this).load(productModel.getPicture()).into(bind.imgAddProductMain); // setting image in image view
 
-        bind.edCurrentStock.setEnabled(false);
-        bind.edBarCodeNum.setEnabled(false);
-        bind.edPurchasePrice.setEnabled(false);
-        bind.edSalePrice.setEnabled(false);
+        bind.edCurrentStock.setEnabled(false); // disabling current stock input field
+        bind.edBarCodeNum.setEnabled(false); // disabling barcode number input field
+        bind.edPurchasePrice.setEnabled(false); // disabling purchase price input field
+        bind.edSalePrice.setEnabled(false); // disabling sale price input field
 
+        // setting category spinner
         for (int i = 0; i < arrCategory.size(); i++) {
+            // if category is same as product category
             if (arrCategory.get(i).getName().equals(productModel.getCategory())) {
-                bind.spCategory.setSelection(i);
-                break;
+                bind.spCategory.setSelection(i); // setting category in spinner
+                break; // break the loop
             }
         }
 
-        bind.edCurrentStock.setTextColor(getColor(R.color.TextGrey));
-        bind.edBarCodeNum.setTextColor(getColor(R.color.TextGrey));
-        bind.edPurchasePrice.setTextColor(getColor(R.color.TextGrey));
-        bind.edSalePrice.setTextColor(getColor(R.color.TextGrey));
+        bind.edCurrentStock.setTextColor(getColor(R.color.TextGrey)); // changing text color to grey
+        bind.edBarCodeNum.setTextColor(getColor(R.color.TextGrey)); // changing text color to grey
+        bind.edPurchasePrice.setTextColor(getColor(R.color.TextGrey)); // changing text color to grey
+        bind.edSalePrice.setTextColor(getColor(R.color.TextGrey)); // changing text color to grey
     }
 
     // menu bar item selection listener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu); // setting toolbar menu
 
         // scan button initialization from action bar and on click listener
         MenuItem btnScan = menu.findItem(R.id.scanner);
 
         // search and add buttons are not useful so we are unvisibiling them
         MenuItem btnSearch = menu.findItem(R.id.search);
-        btnSearch.setVisible(false);
+        btnSearch.setVisible(false); // making search button invisible
 
-        MenuItem btnAdd = menu.findItem(R.id.addProduct);
-        btnAdd.setVisible(false);
+        MenuItem btnAdd = menu.findItem(R.id.addProduct); // add product button
+        btnAdd.setVisible(false); // making add product button invisible
 
+        // scan button on click listener
         btnScan.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                if (isUpdating) {
+                if (isUpdating) { // if product is updating
+                    // displaying toast message
                     Toast.makeText(AddProduct.this, "Can't Scan in Update Mode", Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                reset();
+                reset(); // reset all the fields
                 scanner = MainToolbar.getScanner(); // getting scanner options
                 bar.launch(scanner); // launching the scanner
                 return true;
@@ -242,33 +252,36 @@ public class AddProduct extends AppCompatActivity {
 
     // select image from gallery or camera  using this method, when product is not available when scan
     private void showImageSelectionDialog() {
-        builder = DialogBuilder.showDialog(AddProduct.this, "Select Image Source :", "");
-        builder.setMessage(null);
+        builder = DialogBuilder.showDialog(AddProduct.this, "Select Image Source :", ""); // dialog box builder
+        builder.setMessage(null); // setting message to null
 
-        String[] options = {"Capture Photo", "Choose from Gallery"};
+        String[] options = {"Capture Photo", "Choose from Gallery"}; // options for dialog box
+
+        // setting options in dialog box
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
+                switch (which) { // switch case for options
+                    case 0: // if user select camera
                         dispatchTakePictureIntent(); // open camera
                         break;
-                    case 1:
+                    case 1: // if user select gallery
                         dispatchPickImageIntent(); // open gallery
                         break;
                 }
             }
         });
 
-        builder.create().show();
+        builder.create().show(); // show dialog box
     }
 
     // opening camera for taking picture
     private void dispatchTakePictureIntent() {
         try {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); // intent for camera
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE); // start camera
         } catch (Exception e) {
+            // if any error rise
             Toast.makeText(AddProduct.this, "Can not Open Camera", Toast.LENGTH_SHORT).show();
             Log.d("ErrorMsg", "dispatchTakePictureIntent: " + e.getMessage());
         }
@@ -277,10 +290,11 @@ public class AddProduct extends AppCompatActivity {
     // opening local files to find the image
     private void dispatchPickImageIntent() {
         try {
-            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickImageIntent.setType("image/*");
-            startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY);
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); // intent for gallery
+            pickImageIntent.setType("image/*"); // setting type of image
+            startActivityForResult(pickImageIntent, REQUEST_IMAGE_GALLERY); // start gallery
         } catch (Exception e) {
+            // if any error rise
             Toast.makeText(AddProduct.this, "Can not Open Gallery", Toast.LENGTH_SHORT).show();
             Log.d("ErrorMsg", "dispatchPickImageIntent: " + e.getMessage());
         }
@@ -289,29 +303,31 @@ public class AddProduct extends AppCompatActivity {
     // image is taken from camera or from file, now set in imageview
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data); // calling super method
+
+        // if image is taken from camera
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             // image from camera
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            bind.imgAddProductMain.setImageBitmap(imageBitmap);
-        } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
-            // image from gallery
-            Uri selectedImageUri = data.getData();
-            bind.imgAddProductMain.setImageURI(selectedImageUri);
+            Bundle extras = data.getExtras(); // getting extras
+            Bitmap imageBitmap = (Bitmap) extras.get("data"); // getting image from extras
+            bind.imgAddProductMain.setImageBitmap(imageBitmap); // setting image in image view
+        } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) { // if image is taken from gallery
+            // image from gallery is selected
+            Uri selectedImageUri = data.getData(); // getting image uri
+            bind.imgAddProductMain.setImageURI(selectedImageUri); // setting image in image view
         }
     }
 
     // reset all fields of form
     private void reset() {
         bind.imgAddProductMain.setImageDrawable(getDrawable(R.drawable.addimg)); // set default image
-        bind.edProductName.setText("");
-        bind.edCurrentStock.setText("");
-        bind.edBarCodeNum.setText("");
-        bind.edReorderpoint.setText("");
-        bind.edPurchasePrice.setText("");
-        bind.edSalePrice.setText("");
-        bind.txtHeading.setVisibility(View.GONE);
+        bind.edProductName.setText(""); // set product name to null
+        bind.edCurrentStock.setText(""); // set current stock to null
+        bind.edBarCodeNum.setText(""); // set barcode number to null
+        bind.edReorderpoint.setText(""); // set reorder point to null
+        bind.edPurchasePrice.setText(""); // set purchase price to null
+        bind.edSalePrice.setText(""); // set sale price to null
+        bind.txtHeading.setVisibility(View.GONE); // make heading invisible
     }
 
     // scanner result
@@ -319,25 +335,26 @@ public class AddProduct extends AppCompatActivity {
         // if scanner has some result
         if (result.getContents() != null) {
             barCodeId = result.getContents(); // collect the barcode number and store it
-            checkBarCodeNum();
+            checkBarCodeNum(); // check the barcode number
         }
         // scanner does not have any results
         else Toast.makeText(this, "Unable to Scan!!", Toast.LENGTH_LONG).show();
     });
 
+    // check the barcode number
     private boolean checkBarCodeNum() {
-        builder = DialogBuilder.showDialog(this, "Scanner Result!!:", "Is this, Correct Result? :\n" + barCodeId);
+        builder = DialogBuilder.showDialog(this, "Scanner Result!!:", "Is this, Correct Result? :\n" + barCodeId); // dialog box builder
 
         // positive button to add product manually
         builder.setPositiveButton("Fetch Product Details", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Fetching Product Details", "Please Wait...");
+                dialog.cancel(); // close dialog box
+                sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Fetching Product Details", "Please Wait..."); // show progress dialog
                 try {
-                    getProductDetail();
+                    getProductDetail(); // get product details from api
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(e); // if any error rise
                 }
             }
         });
@@ -346,21 +363,21 @@ public class AddProduct extends AppCompatActivity {
         builder.setNegativeButton("Scan Again", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                bar.launch(scanner);
+                bar.launch(scanner); // launch scanner again
             }
         });
 
-        // set cancel button
+        // user want to add product manually
         builder.setNeutralButton("Add Product Manually", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 bind.edBarCodeNum.setText(barCodeId); //setting barcode number in text view
-                dialog.cancel();
-                showImageSelectionDialog();
+                dialog.cancel(); // close dialog box
+                showImageSelectionDialog(); // method call for user option of camera or gallery
             }
         });
 
-        builder.create().show();
+        builder.create().show(); // show dialog box
         return true;
     }
 
@@ -402,15 +419,16 @@ public class AddProduct extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-RapidAPI-Key", "8b95b432c8mshbc8aee1d626616ap199372jsnb71b43f2a8fc");
-                params.put("X-RapidAPI-Host", "barcodes1.p.rapidapi.com");
+                Map<String, String> params = new HashMap<>(); // header parameters
+                params.put("X-RapidAPI-Key", "8b95b432c8mshbc8aee1d626616ap199372jsnb71b43f2a8fc"); // api key
+                params.put("X-RapidAPI-Host", "barcodes1.p.rapidapi.com"); // api host
                 return params;
             }
         };
 
+        // setting retry policy for api call
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        queue.add(jsonObjectRequest);
+        queue.add(jsonObjectRequest); // adding request in queue
     }
 
     // API can't fetch the product details || Error Rise
@@ -439,19 +457,19 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
-        builder.create().show();
+        builder.create().show(); // show dialog box
     }
 
     // add product button clicked
     public void btnAddProductClicked(View view) {
         // store all the data from textboxes to the productModel Class object
-        productModel.setId(bind.edBarCodeNum.getText().toString());
-        productModel.setName(bind.edProductName.getText().toString());
-        productModel.setCurrent_stock(bind.edCurrentStock.getText().toString());
-        productModel.setReorder_point(bind.edReorderpoint.getText().toString());
-        productModel.setPurchase_price(bind.edPurchasePrice.getText().toString());
-        productModel.setSale_price(bind.edSalePrice.getText().toString());
-        productModel.setCategory(arrCategory.get(bind.spCategory.getSelectedItemPosition()).getId());
+        productModel.setId(bind.edBarCodeNum.getText().toString()); // setting barcode number
+        productModel.setName(bind.edProductName.getText().toString()); // setting product name
+        productModel.setCurrent_stock(bind.edCurrentStock.getText().toString()); // setting current stock
+        productModel.setReorder_point(bind.edReorderpoint.getText().toString()); // setting reorder point
+        productModel.setPurchase_price(bind.edPurchasePrice.getText().toString()); // setting purchase price
+        productModel.setSale_price(bind.edSalePrice.getText().toString()); // setting sale price
+        productModel.setCategory(arrCategory.get(bind.spCategory.getSelectedItemPosition()).getId()); // setting category
 
         // check that is there any input available or not
         if ((!productModel.getName().isEmpty()) && (!productModel.getCurrent_stock().isEmpty()) && (!productModel.getReorder_point().isEmpty()) && (!productModel.getPurchase_price().isEmpty()) && (!productModel.getSale_price().isEmpty()) && (!productModel.getId().isEmpty()) && (!productModel.getCategory().equals("Select Category"))) {
@@ -465,33 +483,32 @@ public class AddProduct extends AppCompatActivity {
     // check that is product already available or not in database
     // is not then add the product in database
     private void isProductAvailable() {
-
         // check that product is already available or not
-        if (!isUpdating) {
-            for (ProductModel productModel : Params.getOwnerModel().getArrAllProduct())
-                if (productModel.getId().equals(bind.edBarCodeNum.getText().toString())) {
-                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show();
+        if (!isUpdating) { // if product is not updating
+            for (ProductModel productModel : Params.getOwnerModel().getArrAllProduct()) // check all the product in the list
+                if (productModel.getId().equals(bind.edBarCodeNum.getText().toString())) { // if product is already available
+                    Toast.makeText(AddProduct.this, "Product is Already Available!!", Toast.LENGTH_SHORT).show(); // display toast message
                     return;
                 }
-        } else {
-            if (Integer.parseInt(productModel.getCurrent_stock()) < 1) {
-                isOutOfStock = true;
+        } else { // if product is updating
+            if (Integer.parseInt(productModel.getCurrent_stock()) < 1) { // if current stock is less than 1
+                isOutOfStock = true; // setting out of stock status
             }
-            if(Integer.parseInt(productModel.getCurrent_stock()) < Integer.parseInt(productModel.getReorder_point())) {
-                isReorderPointReached = true;
+            if(Integer.parseInt(productModel.getCurrent_stock()) < Integer.parseInt(productModel.getReorder_point())) { // if current stock is less than reorder point
+                isReorderPointReached = true; // setting reorder point status
             }
         }
 
         // product is not available, so visible progress bar and upload data to the database
         sweetAlertDialog = DialogBuilder.showSweetDialogProcess(AddProduct.this, "Adding Product", "Please Wait...");
-        uploadData();
+        uploadData(); // method call to upload data in database
     }
 
     // uploading product details in firebase
     private void uploadData() {
         // Upload bitmap to Firebase Storage
         String image = productModel.getId() + ".jpg"; // setting the name of image
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); // initializing byte array output stream
 
         bitmap = ((BitmapDrawable) bind.imgAddProductMain.getDrawable()).getBitmap(); // getting bitmap from the image view
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); // compressing bitmap data into image file of jpeg
@@ -530,35 +547,36 @@ public class AddProduct extends AppCompatActivity {
     }
 
     private void addProductToCategory() {
-        CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition());
+        CategoryModel categoryModel = arrCategory.get(bind.spCategory.getSelectedItemPosition()); // getting category object
 
-        if (categoryModel.getArrProducts() == null)
-            categoryModel.setArrProducts(new ArrayList<>());
-        categoryModel.getArrProducts().add(productModel.getId());
+        if (categoryModel.getArrProducts() == null) // if category has no product
+            categoryModel.setArrProducts(new ArrayList<>()); // initializing product list
+        categoryModel.getArrProducts().add(productModel.getId()); // adding product id in the list
 
+        // adding product id in the category
         Params.getREFERENCE().child(Params.getCATEGORY()).child(categoryModel.getId()).setValue(categoryModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                sweetAlertDialog.cancel();
-                String msg = isUpdating ? "Product Updated Successfully" : "Product Added Successfully";
-                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", msg);
-                reset();
+                sweetAlertDialog.cancel(); // cancel the progress dialog
+                String msg = isUpdating ? "Product Updated Successfully" : "Product Added Successfully"; // success message
+                sweetAlertDialog = DialogBuilder.showSweetDialogSuccess(AddProduct.this, "Success", msg); // success dialog box
+                reset(); // reset all the fields
                 sweetAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        Intent resultIntent = new Intent();
+                        Intent resultIntent = new Intent(); // intent object
                         // You can put extra data in the intent if needed
-                        setResult(Activity.RESULT_OK, resultIntent);
-                        finish();
+                        setResult(Activity.RESULT_OK, resultIntent); // setting result
+                        finish(); // finish the activity
                     }
                 });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                sweetAlertDialog.cancel();
-                sweetAlertDialog = DialogBuilder.showSweetDialogError(AddProduct.this, "Error", "Failed to add product");
-                Log.d("ErrorMsg", "onFailure: " + e.getMessage());
+                sweetAlertDialog.cancel(); // cancel the progress dialog
+                sweetAlertDialog = DialogBuilder.showSweetDialogError(AddProduct.this, "Error", "Failed to add product"); // error dialog box
+                Log.d("ErrorMsg", "onFailure: " + e.getMessage()); // error message
             }
         });
     }
