@@ -1,9 +1,9 @@
 {
   "project_info": {
     "project_number": "602812577038",
-    "firebase_url": "https://stockwiseapp-231a8-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "stockwiseapp-231a8",
-    "storage_bucket": "stockwiseapp-231a8.appspot.com"
+    "firebase_url": "Enter your Firebase Real time database url",
+    "project_id": "Your Firebase Project Id",
+    "storage_bucket": "Your Firebase Storage Id"
   },
   "client": [
     {
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAs41_JVc_y8-4m2DQJlSfwnkjUXi30rY8"
+          "current_key": "Your Api Key"
         }
       ],
       "services": {
