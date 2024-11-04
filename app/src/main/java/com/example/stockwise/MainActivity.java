@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.stockwise.databinding.ActivityMainBinding;
 import com.example.stockwise.fragments.HomeFragment;
 import com.example.stockwise.fragments.category.ManageCategory;
@@ -34,7 +33,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import com.example.stockwise.fragments.profile.Settings;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private ActivityMainBinding bind; // declaring view binding
@@ -64,34 +62,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(bind.toolbar); // setting toolbar as action bar
 
         // Adding Menu items in Bottom Navigation
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navHomeId,R.drawable.homevector)); // home menu
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navCustomerId,R.drawable.custvector)); // customer menu
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navTransactionId,R.drawable.ordervector)); // transaction menu
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navProductId,R.drawable.productvector)); // product menu
-        bind.meowBottom.add(new MeowBottomNavigation.Model(navProfileId,R.drawable.profilevector)); // profile menu
-
-        bind.meowBottom.show(navHomeId,true); // displaying bottom navigation on screen
-        // setting onclick listener of bottom navigation, when menu item is click change the screen according to it
-        bind.meowBottom.setOnClickMenuListener(new Function1<MeowBottomNavigation.Model, Unit>() {
-            @Override
-            public Unit invoke(MeowBottomNavigation.Model model) {
-                int currentId = model.getId(); // getting the id of currently clicked menu item
-
-                // checking that which menu item is clicked
-                if(currentId == navHomeId){ // home menu item clicked
-                    changeFragment(homeFragment,R.string.titleHome); // changing the screen to home screen
-                } else if (currentId == navCustomerId) { // Customer menu item clicked
-                    changeFragment(personFragment,R.string.titlePerson); // changing the screen to person screen
-                }else if(currentId == navTransactionId){ // Transaction menu item clicked
-                    changeFragment(transactionFragment,R.string.titleTransaction); // changing the screen to transaction screen
-                } else if (currentId == navProductId) { // Product menu item clicked
-                    changeFragment(productFragment,R.string.titleProduct); // changing the screen to product screen
-                }else if (currentId == navProfileId) { // Profile menu item clicked
-                    changeFragment(profileFragment,R.string.titleProfile); // changing the screen to profile screen
+        bind.bottomNavigationView.setOnNavigationItemSelectedListener(
+                item -> {
+                    int id = item.getItemId(); // getting the id of currently clicked menu item
+                    if(id == R.id.nav_home){
+                        changeFragment(homeFragment,R.string.titleHome);
+                        return true;
+                    } else if (id == R.id.nav_customer) {
+                        changeFragment(personFragment,R.string.titlePerson);
+                        return true;
+                    } else if (id == R.id.nav_transaction) {
+                        changeFragment(transactionFragment,R.string.titleTransaction);
+                        return true;
+                    } else if (id == R.id.nav_product) {
+                        changeFragment(productFragment,R.string.titleProduct);
+                        return true;
+                    } else if (id == R.id.nav_profile) {
+                        changeFragment(profileFragment,R.string.titleProfile);
+                        return true;
+                    }
+                    return false;
                 }
-                return null;
-            }
-        });
+        );
+
+        bind.bottomNavigationView.setSelectedItemId(R.id.nav_home);
 
         // setting drawer and custom toolbar
         setSupportActionBar(bind.toolbar); // toolbar setup
@@ -105,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 // drawer is opened/ slide
-                bind.meowBottom.setVisibility(View.GONE); // setting visibility gone to bottom nav
+                bind.bottomNavigationView.setVisibility(View.GONE); // setting visibility gone to bottom nav
 
                 // setting values to name, number and image of view
                 TextView txtName = findViewById(R.id.txtDrawerName); // getting name text view
@@ -126,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 // drawer is closed, so visible the bottom nav
-                bind.meowBottom.setVisibility(View.VISIBLE);
+                bind.bottomNavigationView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -171,18 +165,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id == R.id.nav_home) { // home fragment selected
             changeFragment(homeFragment,R.string.titleHome); // change the screen to home screen
-            bind.meowBottom.show(navHomeId,true); // displaying the home item is selected in bottom nav
+            bind.bottomNavigationView.setSelectedItemId(R.id.nav_home); // displaying the home item is selected in bottom nav
         }
         else if (id == R.id.nav_profile) { // profile fragment selected
             changeFragment(profileFragment,R.string.titleProfile); // change the screen to profile screen
-            bind.meowBottom.show(navProfileId,true);  // displaying the profile item is selected in bottom nav
+            bind.bottomNavigationView.setSelectedItemId(R.id.nav_profile);  // displaying the profile item is selected in bottom nav
         }
         else if (id == R.id.nav_shop) { // profile fragment selected
             startActivity(new Intent(MainActivity.this, Manage_Shop.class));
         }
         else if (id == R.id.nav_manageProducts) { // Products fragment selected
             changeFragment(productFragment,R.string.titleProduct); // change the screen to product screen
-            bind.meowBottom.show(navProductId,true); // displaying the product item is selected in bottom nav
+            bind.bottomNavigationView.setSelectedItemId(R.id.nav_product); // displaying the product item is selected in bottom nav
         } else if (id == R.id.nav_category) { // category fragment
             // changing screen to category screen
             startActivity(new Intent(MainActivity.this, ManageCategory.class));
@@ -199,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_view, fragment).commit(); // changing the fragment that is given in argument
             bind.toolbar.setTitle(title); // setting title of the screen in action bar
-
             if (title == R.string.titleHome) { // if title is home then set the shop name as title
                 bind.toolbar.setTitle(Params.getOwnerModel().getShop_name()); // setting title of the screen in action bar
             }

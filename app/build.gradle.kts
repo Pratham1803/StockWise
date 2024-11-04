@@ -58,7 +58,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.hbb20:ccp:2.6.0")
-    implementation("com.etebarian:meow-bottom-navigation:1.2.0")
+//    implementation("com.etebarian:meow-bottom-navigation:1.2.0")
 
     // okHttp
     implementation("com.android.volley:volley:1.2.1")
@@ -81,5 +81,5 @@ dependencies {
     implementation ("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation ("com.nineoldandroids:library:2.4.0")
     // Searchable spinner
-    implementation("com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1")
+//    implementation("com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1")
 }

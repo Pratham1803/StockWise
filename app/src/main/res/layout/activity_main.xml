@@ -13,7 +13,7 @@
         android:id="@+id/main_drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        app:layout_constraintBottom_toTopOf="@+id/meowBottom"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MainActivity"
         tools:openDrawer="end">
@@ -59,21 +59,36 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
-    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
-        android:id="@+id/meowBottom"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:foregroundGravity="center"
+        android:layout_height="65dp"
+        app:elevation="10dp"
+        app:itemActiveIndicatorStyle="@color/blue"
+        app:itemBackground="@color/white"
+        app:itemIconTint="@color/blue"
+        app:itemTextColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:mbn_backgroundBottomColor="@color/blue"
-        app:mbn_circleColor="#ffffff"
-        app:mbn_defaultIconColor="#ffffff"
-        app:mbn_rippleColor="#2f424242"
-        app:mbn_selectedIconColor="@color/blue"
-        app:mbn_shadowColor="#1f212121" />
+        app:menu="@menu/bottom_menu" />
+
+<!--    <com.etebarian.meowbottomnavigation.MeowBottomNavigation-->
+<!--        android:id="@+id/meowBottom"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:foregroundGravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:mbn_backgroundBottomColor="@color/blue"-->
+<!--        app:mbn_circleColor="#ffffff"-->
+<!--        app:mbn_defaultIconColor="#ffffff"-->
+<!--        app:mbn_rippleColor="#2f424242"-->
+<!--        app:mbn_selectedIconColor="@color/blue"-->
+<!--        app:mbn_shadowColor="#1f212121" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

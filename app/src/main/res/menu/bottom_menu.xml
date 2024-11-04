@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/homevector"
+        />
+
+    <item
+        android:id="@+id/nav_customer"
+        android:title="Profile"
+        android:icon="@drawable/custvector"
+        />
+
+    <item
+        android:id="@+id/nav_transaction"
+        android:title="Transaction"
+        android:icon="@drawable/ordervector"
+        />
+
+    <item
+        android:id="@+id/nav_product"
+        android:title="Product"
+        android:icon="@drawable/productvector"
+        />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/profilevector"
+        />
+</menu>

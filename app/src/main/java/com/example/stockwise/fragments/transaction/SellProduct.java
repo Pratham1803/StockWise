@@ -70,7 +70,7 @@ public class SellProduct extends AppCompatActivity {
         // Setup Spinner for Entering Person Name
         arrPerson = new ArrayList<>(); // initializing array list
         arrPersonName = new ArrayList<>(); // initializing array list
-        adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_item, arrPersonName); // initializing adapter
+        adapterPersonName = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrPersonName); // initializing adapter
         bind.spPerson.setAdapter(adapterPersonName); // setting adapter
 
         // Fetching Person Data from Firebase
