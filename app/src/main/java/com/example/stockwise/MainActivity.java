@@ -44,13 +44,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     HomeFragment homeFragment = new HomeFragment(); // home fragment object
     transactionFragment transactionFragment = new transactionFragment(); // transaction fragment object
 
-    // Bottom Navigation Objects
-    protected final int navHomeId = 1; // home menu id
-    protected final int navCustomerId = 2; // customer menu id
-    protected final int navTransactionId = 3; // transaction menu id
-    protected final int navProductId = 4; // product menu id
-    protected final int navProfileId = 5; // profile menu id
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

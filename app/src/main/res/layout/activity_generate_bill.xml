@@ -343,6 +343,7 @@
                 android:id="@+id/lsProductView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                tools:listitem="@layout/bill_listview"
                 android:layout_marginHorizontal="10dp"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical" />
