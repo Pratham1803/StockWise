@@ -1,83 +1,77 @@
-# StockWise
+## 📦 StockWise - Smart Inventory Management for Small Shops
 
-Welcome to **StockWise**, your ultimate stock management app. Keep track of your inventory, manage stock levels, and make informed decisions with ease.
+![StockWise Banner](assets/banner.png) <!-- Replace with your banner image path -->
 
-## Main Features
+> **StockWise** is an Android application designed to help small general shop owners manage their inventory with ease, accuracy, and speed. With features like barcode scanning, mobile authentication, and smart stock filtering, StockWise turns complex inventory tasks into a seamless experience.
 
-### 1. Dashboard
-- **Overview of Stock Levels**: Get a quick glance at your current stock levels.
-- **Recent Activity**: See the latest updates and changes in your inventory.
-- **Alerts and Notifications**: Stay informed about low stock levels and other important updates.
+---
 
-### 2. Inventory Management
-- **Add/Remove Items**: Easily add new items or remove old ones from your inventory.
-- **Update Stock Levels**: Quickly update the stock levels for any item.
-- **Categorize Items**: Organize your inventory by categories for better management.
+### 📱 Preview
 
-### 3. Reports and Analytics
-- **Sales Reports**: Generate detailed sales reports to understand your business performance.
-- **Stock Movement**: Track the movement of stock in and out of your inventory.
-- **Trends and Insights**: Gain insights into stock trends and make data-driven decisions.
+| Home Screen             | Product List             | Single Product            | Settings         |
+| ----------------------- | ----------------------- | ----------------------- | ----------------------- |
+| ![](assets/screen1.png) | ![](assets/screen2.png) | ![](assets/screen3.png) | ![](assets/screen4.png) |
 
-### 4. User Management
-- **Role-Based Access**: Assign different roles and permissions to users.
-- **Activity Logs**: Keep track of user activities and changes made to the inventory.
 
-## Screens Layout
 
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
+---
 
-### Inventory Management
-![Inventory Management](screenshots/inventory_management.png)
+### ✨ Features
 
-### Reports and Analytics
-![Reports and Analytics](screenshots/reports_analytics.png)
+* 📲 **Mobile OTP Verification** for secure login
+* 📦 **Product & Vendor Management**
+* 🧾 **Customer Records & Category Organization**
+* 📸 **Barcode Scanning** to auto-fill product info
+* 🔍 **Advanced Filtering** (out-of-stock, reorder level alerts)
+* 👥 **User Profile Management**
+* ☁️ **Firebase Realtime Sync** for data safety and fast access
 
-### User Management
-![User Management](screenshots/user_management.png)
+---
 
-## Technology Used
+### 🧰 Tech Stack
 
-- **Frontend**: React Native
-- **Backend**: Node.js with Express
-- **Database**: MongoDB
-- **Authentication**: Firebase Authentication
-- **Hosting**: Heroku
+| Category         | Tools / Technologies                |
+| ---------------- | ----------------------------------- |
+| Language         | Java                                |
+| Framework        | Android SDK                         |
+| Backend/Database | Firebase (Auth, Firestore, Storage) |
+| Version Control  | Git & GitHub                        |
 
-## Getting Started
+---
 
-To get a local copy up and running, follow these simple steps:
+### 🚀 Getting Started
 
-1. **Clone the repo**
-    ```sh
-    git clone https://github.com/yourusername/StockWise.git
-    ```
-2. **Install NPM packages**
-    ```sh
-    npm install
-    ```
-3. **Run the app**
-    ```sh
-    npm start
-    ```
+1. **Clone the Repository**
 
-## Contributing
+```bash
+git clone https://github.com/Pratham1803/StockWise.git
+```
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+2. **Open in Android Studio**
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. **Connect Firebase**
 
-## License
+   * Add your `google-services.json` to `app/` directory
+   * Enable Firebase Authentication and Firestore in Firebase Console
 
-Distributed under the MIT License. See `LICENSE` for more information.
+4. **Run the App**
 
-## Contact
+   * Build & run on an Android device or emulator
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter) - your_email@example.com
+---
 
-Project Link: [https://github.com/yourusername/StockWise](https://github.com/yourusername/StockWise)
+### 📱 Other Screens
+
+| Registration             | Login Screen             | OTP Verification            
+| ----------------------- | ----------------------- | ----------------------- | 
+| ![](assets/other1.png) | ![](assets/other2.png) | ![](assets/other3.png) | 
+
+
+
+---
+
+### ⭐ Support
+
+If you like this project, consider giving it a ⭐ and sharing it with others!
+
+---
